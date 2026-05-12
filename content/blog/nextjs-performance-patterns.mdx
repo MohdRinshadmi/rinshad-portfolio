@@ -1,0 +1,23 @@
+---
+title: "Next.js Performance Patterns I Use in Every Production App"
+excerpt: "RSC, streaming, PPR, and a handful of lesser-known optimizations that push Lighthouse to 100 on real-world apps."
+date: "2025-04-12"
+readTime: "8 min"
+tags: ["Next.js", "Performance"]
+---
+
+# Next.js Performance Patterns I Use in Every Production App
+
+Every new project I start gets the same performance baseline. Here's the exact playbook.
+
+## 1. Route Segments and Streaming
+
+Use `loading.tsx` at every segment boundary. Pair with `Suspense` for async components...
+
+## 2. Image Optimization
+
+Always use `next/image` with explicit `width` and `height`...
+
+## 3. Font Loading
+
+Use `next/font/google` with `display: swap` and subset to only the characters you need...
