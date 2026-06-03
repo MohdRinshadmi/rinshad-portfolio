@@ -2,7 +2,10 @@
 
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Sphere, MeshDistortMaterial, Float, Stars } from "@react-three/drei";
+import { Sphere } from "@react-three/drei/core/shapes";
+import { MeshDistortMaterial } from "@react-three/drei/core/MeshDistortMaterial";
+import { Float } from "@react-three/drei/core/Float";
+import { Stars } from "@react-three/drei/core/Stars";
 import * as THREE from "three";
 
 function FloatingSphere({

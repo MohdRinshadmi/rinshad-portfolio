@@ -2,193 +2,170 @@ import type {
   Project,
   Skill,
   Experience,
-  Testimonial,
+  Education,
   SocialLink,
   WorkProcess,
 } from "./types";
 
 export const siteConfig = {
   name: "Rinshad",
-  fullName: "Rinshad C",
-  role: "Full-Stack Engineer",
-  tagline: "I build products that scale.",
-  bio: "Senior full-stack engineer with 6+ years crafting high-performance web products. I specialize in React/Next.js frontends paired with robust Node.js and cloud backends. Currently open to senior roles at product-focused companies.",
-  location: "Dubai, UAE",
-  email: "rinshad@example.com",
-  availability: "Available for senior roles",
+  fullName: "Mohammed Rinshad M I",
+  role: "AI-Augmented React Native Engineer",
+  tagline: "I build streaming AI UIs and agentic copilots.",
+  bio: "AI-augmented React Native Engineer with 2.5+ years shipping production React, Next.js, and React Native interfaces to the App Store, Play Store, and the web. I specialize in streaming AI UIs, agentic copilots, and real-time dashboards on TypeScript, React Server Components, and the Vercel AI SDK with Claude, OpenAI, and tool-calling pipelines — owning delivery from Figma to Core Web Vitals, store releases, and production telemetry.",
+  location: "Palakkad, Kerala, India",
+  email: "rinshad803@gmail.com",
+  phone: "+91 88486 75355",
+  availability: "Open to frontend & AI UI roles",
   avatarUrl: "/images/avatar/rinshad.jpg",
   resumeUrl: "/rinshad-resume.pdf",
   social: {
-    github: "https://github.com/rinshad",
-    linkedin: "https://linkedin.com/in/rinshad",
-    twitter: "https://twitter.com/rinshad",
+    github: "https://github.com/MohdRinshadmi",
+    linkedin: "https://linkedin.com/in/mohd-rinshadmi",
   } as Record<string, string>,
 } as const;
 
 export const stats = [
-  { label: "Years Experience", value: 6, suffix: "+" },
-  { label: "Projects Shipped", value: 42, suffix: "+" },
-  { label: "Happy Clients", value: 28, suffix: "" },
-  { label: "GitHub Stars", value: 1400, suffix: "+" },
+  { label: "Years Experience", value: 2.5, suffix: "+" },
+  { label: "Production Apps", value: 20, suffix: "+" },
+  { label: "Faster Delivery", value: 30, suffix: "%" },
+  { label: "Fewer Re-renders", value: 40, suffix: "%" },
 ];
 
 export const projects: Project[] = [
   {
-    id: "saas-dashboard",
-    title: "SaaS Analytics Platform",
-    tagline: "Real-time data at enterprise scale",
+    id: "iot-analytics-dashboard",
+    title: "Cloud-Native IoT Analytics Dashboard",
+    tagline: "Real-time telemetry from 10k+ devices",
     description:
-      "A multi-tenant SaaS analytics dashboard serving 50k+ users with real-time data visualization and custom reporting.",
+      "A cloud-native analytics dashboard streaming live telemetry from 10k+ IoT devices into virtualized charts and heatmaps.",
     problem:
-      "Clients needed live visibility into complex business KPIs without building internal tooling.",
+      "Operators needed live visibility into thousands of devices without the UI buckling under the volume of incoming data.",
     solution:
-      "Built a multi-tenant platform with WebSocket-powered live dashboards, role-based access, and a no-code report builder.",
-    image: "/images/projects/saas-dashboard.png",
-    tags: ["Next.js", "TypeScript", "PostgreSQL", "Redis", "WebSockets", "AWS"],
+      "Streamed telemetry over WebSockets into virtualized charts sustaining 60fps with React 18 transitions and Suspense, backed by RSC + edge caching for sub-second TTFB and a configurable alert/rule builder with optimistic UI and per-tenant theming via shadcn/ui.",
+    image: "",
+    tags: ["Next.js", "RSC", "TypeScript", "TanStack Query", "WebSockets", "Recharts"],
     metrics: [
-      { label: "Active Users", value: "50k+" },
-      { label: "Latency Reduction", value: "60%" },
-      { label: "Uptime", value: "99.97%" },
+      { label: "Devices", value: "10k+" },
+      { label: "Frame Rate", value: "60fps" },
+      { label: "TTFB", value: "<1s" },
     ],
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com/rinshad/saas-dashboard",
     featured: true,
   },
   {
-    id: "ecommerce-engine",
-    title: "Headless Commerce Engine",
-    tagline: "Blazing-fast storefronts, zero compromise",
+    id: "ai-life-assistant",
+    title: "AI Life Assistant Super App",
+    tagline: "Streaming AI copilot with tool calling",
     description:
-      "A headless e-commerce engine powering multiple storefronts with a shared inventory and order management backend.",
+      "The web companion for an AI life-assistant super app — a streaming copilot with multimodal inputs and live agent-trace rendering.",
     problem:
-      "Agency clients needed performant storefronts that could be customized without touching backend logic.",
+      "Users needed a responsive AI copilot that could handle text, image, and voice while staying transparent about what the agent was doing.",
     solution:
-      "Architected a headless system with Next.js storefronts, a GraphQL API layer, and a shared fulfillment service.",
-    image: "/images/projects/ecommerce.png",
-    tags: ["Next.js", "GraphQL", "Stripe", "Node.js", "MongoDB", "Vercel"],
+      "Engineered a streaming copilot with tool/function calling, multimodal inputs, and live agent-trace rendering inside RSC, plus reusable agent-state primitives (Zustand + hooks) for retries, cancellation, and partial-message hydration across long-running conversations.",
+    image: "",
+    tags: ["Next.js", "Vercel AI SDK", "Claude API", "OpenAI API", "Zustand", "shadcn/ui"],
     metrics: [
-      { label: "Core Web Vitals", value: "100/100" },
-      { label: "Conversion Lift", value: "+23%" },
-      { label: "Deploy Time", value: "45s" },
+      { label: "Input Modes", value: "3" },
+      { label: "Latency", value: "<1s" },
+      { label: "Agent Traces", value: "Live" },
     ],
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com/rinshad/headless-commerce",
     featured: true,
   },
   {
-    id: "devtools-cli",
-    title: "DevOps CLI Toolkit",
-    tagline: "One CLI to rule your entire workflow",
+    id: "realtime-collab-platform",
+    title: "AI-Powered Real-Time Collaboration Platform",
+    tagline: "CRDT editor with inline Claude assistance",
     description:
-      "An extensible CLI tool that unifies cloud deployments, secret management, and DB migrations across environments.",
+      "A real-time collaborative editor with conflict-free editing, live presence, and inline AI assistance.",
     problem:
-      "Teams were juggling 8+ tools for environment management, causing deployment errors and secrets sprawl.",
+      "Teams editing the same large document needed conflict-free real-time collaboration with AI help that didn't get in the way.",
     solution:
-      "Built a single CLI with pluggable commands that wraps Terraform, Vault, and custom migration runners.",
-    image: "/images/projects/devtools.png",
-    tags: ["Node.js", "TypeScript", "Terraform", "Docker", "AWS", "Vault"],
+      "Built a CRDT-based editor (Yjs) with live cursors, presence, and conflict-free updates streamed via Suspense, plus inline Claude assistance — streaming completions, “explain selection,” and summarization with tool calling — at <16ms input latency on 10k+ node documents.",
+    image: "",
+    tags: ["Next.js", "Yjs (CRDT)", "WebSockets", "TypeScript", "Vercel AI SDK", "Tailwind CSS"],
     metrics: [
-      { label: "GitHub Stars", value: "1.2k" },
-      { label: "Deploy Errors", value: "-80%" },
-      { label: "Onboarding Time", value: "2hrs→20min" },
+      { label: "Input Latency", value: "<16ms" },
+      { label: "Nodes", value: "10k+" },
+      { label: "Sync", value: "CRDT" },
     ],
-    githubUrl: "https://github.com/rinshad/devtools-cli",
     featured: true,
   },
 ];
 
 export const skills: Skill[] = [
-  { name: "TypeScript", icon: "typescript", category: "frontend", level: 95 },
-  { name: "React / Next.js", icon: "react", category: "frontend", level: 95 },
-  { name: "Tailwind CSS", icon: "tailwind", category: "frontend", level: 90 },
-  { name: "Framer Motion", icon: "framer", category: "frontend", level: 85 },
-  { name: "Node.js", icon: "nodejs", category: "backend", level: 90 },
-  { name: "PostgreSQL", icon: "postgres", category: "backend", level: 85 },
-  { name: "Redis", icon: "redis", category: "backend", level: 80 },
-  { name: "GraphQL", icon: "graphql", category: "backend", level: 80 },
-  { name: "Docker", icon: "docker", category: "devops", level: 85 },
-  { name: "AWS", icon: "aws", category: "devops", level: 80 },
-  { name: "Terraform", icon: "terraform", category: "devops", level: 70 },
-  { name: "GitHub Actions", icon: "github", category: "devops", level: 85 },
-  { name: "Figma", icon: "figma", category: "tools", level: 75 },
-  { name: "Vercel", icon: "vercel", category: "tools", level: 90 },
+  // Languages
+  { name: "TypeScript", icon: "typescript", category: "languages", level: 92 },
+  { name: "JavaScript (ES6+)", icon: "javascript", category: "languages", level: 90 },
+  { name: "HTML5", icon: "html5", category: "languages", level: 88 },
+  { name: "CSS3", icon: "css3", category: "languages", level: 88 },
+  { name: "SQL", icon: "sql", category: "languages", level: 72 },
+
+  // Frameworks & Libraries
+  { name: "React", icon: "react", category: "frameworks", level: 93 },
+  { name: "Next.js", icon: "nextjs", category: "frameworks", level: 92 },
+  { name: "React Native", icon: "reactnative", category: "frameworks", level: 85 },
+  { name: "Expo", icon: "expo", category: "frameworks", level: 80 },
+  { name: "Remix", icon: "remix", category: "frameworks", level: 65 },
+
+  // AI UI & SDKs
+  { name: "Vercel AI SDK", icon: "vercel", category: "ai", level: 90 },
+  { name: "Claude API", icon: "anthropic", category: "ai", level: 88 },
+  { name: "OpenAI API", icon: "openai", category: "ai", level: 85 },
+  { name: "Tool / Function Calling", icon: "tools", category: "ai", level: 85 },
+  { name: "RAG Interfaces", icon: "rag", category: "ai", level: 82 },
+
+  // Styling, State & Realtime
+  { name: "Tailwind CSS", icon: "tailwind", category: "realtime", level: 92 },
+  { name: "shadcn/ui", icon: "shadcn", category: "realtime", level: 88 },
+  { name: "Framer Motion", icon: "framer", category: "realtime", level: 85 },
+  { name: "Zustand", icon: "zustand", category: "realtime", level: 85 },
+  { name: "React Query (TanStack)", icon: "reactquery", category: "realtime", level: 85 },
+
+  // Testing, Build & Tooling
+  { name: "Jest", icon: "jest", category: "tooling", level: 80 },
+  { name: "Playwright", icon: "playwright", category: "tooling", level: 78 },
+  { name: "ESLint", icon: "eslint", category: "tooling", level: 85 },
+  { name: "Storybook", icon: "storybook", category: "tooling", level: 75 },
+  { name: "GitHub Actions", icon: "github", category: "tooling", level: 80 },
+
+  // AI Workflow & Deploy
+  { name: "Claude Code", icon: "anthropic", category: "workflow", level: 90 },
+  { name: "Cursor", icon: "cursor", category: "workflow", level: 85 },
+  { name: "GitHub Copilot", icon: "copilot", category: "workflow", level: 82 },
+  { name: "Vercel", icon: "vercel", category: "workflow", level: 90 },
+  { name: "EAS / App Stores", icon: "expo", category: "workflow", level: 78 },
 ];
 
 export const experience: Experience[] = [
   {
-    id: "exp-1",
-    role: "Senior Full-Stack Engineer",
-    company: "TechCorp Inc.",
-    location: "Dubai, UAE (Remote)",
-    period: "2022 – Present",
+    id: "exp-ioss",
+    role: "Frontend Developer (Full Stack)",
+    company: "Infinite Open Source Solution LLP",
+    location: "Calicut, Kerala",
+    period: "Nov 2023 – Present",
     current: true,
     description:
-      "Leading front-end architecture for a B2B SaaS product used by Fortune 500 companies. Own the performance roadmap and mentor 3 junior engineers.",
+      "Building cross-platform React, Next.js, and React Native interfaces — streaming AI UIs, agentic copilots, and real-time dashboards — and owning delivery from Figma to store release.",
     achievements: [
-      "Rebuilt core dashboard with Next.js App Router, cutting TTI by 55%",
-      "Designed a real-time notification system handling 2M events/day",
-      "Established component library used across 4 product teams",
+      "Architected a cross-platform TypeScript component library across React, Next.js, and React Native — cutting feature delivery time 30% across 20+ production apps.",
+      "Engineered streaming AI UIs with the Vercel AI SDK — rendering Claude/OpenAI completions, tool-call traces, and RAG citations inside React Server Components for sub-second perceived latency.",
+      "Led a full JS-to-TypeScript migration on a live React Native codebase with strict typing and type-safe API contracts — eliminating an entire class of runtime UI errors.",
+      "Optimized React rendering with memoization, code splitting, lazy loading, and React Query caching — cutting re-renders on AI dashboards by 40% and lifting Core Web Vitals.",
+      "Integrated agentic AI workflows (Claude Code, Cursor, GitHub Copilot, v0) into daily delivery — accelerating scaffolding, refactors, and test generation with human review as the gate.",
+      "Owned the cross-platform release pipeline for React Native apps — App Store/Play Store signing, build config, compliance, and staged rollouts end-to-end.",
     ],
-    technologies: ["Next.js", "TypeScript", "Node.js", "PostgreSQL", "Redis", "AWS"],
-  },
-  {
-    id: "exp-2",
-    role: "Full-Stack Engineer",
-    company: "Agency XYZ",
-    location: "Kochi, India",
-    period: "2020 – 2022",
-    description:
-      "Built bespoke web products for clients across fintech, logistics, and retail verticals.",
-    achievements: [
-      "Delivered 12 production projects on time and under budget",
-      "Introduced automated E2E testing, reducing QA cycles by 40%",
-      "Open-sourced a reusable headless component library (300+ GitHub stars)",
-    ],
-    technologies: ["React", "Node.js", "MongoDB", "Stripe", "Vercel"],
-  },
-  {
-    id: "exp-3",
-    role: "Junior Frontend Developer",
-    company: "Startup Hub",
-    location: "Kochi, India",
-    period: "2019 – 2020",
-    description:
-      "Built responsive UIs for early-stage startup products, collaborating directly with founders and designers.",
-    achievements: [
-      "Shipped 3 MVPs from 0 to launch within 6-month timelines",
-      "Improved Lighthouse performance scores from 45 to 90+ on all projects",
-    ],
-    technologies: ["React", "JavaScript", "CSS", "Firebase"],
+    technologies: ["React", "Next.js", "React Native", "TypeScript", "Vercel AI SDK", "React Query"],
   },
 ];
 
-export const testimonials: Testimonial[] = [
+export const education: Education[] = [
   {
-    id: "t1",
-    name: "Sarah Chen",
-    role: "CTO",
-    company: "TechCorp Inc.",
-    avatar: "/images/avatar/sarah.jpg",
-    quote:
-      "Rinshad doesn't just write code — he thinks in systems. The architecture he designed for our analytics platform is the reason we scaled to 50k users without a rewrite. Rare engineer.",
-  },
-  {
-    id: "t2",
-    name: "Alex Martinez",
-    role: "Product Lead",
-    company: "Agency XYZ",
-    avatar: "/images/avatar/alex.jpg",
-    quote:
-      "Every project Rinshad touched shipped on time and exceeded expectations. He has a designer's eye combined with serious engineering depth. Our clients consistently noticed the quality difference.",
-  },
-  {
-    id: "t3",
-    name: "Priya Nair",
-    role: "Engineering Manager",
-    company: "Fintech Startup",
-    avatar: "/images/avatar/priya.jpg",
-    quote:
-      "Brought Rinshad in to rescue a performance-critical feature. He diagnosed the root cause in 2 hours and delivered a fix that was 10x better than our original approach. A true force-multiplier.",
+    id: "edu-bba",
+    degree: "BBA",
+    institution: "SJES College of Management",
+    affiliation: "Bangalore North University",
+    location: "Bangalore, India",
+    period: "Jun 2019 – Oct 2022",
   },
 ];
 
@@ -233,5 +210,4 @@ export const workProcess: WorkProcess[] = [
 export const socialLinks: SocialLink[] = [
   { name: "GitHub", url: siteConfig.social.github, icon: "Github" },
   { name: "LinkedIn", url: siteConfig.social.linkedin, icon: "Linkedin" },
-  { name: "Twitter / X", url: siteConfig.social.twitter, icon: "Twitter" },
 ];

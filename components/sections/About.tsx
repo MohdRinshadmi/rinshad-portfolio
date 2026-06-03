@@ -1,16 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
-import { MapPin, Coffee, BookOpen } from "lucide-react";
+import { Sparkles, Smartphone, Gauge, GraduationCap } from "lucide-react";
 import { SectionWrapper, SectionHeading } from "@/components/animations/SectionWrapper";
 import { FadeUp } from "@/components/animations/FadeUp";
-import { siteConfig } from "@/lib/data";
+import { siteConfig, education } from "@/lib/data";
 
 const interests = [
-  { icon: Coffee, label: "Coffee + code mornings" },
-  { icon: BookOpen, label: "Technical writing" },
-  { icon: MapPin, label: "Building in public" },
+  { icon: Sparkles, label: "Streaming AI UIs & agentic copilots" },
+  { icon: Smartphone, label: "Cross-platform (web + mobile)" },
+  { icon: Gauge, label: "Core Web Vitals obsessed" },
 ];
 
 export function About() {
@@ -50,16 +49,35 @@ export function About() {
             <div className="space-y-4 text-zinc-400 leading-relaxed">
               <p>{siteConfig.bio}</p>
               <p>
-                I care deeply about the craft — not just making things work, but making them
-                maintainable, fast, and delightful for the humans who use them. I believe the best
-                code is the code that doesn&apos;t need to be explained.
+                I work across React, Next.js, and React Native — rendering Claude and OpenAI
+                completions, tool-call traces, and RAG citations inside React Server Components,
+                and shipping them all the way to the App Store, Play Store, and the web.
               </p>
               <p>
-                Outside of engineering, I write about system design, contribute to open source, and
-                occasionally mentor junior developers who want to bridge the gap between &ldquo;it
-                works on my machine&rdquo; and shipping production software.
+                I lean on agentic AI workflows — Claude Code, Cursor, Copilot, and v0 — to move
+                fast, with human review as the gate. I care about the craft: type-safe contracts,
+                fewer re-renders, and Core Web Vitals that hold up in production.
               </p>
             </div>
+
+            {education.map((edu) => (
+              <div
+                key={edu.id}
+                className="mt-8 flex items-start gap-3 rounded-xl border border-white/6 bg-white/2 p-4"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-violet-500/10">
+                  <GraduationCap size={18} className="text-violet-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">
+                    {edu.degree} — {edu.institution}
+                  </p>
+                  <p className="mt-0.5 text-xs text-zinc-500">
+                    {edu.affiliation} · {edu.location} · {edu.period}
+                  </p>
+                </div>
+              </div>
+            ))}
 
             <div className="mt-8 flex flex-wrap gap-3">
               {interests.map(({ icon: Icon, label }) => (

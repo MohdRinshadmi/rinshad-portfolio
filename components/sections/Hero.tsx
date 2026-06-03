@@ -3,19 +3,24 @@
 import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/SocialIcons";
-import dynamic from "next/dynamic";
 import { siteConfig } from "@/lib/data";
 import { staggerContainer, fadeUp, fadeIn } from "@/lib/animation";
 
-const HeroScene = dynamic(
-  () => import("@/components/3d/HeroScene").then((m) => m.HeroScene),
-  { ssr: false }
-);
+// ⚠️ TEMPORARILY DISABLED — the 3D HeroScene pulls in three.js (~38MB / 1150 files)
+// which dominates dev compile time, and renders a WebGL scene continuously at 60fps
+// (even when scrolled offscreen) which pegs the CPU/GPU and hangs the system.
+// Re-enable by uncommenting the import + dynamic() below and the <HeroScene /> usage.
+// import dynamic from "next/dynamic";
+// const HeroScene = dynamic(
+//   () => import("@/components/3d/HeroScene").then((m) => m.HeroScene),
+//   { ssr: false }
+// );
 
 export function Hero() {
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-20">
-      <HeroScene />
+      {/* TEMP: 3D HeroScene disabled (see import note above); lightweight CSS background used instead. */}
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_50%_at_30%_30%,rgba(124,58,237,0.20),transparent_70%),radial-gradient(ellipse_50%_50%_at_75%_60%,rgba(79,70,229,0.16),transparent_70%)]" />
 
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,40,200,0.18),rgba(255,255,255,0))]" />
 

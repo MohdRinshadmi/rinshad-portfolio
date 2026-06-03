@@ -8,24 +8,39 @@ import { skills } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 const categoryLabels: Record<string, string> = {
-  frontend: "Frontend",
-  backend: "Backend",
-  devops: "DevOps & Cloud",
-  tools: "Tools",
+  languages: "Languages",
+  frameworks: "Frameworks & Libraries",
+  ai: "AI UI & SDKs",
+  realtime: "Styling, State & Realtime",
+  tooling: "Testing, Build & Tooling",
+  workflow: "AI Workflow & Deploy",
 };
 
 const categoryColors: Record<string, string> = {
-  frontend: "from-violet-600/20 to-violet-600/5 border-violet-500/20",
-  backend: "from-blue-600/20 to-blue-600/5 border-blue-500/20",
-  devops: "from-emerald-600/20 to-emerald-600/5 border-emerald-500/20",
-  tools: "from-amber-600/20 to-amber-600/5 border-amber-500/20",
+  languages: "from-violet-600/20 to-violet-600/5 border-violet-500/20",
+  frameworks: "from-blue-600/20 to-blue-600/5 border-blue-500/20",
+  ai: "from-fuchsia-600/20 to-fuchsia-600/5 border-fuchsia-500/20",
+  realtime: "from-emerald-600/20 to-emerald-600/5 border-emerald-500/20",
+  tooling: "from-amber-600/20 to-amber-600/5 border-amber-500/20",
+  workflow: "from-sky-600/20 to-sky-600/5 border-sky-500/20",
 };
 
 const categoryText: Record<string, string> = {
-  frontend: "text-violet-300",
-  backend: "text-blue-300",
-  devops: "text-emerald-300",
-  tools: "text-amber-300",
+  languages: "text-violet-300",
+  frameworks: "text-blue-300",
+  ai: "text-fuchsia-300",
+  realtime: "text-emerald-300",
+  tooling: "text-amber-300",
+  workflow: "text-sky-300",
+};
+
+const categoryBar: Record<string, string> = {
+  languages: "from-violet-500 to-purple-400",
+  frameworks: "from-blue-500 to-cyan-400",
+  ai: "from-fuchsia-500 to-pink-400",
+  realtime: "from-emerald-500 to-teal-400",
+  tooling: "from-amber-500 to-yellow-400",
+  workflow: "from-sky-500 to-cyan-400",
 };
 
 function SkillCard({ skill }: { skill: (typeof skills)[0] }) {
@@ -35,7 +50,7 @@ function SkillCard({ skill }: { skill: (typeof skills)[0] }) {
       whileHover={{ y: -4, scale: 1.02 }}
       transition={{ type: "spring", stiffness: 300, damping: 25 }}
       className={cn(
-        "group relative flex flex-col gap-3 rounded-xl border bg-gradient-to-br p-4 backdrop-blur-sm transition-all",
+        "group relative flex flex-col gap-3 rounded-xl border bg-linear-to-br p-4 backdrop-blur-sm transition-all",
         categoryColors[skill.category]
       )}
     >
@@ -52,11 +67,8 @@ function SkillCard({ skill }: { skill: (typeof skills)[0] }) {
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0, 0, 0.2, 1] }}
           className={cn(
-            "h-full rounded-full bg-gradient-to-r",
-            skill.category === "frontend" && "from-violet-500 to-purple-400",
-            skill.category === "backend" && "from-blue-500 to-cyan-400",
-            skill.category === "devops" && "from-emerald-500 to-teal-400",
-            skill.category === "tools" && "from-amber-500 to-yellow-400"
+            "h-full rounded-full bg-linear-to-r",
+            categoryBar[skill.category]
           )}
         />
       </div>
@@ -65,7 +77,14 @@ function SkillCard({ skill }: { skill: (typeof skills)[0] }) {
 }
 
 export function Skills() {
-  const categories = ["frontend", "backend", "devops", "tools"] as const;
+  const categories = [
+    "languages",
+    "frameworks",
+    "ai",
+    "realtime",
+    "tooling",
+    "workflow",
+  ] as const;
 
   return (
     <SectionWrapper id="skills" className="py-24">

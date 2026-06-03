@@ -24,6 +24,10 @@ export async function POST(req: NextRequest) {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
+      // Bound how long a misconfigured/unreachable SMTP server can block the request.
+      connectionTimeout: 10_000,
+      greetingTimeout: 10_000,
+      socketTimeout: 15_000,
     });
 
     await transporter.sendMail({

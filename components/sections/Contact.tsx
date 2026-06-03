@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle, Loader2, Mail, MapPin } from "lucide-react";
+import { Send, CheckCircle, Loader2, Mail, MapPin, Phone } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/SocialIcons";
 import { SectionWrapper, SectionHeading } from "@/components/animations/SectionWrapper";
 import { FadeUp } from "@/components/animations/FadeUp";
@@ -75,7 +75,7 @@ export function Contact() {
         <SectionHeading
           label="Contact"
           title="Let's build something."
-          description="Open to senior engineering roles, consulting engagements, and interesting collaborations."
+          description="Open to frontend & AI engineering roles, freelance work, and interesting collaborations."
           centered
         />
 
@@ -92,6 +92,21 @@ export function Contact() {
                   className="text-sm font-medium text-white hover:text-violet-300 transition-colors"
                 >
                   {siteConfig.email}
+                </a>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10">
+                <Phone size={18} className="text-violet-400" />
+              </div>
+              <div>
+                <p className="text-xs text-zinc-500">Phone</p>
+                <a
+                  href={`tel:${siteConfig.phone.replace(/\s+/g, "")}`}
+                  className="text-sm font-medium text-white hover:text-violet-300 transition-colors"
+                >
+                  {siteConfig.phone}
                 </a>
               </div>
             </div>
@@ -133,7 +148,8 @@ export function Contact() {
                 <p className="text-xs font-semibold text-green-400">Available Now</p>
               </div>
               <p className="text-sm text-zinc-400">
-                Looking for a senior engineer who ships? Let&apos;s talk — I typically respond within 24 hours.
+                Need someone who ships AI-powered, cross-platform interfaces? Let&apos;s talk — I
+                typically respond within 24 hours.
               </p>
             </div>
           </FadeUp>

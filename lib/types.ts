@@ -16,8 +16,17 @@ export interface Project {
 export interface Skill {
   name: string;
   icon: string;
-  category: "frontend" | "backend" | "devops" | "tools";
+  category: "languages" | "frameworks" | "ai" | "realtime" | "tooling" | "workflow";
   level: number;
+}
+
+export interface Education {
+  id: string;
+  degree: string;
+  institution: string;
+  affiliation: string;
+  location: string;
+  period: string;
 }
 
 export interface Experience {
@@ -30,15 +39,6 @@ export interface Experience {
   achievements: string[];
   technologies: string[];
   current?: boolean;
-}
-
-export interface Testimonial {
-  id: string;
-  name: string;
-  role: string;
-  company: string;
-  avatar: string;
-  quote: string;
 }
 
 export interface BlogPost {
