@@ -1,55 +1,327 @@
 @import "tailwindcss";
 
+/* ============================================================================
+   DESIGN TOKENS — Tailwind v4 CSS-first. Tokens in @theme generate utilities:
+     --color-*  → bg-*, text-*, border-*, ring-*  (opacity via /NN)
+     --font-*   → font-*
+     --text-*   → text-*  (+ --text-*--line-height / --letter-spacing modifiers)
+     --radius-* → rounded-*   --shadow-* → shadow-*
+
+   THEME: Light editorial (Formix-inspired). Warm cream canvas, near-black ink,
+   a single warm EMBER accent. "Ink" tokens render the dark glossy cards that
+   sit on the light page (project media, the assistant terminal, the hero rail).
+   ========================================================================== */
+@theme {
+  /* — warm paper canvas — */
+  --color-bg: #f3f2ef;
+  --color-bg-subtle: #eceae5;
+  --color-surface: #fbfaf8;
+  --color-surface-raised: #ffffff;
+  --color-border: rgba(10, 10, 10, 0.1);
+  --color-border-strong: rgba(10, 10, 10, 0.16);
+  --color-text: #0a0a0a;
+  --color-text-secondary: #6b6b66;
+  --color-text-tertiary: #8e8e88;
+  --color-text-muted: #adaca4;
+
+  /* — dark "ink" cards on the light page (Formix's glossy panels) — */
+  --color-ink: #0d0d0f;
+  --color-ink-raised: #17171a;
+  --color-ink-border: rgba(255, 255, 255, 0.1);
+  --color-ink-text: #fafaf9;
+  --color-ink-text-secondary: #a1a1aa;
+  --color-ink-text-tertiary: #71717a;
+
+  /* — accent: warm Ember (the only chromatic note) — */
+  --color-accent: #e5502a;
+  --color-accent-hover: #f25c34;
+  --color-accent-press: #c8401e;
+  --color-accent-fg: #ffffff;
+
+  /* — semantic / state — */
+  --color-positive: #16a34a;
+  --color-warning: #d97706;
+  --color-danger: #dc2626;
+
+  /* — type families (wired to next/font CSS vars in layout.tsx) — */
+  --font-display: var(--font-geist), system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", monospace;
+  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
+  /* distinctive grotesque for eyebrows / kicker labels */
+  --font-grotesk: var(--font-space-grotesk), var(--font-geist), system-ui, sans-serif;
+
+  /* — editorial type scale (fluid clamp) — */
+  --text-display-2xl: clamp(3.5rem, 8vw, 6.75rem);
+  --text-display-2xl--line-height: 0.95;
+  --text-display-2xl--letter-spacing: -0.035em;
+
+  --text-display-xl: clamp(2.75rem, 5.5vw, 4.75rem);
+  --text-display-xl--line-height: 0.98;
+  --text-display-xl--letter-spacing: -0.03em;
+
+  --text-display-lg: clamp(2.25rem, 4vw, 3.5rem);
+  --text-display-lg--line-height: 1.02;
+  --text-display-lg--letter-spacing: -0.025em;
+
+  --text-h2: clamp(1.75rem, 3vw, 2.5rem);
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.02em;
+
+  --text-h3: 1.5rem;
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.015em;
+
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.65;
+
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.14em;
+
+  /* — radius family — */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+  --radius-2xl: 30px;
+
+  /* — elevation: soft, lifted shadows for a light editorial surface — */
+  --shadow-card: 0 1px 2px rgba(20, 18, 14, 0.04), 0 18px 40px -22px rgba(20, 18, 14, 0.18);
+  --shadow-raised: 0 28px 60px -28px rgba(20, 18, 14, 0.26);
+  --shadow-glow: 0 0 0 1px rgba(229, 80, 42, 0.2), 0 14px 40px -12px rgba(229, 80, 42, 0.32);
+  --shadow-hairline: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* Plain CSS vars consumed by custom utilities below. */
 :root {
-  --background: #080808;
-  --foreground: #fafafa;
+  /* faint warm wash for hero/section backgrounds (very subtle on paper) */
+  --aurora: radial-gradient(60% 50% at 28% 18%, rgba(229, 80, 42, 0.07), transparent 70%),
+    radial-gradient(46% 48% at 82% 62%, rgba(10, 10, 10, 0.035), transparent 70%);
+  /* tileable grain — neutral noise, very low opacity on light paper */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  /* dark glossy product field for DeviceFrame / ink media */
+  --product: radial-gradient(120% 90% at 50% 122%, rgba(229, 80, 42, 0.22), transparent 58%),
+    radial-gradient(90% 60% at 50% -12%, rgba(255, 255, 255, 0.08), transparent 60%),
+    linear-gradient(168deg, #1a1a1f 0%, #101013 55%, #0a0a0c 100%);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-}
-
+/* ============================================================================
+   BASE
+   ========================================================================== */
 * {
   box-sizing: border-box;
 }
 
 html {
+  -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(229, 80, 42, 0.2);
+  color: #0a0a0a;
+}
+
+/* Keyboard focus only — ember ring offset from the paper */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #3f3f46;
+  background: #d4d2cb;
   border-radius: 999px;
+  border: 2px solid var(--color-bg);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #52525b;
+  background: #b9b7ae;
 }
 
-/* Selection */
-::selection {
-  background: rgba(124, 58, 237, 0.25);
-  color: #fff;
+/* ============================================================================
+   COMPONENT-AGNOSTIC UTILITIES
+   ========================================================================== */
+@layer utilities {
+  /* Page container — 1200px content well with responsive gutters */
+  .container-page {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 75rem;
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    .container-page {
+      padding-inline: 3rem;
+    }
+  }
+
+  /* Wider well for full-bleed media bands (1440px) */
+  .container-wide {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 90rem;
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    .container-wide {
+      padding-inline: 3rem;
+    }
+  }
+
+  /* Premium vertical section rhythm */
+  .section-py {
+    padding-block: clamp(6rem, 12vw, 12rem);
+  }
+  .section-pt {
+    padding-top: clamp(6rem, 12vw, 12rem);
+  }
+
+  /* Signature background motifs */
+  .bg-aurora {
+    background-image: var(--aurora);
+  }
+  .bg-grain {
+    background-image: var(--grain);
+  }
+  .bg-grid {
+    background-image: linear-gradient(to right, rgba(10, 10, 10, 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(10, 10, 10, 0.045) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+  /* dark glossy product field (used inside ink cards / DeviceFrame) */
+  .bg-product {
+    background-image: var(--product);
+  }
+  .bg-grid-ink {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  /* soft inner top highlight for cards */
+  .ring-hairline {
+    box-shadow: var(--shadow-hairline);
+  }
+  /* inner highlight tuned for dark ink cards */
+  .ring-hairline-ink {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  /* Mask a long edge into transparency (marquees, scroll rails) */
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
 }
 
-/* Focus ring */
-:focus-visible {
-  outline: 2px solid rgba(124, 58, 237, 0.6);
-  outline-offset: 3px;
+/* ============================================================================
+   KEYFRAMES — tiny idle loops only; gated/in-view loops live in JS components
+   ========================================================================== */
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.85);
+  }
+}
+.animate-pulse-dot {
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}
+
+@keyframes caret-blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+.animate-caret {
+  animation: caret-blink 1s step-end infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee var(--marquee-duration, 32s) linear infinite;
+}
+
+/* Vertical marquee — content drifts top → bottom (transform-only, 60fps). */
+@keyframes marquee-y {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.animate-marquee-y {
+  animation: marquee-y var(--marquee-duration, 34s) linear infinite;
+}
+
+@keyframes waveform {
+  0%, 100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+/* Gentle attention breath — fades out then back in (rests at full opacity). */
+@keyframes fade-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+.animate-fade-pulse {
+  animation: fade-pulse 2.6s ease-in-out infinite;
+}
+
+/* ============================================================================
+   ACCESSIBILITY — honor reduced motion globally
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

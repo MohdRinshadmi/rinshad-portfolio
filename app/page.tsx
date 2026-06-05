@@ -1,25 +1,25 @@
 import { Hero } from "@/components/sections/Hero";
-import { SocialProof } from "@/components/sections/SocialProof";
-import { Projects } from "@/components/sections/Projects";
-import { Skills } from "@/components/sections/Skills";
-import { Experience } from "@/components/sections/Experience";
-import { HowIWork } from "@/components/sections/HowIWork";
-import { BlogPreview } from "@/components/sections/BlogPreview";
-import { About } from "@/components/sections/About";
-import { Contact } from "@/components/sections/Contact";
+import { ProofStrip } from "@/components/sections/ProofStrip";
+import { SelectedWork } from "@/components/sections/SelectedWork";
+import { Capabilities } from "@/components/sections/Capabilities";
+import { AINativeSignature } from "@/components/sections/AINativeSignature";
+import { ExperienceTimeline } from "@/components/sections/ExperienceTimeline";
+import { Testimonials } from "@/components/sections/Testimonials";
+import { WritingPreview } from "@/components/sections/WritingPreview";
+import { ContactCTA } from "@/components/sections/ContactCTA";
 
 export default function Home() {
   return (
     <>
       <Hero />
-      <SocialProof />
-      <Projects />
-      <Skills />
-      <Experience />
-      <HowIWork />
-      <BlogPreview />
-      <About />
-      <Contact />
+      <ProofStrip />
+      <SelectedWork />
+      <Capabilities />
+      <AINativeSignature />
+      <ExperienceTimeline />
+      <Testimonials />
+      <WritingPreview />
+      <ContactCTA />
     </>
   );
 }

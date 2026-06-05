@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rinshad — Portfolio
 
-## Getting Started
+Personal site for **Mohammed Rinshad M I**, AI-native Mobile & Full-Stack Engineer.
 
-First, run the development server:
+A premium, editorial, dark-mode portfolio built as a scroll-narrative homepage plus dedicated
+case-study, about, writing, and contact routes. Engineered to feel like a product website, not a
+template — near-monochrome canvas, one restrained accent, editorial typography, and GPU-light
+motion that *demonstrates* the work (token-stream reveals, agent-trace diagrams, scroll-drawn
+timelines).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Stack
+
+- **Next.js 16** (App Router, RSC, Turbopack) · **React 19** · **TypeScript**
+- **Tailwind CSS v4** (CSS-first `@theme` design tokens)
+- **Framer Motion 12** (reveals, stagger, parallax) · **Lenis** (smooth scroll)
+- **next/font** — Geist (display), Inter (body), Geist Mono (technical), Instrument Serif (accent)
+- **MDX** writing via `next-mdx-remote/rsc` · **nodemailer** contact route
+
+## Architecture
+
+```
+app/
+  layout.tsx            fonts, root metadata, Person JSON-LD, Nav/Footer/SmoothScroll
+  page.tsx              homepage — composes the 9 sections
+  work/                 /work index (filterable) + /work/[slug] case studies
+  about/  blog/  contact/
+  api/contact/route.ts  contact form handler
+  sitemap.ts  robots.ts  opengraph-image.tsx
+components/
+  ui/       Eyebrow Button Chip Badge StatTick SectionHeading TokenStream Marquee
+  motion/   Reveal Stagger LineMask CountUp MagneticButton
+  sections/ Hero ProofStrip SelectedWork Capabilities AINativeSignature
+            ExperienceTimeline WritingPreview Testimonials ContactCTA ContactForm
+  work/     ProjectCard CaseStudyHero MetaRail StatCard ArchitectureDiagram DeviceFrame WorkFilter
+  layout/   Navbar MobileMenu Footer SmoothScroll
+lib/
+  data.ts (content) types.ts animation.ts seo.ts blog.ts utils.ts
+docs/
+  PORTFOLIO-REDESIGN.md      design + UX blueprint (source of truth)
+  IMPLEMENTATION-CONTRACT.md component APIs, tokens, motion/a11y rules
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The **design system** lives in [`app/globals.css`](app/globals.css) as Tailwind v4 `@theme`
+tokens (ink ramp, Electric Indigo accent, fluid type scale, radius/shadow), and the **motion
+system** in [`lib/animation.ts`](lib/animation.ts).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+> **Heads up for AI agents / contributors:** this Next.js build diverges from training data.
+> Read the relevant guide in `node_modules/next/dist/docs/` before changing routing, fonts,
+> metadata, or MDX (see [AGENTS.md](AGENTS.md)).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Develop
 
-## Learn More
+```bash
+npm run dev     # next dev --turbopack
+npm run build   # production build
+npm run lint
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Contact form
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Copy `.env.local.example` → `.env.local` and set SMTP credentials (`SMTP_HOST`, `SMTP_PORT`,
+`SMTP_USER`, `SMTP_PASS`, `CONTACT_EMAIL`). Falls back to Ethereal for local testing.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Conventions
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Tokens only** — style with the semantic utility classes (`bg-bg`, `text-text-secondary`,
+  `text-accent`, `font-display`, `text-display-xl`, …); no raw hex.
+- **Restraint** — the accent covers ≤8% of any viewport; reserved for CTAs, links, focus, the
+  live dot, and a diagram's critical path.
+- **Motion** — animate only `transform`/`opacity`; reveals enter once; loops gate on in-view;
+  everything respects `prefers-reduced-motion`.
+- **Server-first** — sections/pages are Server Components; `"use client"` is pushed down to the
+  smallest interactive leaves.
+- **Evidence-backed copy** — every metric traces to the résumé.
