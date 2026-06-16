@@ -36,6 +36,9 @@ export interface Project {
   tagline: string;
   /** card body / index summary */
   description: string;
+  /** card/preview shot rendered inside the DeviceFrame screen (placeholder
+      art until real screenshots exist) */
+  image?: string;
   /** mono eyebrow, e.g. "WEB · REAL-TIME" */
   platform: string;
   year: string;

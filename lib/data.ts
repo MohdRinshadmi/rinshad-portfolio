@@ -93,6 +93,7 @@ export const projects: Project[] = [
     tagline: "A streaming AI copilot with tool-calling and live agent traces.",
     description:
       "The web companion for an AI life-assistant super app — a streaming copilot with multimodal inputs and transparent, live agent-trace rendering inside React Server Components.",
+    image: "https://picsum.photos/seed/rinshad-copilot/1280/800?grayscale",
     platform: "WEB · AI COPILOT",
     year: "2024",
     role: "Lead Frontend Engineer",
@@ -161,6 +162,7 @@ export const projects: Project[] = [
     tagline: "A CRDT editor with live presence and inline Claude assistance.",
     description:
       "A real-time collaborative editor with conflict-free editing, live presence, and inline AI assistance that stays out of the way until you ask for it.",
+    image: "https://picsum.photos/seed/rinshad-collab/1280/800?grayscale",
     platform: "WEB · REAL-TIME · AI",
     year: "2024",
     role: "Frontend Engineer",
@@ -229,6 +231,7 @@ export const projects: Project[] = [
     tagline: "Live telemetry from 10k+ devices, streamed at 60fps.",
     description:
       "A cloud-native analytics dashboard that streams live telemetry from 10k+ IoT devices into virtualized charts and heatmaps — without the UI buckling under the volume.",
+    image: "https://picsum.photos/seed/rinshad-telemetry/1280/800?grayscale",
     platform: "WEB · REAL-TIME",
     year: "2023",
     role: "Frontend Engineer",

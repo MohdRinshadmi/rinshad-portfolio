@@ -1,7 +1,9 @@
 "use client";
 
+import { useRef } from "react";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useHydrated } from "@/lib/use-hydrated";
 import { Button } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { TokenStream } from "@/components/ui/TokenStream";
@@ -20,14 +22,33 @@ import { DURATION, EASE } from "@/lib/animation";
  */
 export function Hero() {
   const reduceMotion = useReducedMotion();
+  const hydrated = useHydrated();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Apple-style departure: as the hero scrolls out, its content drifts down
+  // slightly slower than the page and softens — the next section feels like
+  // it slides over a receding stage. Scrubbed by scroll, transform/opacity only.
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const departY = useTransform(scrollYProgress, [0, 1], [0, 90]);
+  const departOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0.35]);
 
   return (
-    <section id="hero" className="relative overflow-hidden pt-16 pb-16 sm:pb-20">
+    <section
+      ref={sectionRef}
+      id="hero"
+      className="relative overflow-hidden pt-16 pb-16 sm:pb-20"
+    >
       {/* Layered background motifs — non-interactive, behind content */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-aurora" />
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-grain opacity-50" />
 
-      <div className="container-wide">
+      <motion.div
+        className="container-wide"
+        style={hydrated && !reduceMotion ? { y: departY, opacity: departOpacity } : undefined}
+      >
         {/* Side rails only — the bottom is left open so the page-wide GuideRails read
             as one continuous frame. At xl+ the global rails take over the sides. */}
         <div className="grid grid-cols-1 border-x border-dashed border-border-strong xl:border-x-0 lg:grid-cols-[3fr_2fr]">
@@ -132,7 +153,7 @@ export function Hero() {
             </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* ── Scroll cue ─────────────────────────────────────────────── */}
       <motion.div

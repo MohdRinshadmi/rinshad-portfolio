@@ -1,25 +1,69 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { ChapterMark } from "@/components/story/ChapterMark";
+import { ScrubText } from "@/components/motion/ScrubText";
+import { Reveal } from "@/components/motion/Reveal";
 import { CountUp } from "@/components/motion/CountUp";
+import { chapterBuilder } from "@/lib/story";
 import { proofStats } from "@/lib/data";
-import { staggerContainerFast, fadeUp } from "@/lib/animation";
-import { VIEWPORT } from "@/lib/animation";
+import { staggerContainerFast, fadeUp, VIEWPORT } from "@/lib/animation";
 import { cn } from "@/lib/utils";
 
 /**
- * ProofStrip — a thin, quiet band of résumé-backed proof points.
+ * Chapter 01 — The Builder. Long-form editorial: the narrative paragraphs
+ * ignite word-by-word as they pass the reading zone (ScrubText), a serif pull
+ * quote breaks the column, and the chapter closes on a full-bleed band of
+ * résumé-backed proof points that count up on scroll-in.
+ */
+export function TheBuilder() {
+  return (
+    <section id="chapter-01" className="section-py">
+      <div className="container-page">
+        <ChapterMark number={chapterBuilder.number} title={chapterBuilder.title} />
+
+        {/* Narrative column — indented off the left edge like a book page */}
+        <div className="mt-16 sm:mt-24 lg:ml-[8.33%] lg:max-w-[62ch]">
+          <div className="space-y-12">
+            {chapterBuilder.paragraphs.map((paragraph) => (
+              <ScrubText
+                key={paragraph.slice(0, 24)}
+                text={paragraph}
+                className="text-h2 font-display font-medium"
+              />
+            ))}
+          </div>
+
+          {/* Pull quote — breaks the measure, hangs into the margin */}
+          <Reveal className="mt-20 sm:mt-28 lg:-ml-[13%]">
+            <figure className="border-l-2 border-accent pl-7 sm:pl-10">
+              <blockquote className="max-w-[26ch] font-serif text-display-lg italic text-text">
+                “{chapterBuilder.quote}”
+              </blockquote>
+            </figure>
+          </Reveal>
+        </div>
+      </div>
+
+      {/* Proof band — full-bleed, the chapter's receipts in counted numbers */}
+      <ProofBand />
+    </section>
+  );
+}
+
+/**
+ * ProofBand — a thin, quiet band of résumé-backed proof points.
  * Numeric stats (with `to`) count up once on scroll-in; static stats (with
  * `value`) render their string in the display face. Each carries a mono label.
  * 2-up grid on mobile, single row on lg.
  */
-export function ProofStrip() {
+function ProofBand() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section
+    <div
       aria-label="Proof points"
-      className="border-y border-border bg-bg-subtle"
+      className="mt-24 border-y border-border bg-bg-subtle sm:mt-32"
     >
       <div className="container-page">
         <motion.ul
@@ -35,8 +79,7 @@ export function ProofStrip() {
           {proofStats.map((stat, i) => {
             const isNumeric = typeof stat.to === "number";
             // fractional targets (e.g. 2.5) need one decimal place
-            const decimals =
-              isNumeric && !Number.isInteger(stat.to) ? 1 : 0;
+            const decimals = isNumeric && !Number.isInteger(stat.to) ? 1 : 0;
 
             return (
               <motion.li
@@ -70,6 +113,6 @@ export function ProofStrip() {
           })}
         </motion.ul>
       </div>
-    </section>
+    </div>
   );
 }

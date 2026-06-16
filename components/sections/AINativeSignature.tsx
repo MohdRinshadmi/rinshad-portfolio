@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { ScrubText } from "@/components/motion/ScrubText";
 import { signature } from "@/lib/data";
 import { DURATION, EASE, VIEWPORT } from "@/lib/animation";
 import { cn } from "@/lib/utils";
@@ -127,9 +128,11 @@ export function AINativeSignature() {
               </span>
             </h2>
 
-            <p className="mt-6 max-w-[52ch] text-body-lg text-text-secondary">
-              {signature.body}
-            </p>
+            {/* Apple-style scrub — the manifesto ignites word by word as you read. */}
+            <ScrubText
+              text={signature.body}
+              className="mt-6 max-w-[52ch] text-body-lg"
+            />
           </motion.div>
 
           {/* — Right: cheap motif card — */}

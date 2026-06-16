@@ -7,15 +7,15 @@
      --text-*   → text-*  (+ --text-*--line-height / --letter-spacing modifiers)
      --radius-* → rounded-*   --shadow-* → shadow-*
 
-   THEME: Light editorial (Formix-inspired). Warm cream canvas, near-black ink,
-   a single warm EMBER accent. "Ink" tokens render the dark glossy cards that
-   sit on the light page (project media, the assistant terminal, the hero rail).
+   THEME: Light editorial documentary. Warm ivory canvas, near-black ink,
+   a single muted TERRACOTTA accent. "Ink" tokens render the dark glossy cards
+   that sit on the light page (project media, the assistant terminal).
    ========================================================================== */
 @theme {
-  /* — warm paper canvas — */
-  --color-bg: #f3f2ef;
-  --color-bg-subtle: #eceae5;
-  --color-surface: #fbfaf8;
+  /* — warm ivory canvas — */
+  --color-bg: #f7f5f2;
+  --color-bg-subtle: #efece7;
+  --color-surface: #fcfaf7;
   --color-surface-raised: #ffffff;
   --color-border: rgba(10, 10, 10, 0.1);
   --color-border-strong: rgba(10, 10, 10, 0.16);
@@ -32,10 +32,10 @@
   --color-ink-text-secondary: #a1a1aa;
   --color-ink-text-tertiary: #71717a;
 
-  /* — accent: warm Ember (the only chromatic note) — */
-  --color-accent: #e5502a;
-  --color-accent-hover: #f25c34;
-  --color-accent-press: #c8401e;
+  /* — accent: muted terracotta (the only chromatic note) — */
+  --color-accent: #c75c37;
+  --color-accent-hover: #d4693f;
+  --color-accent-press: #b04e2c;
   --color-accent-fg: #ffffff;
 
   /* — semantic / state — */
@@ -89,19 +89,19 @@
   /* — elevation: soft, lifted shadows for a light editorial surface — */
   --shadow-card: 0 1px 2px rgba(20, 18, 14, 0.04), 0 18px 40px -22px rgba(20, 18, 14, 0.18);
   --shadow-raised: 0 28px 60px -28px rgba(20, 18, 14, 0.26);
-  --shadow-glow: 0 0 0 1px rgba(229, 80, 42, 0.2), 0 14px 40px -12px rgba(229, 80, 42, 0.32);
+  --shadow-glow: 0 0 0 1px rgba(199, 92, 55, 0.2), 0 14px 40px -12px rgba(199, 92, 55, 0.32);
   --shadow-hairline: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 /* Plain CSS vars consumed by custom utilities below. */
 :root {
   /* faint warm wash for hero/section backgrounds (very subtle on paper) */
-  --aurora: radial-gradient(60% 50% at 28% 18%, rgba(229, 80, 42, 0.07), transparent 70%),
+  --aurora: radial-gradient(60% 50% at 28% 18%, rgba(199, 92, 55, 0.08), transparent 70%),
     radial-gradient(46% 48% at 82% 62%, rgba(10, 10, 10, 0.035), transparent 70%);
   /* tileable grain — neutral noise, very low opacity on light paper */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
   /* dark glossy product field for DeviceFrame / ink media */
-  --product: radial-gradient(120% 90% at 50% 122%, rgba(229, 80, 42, 0.22), transparent 58%),
+  --product: radial-gradient(120% 90% at 50% 122%, rgba(199, 92, 55, 0.26), transparent 58%),
     radial-gradient(90% 60% at 50% -12%, rgba(255, 255, 255, 0.08), transparent 60%),
     linear-gradient(168deg, #1a1a1f 0%, #101013 55%, #0a0a0c 100%);
 }
@@ -129,7 +129,7 @@ body {
 }
 
 ::selection {
-  background: rgba(229, 80, 42, 0.2);
+  background: rgba(199, 92, 55, 0.22);
   color: #0a0a0a;
 }
 
@@ -189,10 +189,10 @@ body {
 
   /* Premium vertical section rhythm */
   .section-py {
-    padding-block: clamp(6rem, 12vw, 12rem);
+    padding-block: clamp(4rem, 7vw, 6.5rem);
   }
   .section-pt {
-    padding-top: clamp(6rem, 12vw, 12rem);
+    padding-top: clamp(4rem, 7vw, 6.5rem);
   }
 
   /* Signature background motifs */

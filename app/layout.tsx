@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, Instrument_Serif, Space_Grotesk } from "next/font/google";
+import { Archivo_Black, Geist, Geist_Mono, Inter, Instrument_Serif, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -22,6 +22,13 @@ const instrument = Instrument_Serif({
   style: ["normal", "italic"],
   display: "swap",
   variable: "--font-instrument",
+});
+/* poster-grade heavy grotesque — the prologue masthead only */
+const archivoBlack = Archivo_Black({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-archivo-black",
 });
 
 export const metadata: Metadata = {
@@ -59,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${geist.variable} ${geistMono.variable} ${inter.variable} ${instrument.variable} ${spaceGrotesk.variable}`}
+      className={`${geist.variable} ${geistMono.variable} ${inter.variable} ${instrument.variable} ${spaceGrotesk.variable} ${archivoBlack.variable}`}
       suppressHydrationWarning
     >
       <body

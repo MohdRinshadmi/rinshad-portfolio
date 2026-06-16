@@ -1,25 +1,28 @@
-import { Hero } from "@/components/sections/Hero";
-import { ProofStrip } from "@/components/sections/ProofStrip";
-import { SelectedWork } from "@/components/sections/SelectedWork";
-import { Capabilities } from "@/components/sections/Capabilities";
-import { AINativeSignature } from "@/components/sections/AINativeSignature";
-import { ExperienceTimeline } from "@/components/sections/ExperienceTimeline";
-import { Testimonials } from "@/components/sections/Testimonials";
-import { WritingPreview } from "@/components/sections/WritingPreview";
-import { ContactCTA } from "@/components/sections/ContactCTA";
+import { Prologue } from "@/components/story/Prologue";
+import { TheBuilder } from "@/components/story/TheBuilder";
+import { BehindTheInterfaces } from "@/components/story/BehindTheInterfaces";
+import { SystemsCanvas } from "@/components/story/SystemsCanvas";
+import { WorkStories } from "@/components/story/WorkStories";
+import { Principles } from "@/components/story/Principles";
+import { Epilogue } from "@/components/story/Epilogue";
 
+/**
+ * Homepage — "an engineering documentary" in five chapters.
+ * Prologue (the statement + living artifact) → The Builder → Behind the
+ * Interfaces (horizontal case study) → Systems Thinking (drawn architecture)
+ * → Selected Work (magazine features) → Principles → Epilogue (the ending).
+ * The Builder closes on the full-bleed proof band (count-up stats).
+ */
 export default function Home() {
   return (
     <>
-      <Hero />
-      <ProofStrip />
-      <SelectedWork />
-      <Capabilities />
-      <AINativeSignature />
-      <ExperienceTimeline />
-      <Testimonials />
-      <WritingPreview />
-      <ContactCTA />
+      <Prologue />
+      {/* <TheBuilder /> */}
+      <BehindTheInterfaces />
+      <SystemsCanvas />
+      <WorkStories />
+      <Principles />
+      <Epilogue />
     </>
   );
 }

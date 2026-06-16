@@ -4,6 +4,7 @@ import { projects } from "@/lib/data";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { ProjectCard } from "@/components/work/ProjectCard";
+import { ScrollScale } from "@/components/motion/ScrollScale";
 
 /**
  * SelectedWork — featured case studies on the homepage.
@@ -42,7 +43,11 @@ export function SelectedWork() {
               className="lg:sticky"
               style={{ top: `calc(5.5rem + ${i * 1.25}rem)` }}
             >
-              <ProjectCard project={project} variant="featured" index={i} />
+              {/* Apple "settle": each card rises and scales to rest before it
+                  pins — the deck reads as physical layers, not a scroll list. */}
+              <ScrollScale from={0.965} y={48}>
+                <ProjectCard project={project} variant="featured" index={i} />
+              </ScrollScale>
             </div>
           ))}
         </div>

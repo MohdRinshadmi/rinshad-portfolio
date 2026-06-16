@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
@@ -80,7 +81,18 @@ export function ProjectCard({ project, variant = "grid", index = 0, className }:
   const media = (
     <div className="overflow-hidden rounded-xl sm:rounded-2xl">
       <motion.div variants={mediaVariants} className="will-change-transform">
-        <DeviceFrame variant="browser" label={project.title} />
+        <DeviceFrame variant="browser" label={project.title}>
+          {project.image ? (
+            // decorative inside the card link — its aria-label already names the project
+            <Image
+              src={project.image}
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 36rem, 92vw"
+              className="object-cover"
+            />
+          ) : undefined}
+        </DeviceFrame>
       </motion.div>
     </div>
   );

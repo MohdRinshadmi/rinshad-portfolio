@@ -3,6 +3,8 @@ import { Badge } from "@/components/ui/Badge";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/SocialIcons";
 import { ContactForm } from "@/components/sections/ContactForm";
+import { Reveal } from "@/components/motion/Reveal";
+import { ScrollScale } from "@/components/motion/ScrollScale";
 import { siteConfig } from "@/lib/data";
 
 interface InfoRow {
@@ -40,20 +42,20 @@ export function ContactCTA() {
   return (
     <section id="contact" className="section-py">
       <div className="container-page">
-        <div className="flex flex-col gap-5">
+        <Reveal className="flex flex-col gap-5">
           <Eyebrow pill>CONTACT</Eyebrow>
           <h2 className="max-w-[18ch] font-display text-display-lg text-text text-balance sm:text-display-xl">
             Have something worth building?{" "}
             <span className="font-serif italic text-text-secondary">Let&apos;s talk.</span>
           </h2>
-        </div>
+        </Reveal>
 
         <div className="mt-14 grid grid-cols-1 gap-12 lg:mt-16 lg:grid-cols-[15rem_minmax(0,34rem)] lg:gap-12">
           {/* Left info rail */}
           <div className="flex flex-col gap-8">
             <ul className="flex flex-col gap-6">
-              {infoRows.map(({ key, label, value, href, icon: Icon }) => (
-                <li key={key} className="flex items-center gap-4">
+              {infoRows.map(({ key, label, value, href, icon: Icon }, i) => (
+                <Reveal as="li" key={key} delay={i * 0.08} y={16} className="flex items-center gap-4">
                   <span
                     aria-hidden="true"
                     className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-surface ring-hairline"
@@ -75,7 +77,7 @@ export function ContactCTA() {
                       <span className="text-sm font-medium text-text">{value}</span>
                     )}
                   </span>
-                </li>
+                </Reveal>
               ))}
             </ul>
 
@@ -108,10 +110,10 @@ export function ContactCTA() {
             </div>
           </div>
 
-          {/* Right form */}
-          <div>
+          {/* Right form — settles into place as it reaches the reading zone. */}
+          <ScrollScale from={0.97} y={32}>
             <ContactForm />
-          </div>
+          </ScrollScale>
         </div>
       </div>
     </section>
