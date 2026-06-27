@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" fill="none" role="img" aria-label="Cloud-native IoT analytics dashboard">
+  <rect width="1280" height="800" fill="#0e0e11"/>
+  <ellipse cx="640" cy="880" rx="720" ry="340" fill="#c75c37" opacity="0.08"/>
+
+  <!-- header -->
+  <text x="64" y="92" font-family="ui-monospace, monospace" font-size="22" letter-spacing="4" fill="#a1a1aa">IOT ANALYTICS — OVERVIEW</text>
+  <circle cx="1140" cy="84" r="6" fill="#c75c37"/>
+  <text x="1216" y="92" text-anchor="end" font-family="ui-monospace, monospace" font-size="20" fill="#71717a">live</text>
+
+  <!-- stat cards -->
+  <g font-family="ui-sans-serif, system-ui, sans-serif">
+    <g>
+      <rect x="64" y="142" width="354" height="150" rx="20" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.08"/>
+      <text x="92" y="196" font-family="ui-monospace, monospace" font-size="17" letter-spacing="2" fill="#71717a">REST APIS</text>
+      <text x="92" y="252" font-size="52" font-weight="600" fill="#fafaf9">15+</text>
+    </g>
+    <g>
+      <rect x="446" y="142" width="354" height="150" rx="20" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.08"/>
+      <text x="474" y="196" font-family="ui-monospace, monospace" font-size="17" letter-spacing="2" fill="#71717a">COMPONENTS</text>
+      <text x="474" y="252" font-size="52" font-weight="600" fill="#fafaf9">25+</text>
+    </g>
+    <g>
+      <rect x="828" y="142" width="388" height="150" rx="20" fill="#c75c37" fill-opacity="0.12" stroke="#c75c37" stroke-opacity="0.30"/>
+      <text x="856" y="196" font-family="ui-monospace, monospace" font-size="17" letter-spacing="2" fill="#e3a587">SERVICES</text>
+      <text x="856" y="252" font-size="52" font-weight="600" fill="#fafaf9">6</text>
+      <text x="924" y="252" font-size="26" fill="#a1a1aa">· Compose</text>
+    </g>
+  </g>
+
+  <!-- line chart panel -->
+  <rect x="64" y="320" width="736" height="416" rx="20" fill="#ffffff" fill-opacity="0.04" stroke="#ffffff" stroke-opacity="0.08"/>
+  <text x="92" y="362" font-family="ui-monospace, monospace" font-size="17" letter-spacing="2" fill="#71717a">TELEMETRY · 24H</text>
+  <!-- gridlines -->
+  <g stroke="#ffffff" stroke-opacity="0.06">
+    <line x1="92" y1="430" x2="772" y2="430"/>
+    <line x1="92" y1="520" x2="772" y2="520"/>
+    <line x1="92" y1="610" x2="772" y2="610"/>
+    <line x1="92" y1="700" x2="772" y2="700"/>
+  </g>
+  <!-- area + line -->
+  <path d="M92 660 L212 600 L332 632 L452 540 L572 580 L692 470 L772 500 L772 700 L92 700 Z" fill="#c75c37" fill-opacity="0.10"/>
+  <path d="M92 660 L212 600 L332 632 L452 540 L572 580 L692 470 L772 500" stroke="#c75c37" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="692" cy="470" r="6" fill="#c75c37"/>
+
+  <!-- bar chart panel -->
+  <rect x="828" y="320" width="388" height="416" rx="20" fill="#ffffff" fill-opacity="0.04" stroke="#ffffff" stroke-opacity="0.08"/>
+  <text x="856" y="362" font-family="ui-monospace, monospace" font-size="17" letter-spacing="2" fill="#71717a">BY DEVICE</text>
+  <g>
+    <rect x="856" y="540" width="52" height="156" rx="8" fill="#ffffff" fill-opacity="0.16"/>
+    <rect x="924" y="476" width="52" height="220" rx="8" fill="#ffffff" fill-opacity="0.16"/>
+    <rect x="992" y="580" width="52" height="116" rx="8" fill="#ffffff" fill-opacity="0.16"/>
+    <rect x="1060" y="430" width="52" height="266" rx="8" fill="#c75c37"/>
+    <rect x="1128" y="512" width="52" height="184" rx="8" fill="#ffffff" fill-opacity="0.16"/>
+  </g>
+</svg>

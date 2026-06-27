@@ -57,7 +57,7 @@ export function DeviceFrame({ label, variant = "browser", className, children }:
       <div
         className={cn(
           "relative w-full overflow-hidden bg-product",
-          isPhone ? "aspect-[9/19.5]" : "aspect-[16/10]",
+          isPhone ? "aspect-[9/19.5]" : "aspect-16/12",
         )}
       >
         {children ? (

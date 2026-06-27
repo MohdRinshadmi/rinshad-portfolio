@@ -14,7 +14,7 @@ export function Epilogue() {
     { label: "Email", value: siteConfig.email, href: `mailto:${siteConfig.email}` },
     { label: "LinkedIn", value: "in/mohd-rinshadmi", href: siteConfig.social.linkedin },
     { label: "GitHub", value: "@MohdRinshadmi", href: siteConfig.social.github },
-    { label: "Résumé", value: "PDF · one page", href: siteConfig.resumeUrl },
+    { label: "Résumé", value: "PDF · two pages", href: siteConfig.resumeUrl },
   ];
 
   return (

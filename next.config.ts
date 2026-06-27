@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
     root: __dirname,
   },
   images: {
+    // Local project mockups are SVGs; allow the optimizer to serve them.
+    // Safe here because every SVG under /public is authored in-repo (no scripts).
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       {
         protocol: "https",

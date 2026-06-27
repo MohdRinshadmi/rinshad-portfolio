@@ -27,7 +27,7 @@ export function WritingPreview() {
                 <span className="font-serif italic">build</span>
               </>
             }
-            description="Field notes on streaming AI, real-time systems, and shipping production full-stack."
+            description="Field notes on full-stack web & mobile engineering — streaming AI, real-time systems, and shipping production-grade React, React Native, and Node.js."
           />
 
           <Link

@@ -12,16 +12,16 @@ import type {
 
 /* ============================================================================
    SITE CONFIG
-   Positioning: AI-Augmented Full-Stack Engineer.
+   Positioning: Full-Stack Web & Mobile Engineer (AI/LLM a supporting theme).
    Voice: confident, concrete, senior. Lead with verbs and numbers.
-   Every claim is évidence-backed by the résumé.
+   Every claim is evidence-backed by the résumé.
    ========================================================================== */
 export const siteConfig = {
   name: "Rinshad",
   fullName: "Mohammed Rinshad M I",
-  role: "AI-Augmented Full-Stack Engineer",
-  tagline: "I build production LLM apps end-to-end — React, Next.js, and Node.js.",
-  bio: "AI-Augmented Full-Stack Engineer with 2.5+ years shipping 20+ production systems on React, Next.js, TypeScript, Node.js, and AWS. I build React UIs — hooks, React Server Components, SSR, Redux Toolkit, React Query, and Tailwind — wired to Node.js APIs running LLM applications, RAG, multi-agent systems, and tool/function calling with Claude, OpenAI, LangChain, and the Vercel AI SDK, backed by PostgreSQL + pgvector, Redis, WebSockets, and event-driven microservices on Docker and serverless. I cut API latency 35%, eliminated a recurring runtime-error class via a live JS→TypeScript migration, and processed Stripe/PayPal billing with zero reconciliation failures.",
+  role: "Full-Stack Web & Mobile Engineer",
+  tagline: "I build full-stack web and mobile apps end-to-end — React, Next.js, React Native, and Node.js.",
+  bio: "Full-Stack Web & Mobile Engineer with 2.5+ years building and shipping 20+ production web and mobile apps end-to-end on React, Next.js, React Native, TypeScript, Node.js, Golang, and AWS. I build full-stack products — React and React Native front-ends wired to Node.js and Go APIs — with AI/LLM features (RAG, semantic search, multi-agent systems, and tool/function calling via Claude, OpenAI, LangChain, and the Vercel AI SDK), real-time collaboration (WebSockets, Yjs CRDT), and payment systems (Stripe, PayPal, Razorpay), backed by PostgreSQL + pgvector, Redis, and Docker. I cut API latency 35%, raised Lighthouse from 62 to 89, and led a live JS→TypeScript migration across web and mobile.",
   location: "Palakkad, Kerala, India",
   locationShort: "Palakkad, IN",
   email: "rinshad803@gmail.com",
@@ -40,12 +40,12 @@ export const siteConfig = {
    HERO
    ========================================================================== */
 export const hero = {
-  eyebrow: "AI · FULL-STACK · 2.5 YRS · 20+ SHIPPED",
+  eyebrow: "FULL-STACK · WEB & MOBILE · 2.5 YRS · 20+ SHIPPED",
   /** Primary H1. `accent` MUST be a verbatim substring — Hero renders it as the muted two-tone tail. */
-  headline: "AI-Augmented Full-Stack Engineer",
-  accent: "Full-Stack Engineer",
+  headline: "Full-Stack Web & Mobile Engineer",
+  accent: "Web & Mobile Engineer",
   subheadline:
-    "I build production LLM apps end-to-end — React, Next.js, React Native, and TypeScript front-ends wired to Node.js APIs on AWS running RAG, multi-agent systems, and tool calling with Claude, OpenAI, and the Vercel AI SDK.",
+    "I build full-stack web and mobile apps end-to-end — React, Next.js, and React Native front-ends wired to Node.js and Go APIs on AWS, with AI/LLM, RAG, and real-time features.",
   primaryCta: { label: "View Projects", href: "/work" },
   secondaryCta: { label: "Let's Talk", href: "/contact" },
   /** Alternative headlines (per brief) — keep for easy A/B swaps. */
@@ -59,8 +59,8 @@ export const hero = {
   spec: [
     { k: "LOCATION", v: "Palakkad, IN" },
     { k: "STATUS", v: "Open to roles", live: true },
-    { k: "FOCUS", v: "LLM apps · RAG · Realtime" },
-    { k: "SHIPS TO", v: "Web · APIs · Cloud" },
+    { k: "FOCUS", v: "Web · Mobile · AI" },
+    { k: "SHIPS TO", v: "Web · Mobile · Cloud" },
   ],
 } as const;
 
@@ -93,14 +93,14 @@ export const projects: Project[] = [
     tagline: "A streaming AI copilot with tool-calling and live agent traces.",
     description:
       "The web companion for an AI life-assistant super app — a streaming copilot with multimodal inputs and transparent, live agent-trace rendering inside React Server Components.",
-    image: "https://picsum.photos/seed/rinshad-copilot/1280/800?grayscale",
+    image: "/images/projects/ai-copilot.svg",
     platform: "WEB · AI COPILOT",
     year: "2024",
     role: "Lead Frontend Engineer",
     timeline: "Production",
     categories: ["AI", "Full-stack"],
     overview:
-      "A production AI copilot that streams Claude and OpenAI completions in real time, calls tools mid-conversation, and shows the user exactly what the agent is doing — all inside React Server Components for sub-second perceived latency.",
+      "A production, voice-first AI assistant that streams Gemini completions in real time, calls tools mid-conversation, and grounds its answers in a 20,000+ chunk knowledge base — all inside React Server Components for sub-second perceived latency.",
     problem:
       "Users needed a responsive AI copilot that could handle text, image, and voice input while staying transparent about what the agent was doing — without the UI freezing on long, tool-heavy runs.",
     approach:
@@ -109,13 +109,13 @@ export const projects: Project[] = [
       "Engineered a streaming copilot with tool/function calling, multimodal inputs, and live agent-trace rendering inside RSC, backed by reusable agent-state primitives (Zustand + hooks) for retries, cancellation, and partial-message hydration across long-running conversations.",
     architecture: {
       summary:
-        "The client opens a streaming channel to an AI gateway that fans requests out to Claude/OpenAI and tool endpoints. Tokens and tool events stream back through React Server Components and Suspense, while a Zustand store holds cancellable, hydratable agent state.",
+        "A voice-first assistant streams Gemini chat and tool calls through a Next.js RSC UI to a Node.js API that owns JWT refresh-token rotation and Redis-backed rate limiting. A production RAG pipeline retrieves over 20,000+ pgvector chunks with HNSW indexing — cutting retrieval from seconds to sub-second — then speaks the answer back via TTS.",
       nodes: [
-        { id: "client", label: "RSC Client", sub: "Next.js · streaming UI" },
-        { id: "gateway", label: "AI Gateway", sub: "Vercel AI SDK", critical: true },
-        { id: "models", label: "Claude · OpenAI", sub: "completions + tools", critical: true },
-        { id: "tools", label: "Tool calls", sub: "function calling" },
-        { id: "state", label: "Agent State", sub: "Zustand · retries · cancel" },
+        { id: "client", label: "Streaming UI", sub: "Next.js · RSC · voice" },
+        { id: "api", label: "Node.js API", sub: "JWT · rate limit" },
+        { id: "gemini", label: "Gemini", sub: "stream · tool calls", critical: true },
+        { id: "rag", label: "RAG · pgvector", sub: "HNSW · 20k+ chunks", critical: true },
+        { id: "tts", label: "TTS playback", sub: "voice response" },
       ],
     },
     challenges: [
@@ -130,78 +130,78 @@ export const projects: Project[] = [
         after: "Sub-second first token via streaming + optimistic UI",
       },
       {
-        label: "Input modes",
-        before: "Text only",
-        after: "Text, image & voice in one composer",
+        label: "Retrieval latency",
+        before: "Seconds on a naive vector scan",
+        after: "Sub-second via HNSW over 20k+ chunks",
       },
     ],
     results: [
-      "Shipped a transparent, streaming copilot with live agent traces to production.",
-      "Reusable agent-state primitives now power multiple conversation surfaces.",
+      "Shipped a voice-first, transparent streaming assistant to production.",
+      "Production RAG over 20,000+ embedded chunks with sub-second HNSW retrieval.",
     ],
     lessons: [
       "Streaming is a UI architecture, not a feature — design every partial state up front.",
       "Showing the agent's tool calls builds more trust than hiding them behind a spinner.",
     ],
-    tags: ["Next.js", "Vercel AI SDK", "Claude API", "OpenAI API", "Zustand"],
+    tags: ["Next.js", "Node.js", "Gemini API", "pgvector · HNSW", "Redis"],
     stack: [
-      { label: "Framework", items: ["Next.js (App Router · RSC)", "TypeScript", "React 19"] },
-      { label: "AI", items: ["Vercel AI SDK", "Claude API", "OpenAI API", "Tool calling"] },
-      { label: "State & UI", items: ["Zustand", "Tailwind CSS", "shadcn/ui", "Framer Motion"] },
+      { label: "Framework", items: ["Next.js (App Router · RSC)", "Node.js", "TypeScript", "React"] },
+      { label: "AI & RAG", items: ["Gemini API", "Tool / function calling", "RAG · PostgreSQL + pgvector", "HNSW vector indexing"] },
+      { label: "State, data & UI", items: ["Zustand", "Redis (rate limiting)", "Tailwind CSS", "shadcn/ui"] },
     ],
     metrics: [
-      { label: "Latency", value: "<1s" },
-      { label: "Input modes", value: "3" },
-      { label: "Agent traces", value: "Live" },
+      { label: "Retrieval", value: "<1s" },
+      { label: "Knowledge base", value: "20k+ chunks" },
+      { label: "Vector index", value: "HNSW" },
     ],
     featured: true,
   },
   {
     slug: "realtime-collab-platform",
     title: "AI-Powered Real-Time Collaboration Platform",
-    tagline: "A CRDT editor with live presence and inline Claude assistance.",
+    tagline: "A Yjs CRDT editor with live presence and inline AI assistance.",
     description:
       "A real-time collaborative editor with conflict-free editing, live presence, and inline AI assistance that stays out of the way until you ask for it.",
-    image: "https://picsum.photos/seed/rinshad-collab/1280/800?grayscale",
+    image: "/images/projects/collab-editor.svg",
     platform: "WEB · REAL-TIME · AI",
     year: "2024",
     role: "Frontend Engineer",
     timeline: "Production",
     categories: ["Real-time", "AI"],
     overview:
-      "A CRDT-based collaborative editor where many people edit the same large document at once — with live cursors, presence, and inline Claude assistance — at sub-16ms input latency on 10k+ node documents.",
+      "A Yjs CRDT collaborative editor where many people edit the same document at once — with live cursors, presence, and inline AI assistance — broadcasting conflict-free updates across multiple stateless server instances via Redis Pub/Sub.",
     problem:
       "Teams editing the same large document needed conflict-free real-time collaboration with AI help that assisted without interrupting the writing flow.",
     approach:
       "Lean on CRDTs for correctness instead of fragile lock-based sync, stream UI updates through Suspense, and keep AI inline and on-demand so it never blocks typing.",
     solution:
-      "Built a CRDT-based editor (Yjs) with live cursors, presence, and conflict-free updates streamed via Suspense, plus inline Claude assistance — streaming completions, “explain selection,” and summarization with tool calling — at <16ms input latency on 10k+ node documents.",
+      "Built a Yjs CRDT editor with live cursors, presence, and typing indicators handling 20+ concurrent clients without merge conflicts, on a stateless WebSocket layer that fans updates out via Redis Pub/Sub across multiple app instances. Inline AI — streaming summarization and agent actions on a selection — sits behind a JWT/OAuth audit and ACL layer with idempotent webhooks on AWS.",
     architecture: {
       summary:
-        "Each client holds a Yjs document and syncs CRDT updates over WebSockets, so edits merge conflict-free. Presence rides the same channel; AI requests stream completions back into the document through Suspense without blocking input.",
+        "Editor clients hold Yjs CRDT documents with live presence and typing indicators. A stateless WebSocket gateway fans updates out through Redis Pub/Sub across multiple app instances by channel, where they merge conflict-free. Inline streaming LLM (summarize, agent actions on a selection) sits behind a JWT/OAuth audit + ACL layer with idempotent webhooks on AWS.",
       nodes: [
-        { id: "client", label: "Editor Client", sub: "Yjs document" },
-        { id: "ws", label: "WebSocket Sync", sub: "CRDT updates", critical: true },
-        { id: "crdt", label: "Conflict-free Merge", sub: "Yjs", critical: true },
-        { id: "presence", label: "Live Presence", sub: "cursors · awareness" },
-        { id: "ai", label: "Inline Claude", sub: "streamed via Suspense" },
+        { id: "client", label: "Editor Clients", sub: "Yjs · presence · 20+" },
+        { id: "ws", label: "WS Gateway", sub: "stateless" },
+        { id: "pubsub", label: "Redis Pub/Sub", sub: "channel fan-out", critical: true },
+        { id: "crdt", label: "CRDT Merge", sub: "Yjs · conflict-free", critical: true },
+        { id: "ai", label: "Inline LLM", sub: "summarize · ACL" },
       ],
     },
     challenges: [
-      "Keeping input latency under 16ms while merging CRDT updates on 10k+ node documents.",
+      "Broadcasting CRDT updates across multiple stateless server instances without losing consistency.",
       "Rendering live cursors and presence without re-rendering the whole editor.",
       "Streaming AI completions into a live document without fighting concurrent edits.",
     ],
     performance: [
       {
-        label: "Input latency",
-        before: "Jank on large documents",
-        after: "<16ms on 10k+ node docs",
+        label: "Concurrent editing",
+        before: "Lock contention & lost edits",
+        after: "20+ clients, conflict-free via CRDT merge",
       },
       {
-        label: "Conflict handling",
-        before: "Lock contention & lost edits",
-        after: "Conflict-free via CRDT merge",
+        label: "Scale-out",
+        before: "Single-instance WebSocket server",
+        after: "Stateless, fanned out via Redis Pub/Sub",
       },
     ],
     results: [
@@ -212,85 +212,85 @@ export const projects: Project[] = [
       "CRDTs trade a steeper model for correctness you don't have to babysit later.",
       "AI in a live document has to be on-demand and inline, or it becomes noise.",
     ],
-    tags: ["Next.js", "Yjs (CRDT)", "WebSockets", "TypeScript", "Vercel AI SDK"],
+    tags: ["Next.js", "Yjs (CRDT)", "WebSockets", "Redis Pub/Sub", "AWS"],
     stack: [
-      { label: "Framework", items: ["Next.js", "TypeScript", "React"] },
-      { label: "Real-time", items: ["Yjs (CRDT)", "WebSockets", "Suspense", "Presence / awareness"] },
-      { label: "AI", items: ["Vercel AI SDK", "Claude API", "Tool calling"] },
+      { label: "Framework", items: ["Next.js", "Node.js", "TypeScript", "React"] },
+      { label: "Real-time", items: ["Yjs (CRDT)", "WebSockets", "Redis Pub/Sub", "Presence / awareness"] },
+      { label: "AI & security", items: ["Streaming LLM (inline)", "Tool / function calling", "JWT/OAuth · ACL", "Idempotent webhooks · AWS"] },
     ],
     metrics: [
-      { label: "Input latency", value: "<16ms" },
-      { label: "Document size", value: "10k+ nodes" },
-      { label: "Sync", value: "CRDT" },
+      { label: "Concurrent clients", value: "20+" },
+      { label: "Merge", value: "Conflict-free" },
+      { label: "Fan-out", value: "Redis Pub/Sub" },
     ],
     featured: true,
   },
   {
     slug: "iot-analytics-dashboard",
-    title: "Cloud-Native IoT Analytics Dashboard",
-    tagline: "Live telemetry from 10k+ devices, streamed at 60fps.",
+    title: "Cloud-Native IoT Analytics Platform",
+    tagline: "A React + Go platform on Clean Architecture, built to scale.",
     description:
-      "A cloud-native analytics dashboard that streams live telemetry from 10k+ IoT devices into virtualized charts and heatmaps — without the UI buckling under the volume.",
-    image: "https://picsum.photos/seed/rinshad-telemetry/1280/800?grayscale",
-    platform: "WEB · REAL-TIME",
+      "A cloud-native IoT analytics platform — a type-safe React client over 15+ Go REST APIs, structured with Clean Architecture and a service/repository split, containerized for a clean local setup and future microservice evolution.",
+    image: "/images/projects/analytics-dashboard.svg",
+    platform: "WEB · CLOUD-NATIVE",
     year: "2023",
-    role: "Frontend Engineer",
+    role: "Full-Stack Engineer",
     timeline: "Production",
-    categories: ["Real-time", "Full-stack"],
+    categories: ["Full-stack", "Cloud-native"],
     overview:
-      "An operations dashboard that turns a firehose of IoT telemetry into something a human can actually read — virtualized charts and heatmaps holding 60fps while thousands of devices report in, with sub-second TTFB from RSC and edge caching.",
+      "A cloud-native IoT analytics platform built React-over-Go: a type-safe React client (25+ reusable components, TanStack Query + Zustand) calling 15+ Go/Gin REST APIs through a Clean-Architecture service and repository layer over PostgreSQL and Redis — six services orchestrated with Docker Compose, with real-time and Kubernetes designed in for the next phase.",
     problem:
-      "Operators needed live visibility into thousands of devices without the UI buckling under the sheer volume of incoming data.",
+      "The platform needed a maintainable, scalable foundation — a clean separation between transport, domain, and data — that a team could extend toward real-time telemetry and microservices without a rewrite.",
     approach:
-      "Virtualize everything that renders, push first paint to the edge, and use React 18 transitions so high-frequency updates never block interaction.",
+      "Lead with architecture: Clean Architecture with repository/service layers and dependency injection on the Go side, a type-safe API layer and feature modules on the React side, and a monorepo that can split into services later.",
     solution:
-      "Streamed telemetry over WebSockets into virtualized charts sustaining 60fps with React 18 transitions and Suspense, backed by RSC + edge caching for sub-second TTFB and a configurable alert/rule builder with optimistic UI and per-tenant theming via shadcn/ui.",
+      "Built a React + Go platform on Clean Architecture: 15+ Gin/GORM REST endpoints (device registration, telemetry ingestion, auth, analytics) with middleware, a type-safe TanStack Query + Zustand client of 25+ reusable components, and six services wired with Docker Compose — cutting local setup from hours to minutes. Real-time telemetry (MQTT, WebSocket broadcast), AI analytics, and Kubernetes are designed in for the next phase.",
     architecture: {
       summary:
-        "A device fleet streams telemetry through a WebSocket gateway. React Server Components prerender the shell at the edge for fast TTFB, while virtualized charts apply high-frequency updates inside React transitions to protect the frame budget.",
+        "A type-safe React client — 25+ reusable components with TanStack Query and Zustand — calls 15+ Go/Gin REST endpoints through middleware into a Clean-Architecture service layer with dependency injection and a GORM repository over PostgreSQL and Redis. Six services are orchestrated with Docker Compose; real-time MQTT, WebSocket broadcast, and Kubernetes are designed in for the next phase.",
       nodes: [
-        { id: "fleet", label: "Device Fleet", sub: "10k+ devices" },
-        { id: "ws", label: "WebSocket Gateway", sub: "live telemetry", critical: true },
-        { id: "rsc", label: "RSC + Edge Cache", sub: "sub-second TTFB" },
-        { id: "charts", label: "Virtualized Charts", sub: "60fps · transitions", critical: true },
-        { id: "alerts", label: "Alert / Rule Builder", sub: "optimistic UI" },
+        { id: "client", label: "React Client", sub: "TanStack · Zustand" },
+        { id: "api", label: "Go · Gin", sub: "15+ REST · mw", critical: true },
+        { id: "service", label: "Service Layer", sub: "Clean Arch · DI", critical: true },
+        { id: "repo", label: "Repository", sub: "GORM" },
+        { id: "data", label: "Postgres · Redis", sub: "6 svc · Compose" },
       ],
     },
     challenges: [
-      "Sustaining 60fps while thousands of devices stream updates simultaneously.",
-      "Keeping TTFB sub-second on a data-heavy, multi-tenant dashboard.",
-      "Letting operators build alert rules with instant, optimistic feedback.",
+      "Keeping a clean boundary between transport, domain, and data so the system stays extensible.",
+      "Designing a type-safe contract shared across a 25+ component React client and the Go API.",
+      "Structuring a monorepo and six containerized services that can split into microservices later.",
     ],
     performance: [
       {
-        label: "Frame rate under load",
-        before: "Dropped frames on burst data",
-        after: "Sustained 60fps via virtualization + transitions",
+        label: "Local setup",
+        before: "Hours of manual service wiring",
+        after: "Minutes via Docker Compose (6 services)",
       },
       {
-        label: "Time to first byte",
-        before: "Slow data-heavy first paint",
-        after: "<1s via RSC + edge caching",
+        label: "Architecture",
+        before: "Tightly coupled layers",
+        after: "Clean Architecture · DI · repository split",
       },
     ],
     results: [
-      "Live visibility across 10k+ devices in a single, responsive dashboard.",
-      "A per-tenant alert builder that operators configure without engineering help.",
+      "A scalable React + Go foundation ready to evolve into microservices.",
+      "15+ REST APIs and 25+ reusable components behind a type-safe contract.",
     ],
     lessons: [
-      "At high update frequencies, virtualization and transitions matter more than raw render speed.",
-      "Pushing first paint to the edge buys headroom the rest of the UI spends well.",
+      "Clean Architecture is cheap up front and pays for itself the first time requirements move.",
+      "A monorepo with clear module boundaries is the lowest-friction path to microservices later.",
     ],
-    tags: ["Next.js", "RSC", "WebSockets", "TanStack Query", "Recharts"],
+    tags: ["React", "Golang · Gin", "PostgreSQL", "Redis", "Docker"],
     stack: [
-      { label: "Framework", items: ["Next.js (App Router · RSC)", "TypeScript", "Server Actions"] },
-      { label: "Real-time & data", items: ["WebSockets", "TanStack Query", "React 18 transitions"] },
-      { label: "Viz & UI", items: ["D3 / Recharts", "shadcn/ui", "Tailwind CSS", "Edge caching"] },
+      { label: "Frontend", items: ["React", "TypeScript", "TanStack Query", "Zustand"] },
+      { label: "Backend (Go)", items: ["Golang · Gin", "GORM", "15+ REST APIs", "Clean Architecture · DI"] },
+      { label: "Data & infra", items: ["PostgreSQL", "Redis", "Docker Compose (6 services)", "MQTT · K8s (designed)"] },
     ],
     metrics: [
-      { label: "Devices", value: "10k+" },
-      { label: "Frame rate", value: "60fps" },
-      { label: "TTFB", value: "<1s" },
+      { label: "REST APIs", value: "15+" },
+      { label: "React components", value: "25+" },
+      { label: "Services", value: "6 · Compose" },
     ],
     featured: true,
   },
@@ -310,9 +310,9 @@ export const capabilities: Capability[] = [
     items: ["Vercel AI SDK", "Claude · OpenAI", "LangChain", "Tool / function calling", "RAG · pgvector", "Multi-agent systems"],
   },
   {
-    title: "Frontend Engineering",
-    blurb: "React, Next.js, and TypeScript — hooks, React Server Components, and SSR, production UIs that ship.",
-    items: ["React (hooks · RSC)", "Next.js (App Router · SSR)", "TypeScript", "Redux Toolkit · React Query", "Tailwind · shadcn/ui", "Framer Motion"],
+    title: "Frontend — Web & Mobile",
+    blurb: "React, Next.js, and React Native — hooks, React Server Components, and SSR, production web and mobile UIs that ship.",
+    items: ["React (hooks · RSC)", "React Native (mobile)", "Next.js (App Router · SSR)", "TypeScript", "Redux Toolkit · React Query", "Tailwind · shadcn/ui"],
   },
   {
     title: "Backend & Real-Time",
@@ -353,16 +353,16 @@ export const experience: Experience[] = [
     period: "Nov 2023 — Present",
     current: true,
     description:
-      "Building React, Next.js, and TypeScript front-ends wired to Node.js APIs — streaming AI copilots, agentic systems, and real-time dashboards — and owning delivery from Figma to production.",
+      "Building React, Next.js, and React Native front-ends wired to Node.js and Go APIs — streaming AI copilots, agentic systems, and real-time dashboards across web and mobile — and owning delivery from Figma to production.",
     achievements: [
-      "Architected a shared TypeScript component library across React and Next.js — cutting feature delivery time 30% across 20+ production systems.",
+      "Architected a shared TypeScript component and API-contract library across React, Next.js, and React Native — cutting feature delivery time 30% across 20+ production systems on web and mobile.",
       "Engineered streaming AI features with the Vercel AI SDK — Claude/OpenAI completions, tool-call traces, multi-agent flows, and RAG citations inside React Server Components for sub-second perceived latency.",
-      "Led a full JS-to-TypeScript migration on a live production codebase with strict typing and type-safe API contracts — eliminating an entire class of runtime errors.",
+      "Led a full JS-to-TypeScript migration across web (React) and mobile (React Native) on a live production codebase with strict typing and type-safe API contracts — eliminating an entire class of runtime errors.",
       "Optimized React rendering with memoization, code splitting, lazy loading, and React Query caching — cutting re-renders on AI dashboards by 40% and lifting Core Web Vitals.",
       "Integrated agentic AI workflows (Claude Code, Cursor, GitHub Copilot, v0) into daily delivery — accelerating scaffolding, refactors, and test generation with human review as the gate.",
       "Cut API latency 35% and processed Stripe/PayPal billing with zero reconciliation failures — Node.js services with idempotent webhooks, retries, and event-driven workers on Docker.",
     ],
-    technologies: ["React", "Next.js", "Node.js", "TypeScript", "Vercel AI SDK", "PostgreSQL"],
+    technologies: ["React", "Next.js", "React Native", "Node.js", "TypeScript", "Golang"],
   },
 ];
 
@@ -381,10 +381,10 @@ export const education: Education[] = [
    FULL SKILL INVENTORY (for /about) — verbatim from the résumé
    ========================================================================== */
 export const skillGroups: SkillGroup[] = [
-  { label: "Languages", items: ["TypeScript", "JavaScript (ES6+)", "HTML5", "CSS3", "SQL"] },
+  { label: "Languages", items: ["TypeScript", "JavaScript (ES6+)", "Golang", "Python", "SQL", "HTML5 · CSS3"] },
   {
     label: "Frameworks & Libraries",
-    items: ["React", "Next.js (App Router · RSC · Server Actions)", "Remix (familiar)"],
+    items: ["React", "React Native", "Next.js (App Router · RSC · Server Actions)", "Remix (familiar)"],
   },
   {
     label: "Backend & Data",
@@ -458,14 +458,14 @@ export const workProcess: WorkProcess[] = [
    ========================================================================== */
 export const about = {
   intro:
-    "I'm Rinshad — an AI-augmented full-stack engineer who builds production LLM apps end-to-end, from React and Next.js UIs to Node.js APIs and the data layer.",
+    "I'm Rinshad — a full-stack web & mobile engineer who builds production apps end-to-end, from React, Next.js, and React Native front-ends to Node.js and Go APIs and the data layer.",
   paragraphs: [
-    "Over the last 2.5 years I've shipped 20+ production systems on React, Next.js, TypeScript, Node.js, and AWS: streaming AI copilots, agentic interfaces, real-time collaboration, and live telemetry dashboards. I build React UIs — hooks, React Server Components, SSR, Redux Toolkit, and React Query — wired to Node.js APIs running LLM applications, RAG, multi-agent systems, and tool calling on Claude, OpenAI, LangChain, and the Vercel AI SDK, backed by PostgreSQL + pgvector, Redis, and event-driven microservices.",
-    "I care about the parts users feel: sub-second streaming, conflict-free real-time editing, and transparent agents that show their work. I cut API latency 35%, processed Stripe/PayPal billing with zero reconciliation failures, led a live JS→TypeScript migration that erased a recurring class of runtime errors, and built a shared component library that cut feature delivery time 30% across 20+ systems.",
+    "Over the last 2.5 years I've shipped 20+ production web and mobile apps on React, Next.js, React Native, TypeScript, Node.js, Golang, and AWS: streaming AI copilots, agentic interfaces, real-time collaboration, and live telemetry dashboards. I build React and React Native front-ends — hooks, React Server Components, SSR, Redux Toolkit, and React Query — wired to Node.js and Go APIs running LLM applications, RAG, multi-agent systems, and tool calling on Claude, OpenAI, LangChain, and the Vercel AI SDK, backed by PostgreSQL + pgvector, Redis, and event-driven microservices.",
+    "I care about the parts users feel: sub-second streaming, conflict-free real-time editing, and transparent agents that show their work. I cut API latency 35%, raised Lighthouse from 62 to 89, processed Stripe, PayPal, and Razorpay billing with zero reconciliation failures, led a live JS→TypeScript migration across web and mobile that erased a recurring class of runtime errors, and built a shared component library used across React, Next.js, and React Native.",
     "AI isn't a bolt-on for me — I design for it: streaming states, cancellation, tool-call traces, and latency budgets, treated as first-class UI in production.",
   ],
   closing:
-    "Based in Kerala, India — open to AI and full-stack engineering roles, remote or relocation.",
+    "Based in Kerala, India — open to full-stack web & mobile engineering roles, remote or relocation.",
 };
 
 /* ============================================================================

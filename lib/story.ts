@@ -14,7 +14,7 @@ export const prologue = {
     index: "01",
     edition: "Ed. 2026",
     name: "Mohammed Rinshad",
-    role: "AI-native product engineering",
+    role: "Full-stack web & mobile engineering",
     location: "Palakkad, IN",
     coords: "10.79°N",
     status: "Available",
@@ -24,10 +24,10 @@ export const prologue = {
   headline: {
     intro: "I am",
     name: "Rinshad",
-    lines: ["full-stack", "engineer"],
+    lines: ["full-stack web", "& mobile engineer"],
   },
   byline:
-    "Mohammed Rinshad — product engineer. Two and a half years, twenty-plus systems shipped. This is how the work actually happens.",
+    "Mohammed Rinshad — full-stack web & mobile engineer. Two and a half years, twenty-plus systems shipped. This is how the work actually happens.",
   availability: "Open to AI & full-stack engineering roles",
   scrollCue: "Scroll to begin",
   /** Vertical project reel — the cover photograph, in motion. Placeholder art
@@ -52,7 +52,7 @@ export const prologue = {
         src: "https://picsum.photos/seed/rinshad-telemetry/720/460?grayscale",
         width: 720,
         height: 460,
-        label: "IoT telemetry — 10k devices, 60fps",
+        label: "IoT analytics — React + Go platform",
       },
       {
         src: "https://picsum.photos/seed/rinshad-systems/720/560?grayscale",
@@ -92,7 +92,7 @@ export const chapterBuilder = {
   title: "The Builder",
   /** Large scrubbed paragraphs — the narrative spine. */
   paragraphs: [
-    "Some engineers collect technologies. I collect shipped systems — twenty-some of them over the last two and a half years: streaming AI copilots, conflict-free collaborative editors, telemetry dashboards that hold sixty frames a second while ten thousand devices report in.",
+    "Some engineers collect technologies. I collect shipped systems — twenty-some of them over the last two and a half years, across web and mobile: streaming AI copilots, conflict-free collaborative editors, React Native apps, and a cloud-native analytics platform engineered on Clean Architecture to scale.",
     "Each one started messy. A vague brief, an impossible latency budget, a codebase mid-migration. The work is the same every time: understand the problem until it stops being scary, draw the system before writing the code, then ship, watch it break, and stay until it doesn't.",
   ],
   quote: "The fastest way to understand a system is to ship it — and stay until it stops breaking.",
@@ -101,7 +101,7 @@ export const chapterBuilder = {
     {
       mark: "1",
       fact: "20+ production systems",
-      gloss: "shipped end-to-end on React, Next.js, Node.js, and AWS",
+      gloss: "shipped end-to-end on React, Next.js, React Native, Node.js, and AWS",
     },
     {
       mark: "2",
@@ -138,7 +138,7 @@ export const chapterInterfaces = {
     {
       step: "Architecture",
       title: "Draw the system before the screens.",
-      body: "A streaming gateway fans requests out to Claude and OpenAI and to tool endpoints. Tokens and tool events flow back through React Server Components; a small agent-state store owns retries, cancellation, and partial-message hydration.",
+      body: "A streaming gateway fans requests out to Gemini and to tool endpoints. Tokens and tool events flow back through React Server Components; a small agent-state store owns retries, cancellation, and partial-message hydration.",
       detail: "Client ⇄ AI gateway ⇄ models + tools, with state that survives interruption.",
     },
     {
@@ -184,22 +184,22 @@ export const chapterWork = {
   /** Editorial framing per featured project, keyed by slug. */
   features: {
     "ai-life-assistant": {
-      kicker: "Feature · AI copilot",
-      hook: "An AI assistant that shows its work — every tool call streamed live into the conversation.",
-      difficulty: "Streaming, cancellation, and multimodal input had to feel like one calm surface, not three features fighting.",
-      outcome: "Sub-second first token; the agent-state primitives now power every conversation surface.",
+      kicker: "Feature · Voice-first AI",
+      hook: "A voice-first assistant that streams its answers — grounded in a 20,000-chunk knowledge base.",
+      difficulty: "Voice, streaming, and retrieval had to feel like one calm surface — and retrieval had to be fast enough to keep up with speech.",
+      outcome: "Sub-second first token, sub-second RAG retrieval via HNSW, and a voice-to-voice loop in production.",
     },
     "realtime-collab-platform": {
       kicker: "Feature · Real-time collaboration",
-      hook: "Many hands in one large document, no conflicts, with Claude waiting quietly inline.",
-      difficulty: "Merging CRDT updates on 10k-node documents without ever letting input latency cross 16 milliseconds.",
-      outcome: "Conflict-free editing with live presence in production — and AI help that never interrupts typing.",
+      hook: "Many hands in one document, no conflicts — with AI waiting quietly inline.",
+      difficulty: "Broadcasting CRDT updates across multiple stateless server instances, conflict-free, with 20+ clients editing at once.",
+      outcome: "Conflict-free editing with live presence in production, fanned out via Redis Pub/Sub — and AI that never interrupts typing.",
     },
     "iot-analytics-dashboard": {
-      kicker: "Feature · Live telemetry",
-      hook: "Ten thousand devices reporting at once, rendered at sixty frames a second.",
-      difficulty: "A firehose of telemetry had to stay readable — and interactive — while the data never stopped arriving.",
-      outcome: "Sustained 60fps under burst load, sub-second first paint, and an alert builder operators use without engineers.",
+      kicker: "Feature · Cloud-native platform",
+      hook: "A React-over-Go platform built architecture-first — Clean Architecture, 15+ REST APIs, ready to scale.",
+      difficulty: "The system had to stay extensible — a clean split between transport, domain, and data that could grow into real-time and microservices without a rewrite.",
+      outcome: "15+ Go REST APIs and 25+ reusable React components behind a type-safe contract; six services one Docker Compose up away.",
     },
   } as Record<string, { kicker: string; hook: string; difficulty: string; outcome: string }>,
   readCta: "Read the story",

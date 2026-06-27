@@ -1,0 +1,40 @@
+# Rinshad — Full-Stack Web & Mobile Engineer
+
+> Mohammed Rinshad M I is a Full-Stack Web & Mobile Engineer based in Palakkad, Kerala, India, with 2.5+ years building and shipping 20+ production web and mobile apps end-to-end on React, Next.js, React Native, TypeScript, Node.js, Golang, and AWS. He builds full-stack products — React and React Native front-ends wired to Node.js and Go APIs — with AI/LLM features (RAG, multi-agent systems, tool/function calling via Claude, OpenAI, LangChain, and the Vercel AI SDK), real-time collaboration, and payment systems (Stripe, PayPal, Razorpay), backed by PostgreSQL + pgvector, Redis, and Docker.
+
+Key facts:
+- Role: Full-Stack Web & Mobile Engineer
+- Location: Palakkad, Kerala, India (open to remote or relocation)
+- Availability: Open to full-stack web & mobile engineering roles
+- Email: rinshad803@gmail.com
+- Core stack: React, Next.js (App Router · RSC · SSR), React Native, TypeScript, Node.js, Golang, AWS
+- Frontend: React, React Native, Redux Toolkit, Zustand, TanStack Query, Tailwind CSS
+- Backend: Node.js · Express, Golang · Gin, REST, WebSockets, PostgreSQL · pgvector, Redis
+- AI: Vercel AI SDK, Claude API, OpenAI API, LangChain, RAG · pgvector, multi-agent systems, tool/function calling
+- Payments: Stripe, PayPal, Razorpay (webhook-driven order lifecycle)
+- Impact: cut API latency 35%, raised Lighthouse from 62 to 89, led a live JS→TypeScript migration across web and mobile, processed 2,000+ monthly transactions, shipped 20+ production features
+
+## Pages
+
+- [Home](https://rinshad.dev): Overview, positioning, and featured work
+- [Work](https://rinshad.dev/work): Case studies of production systems
+- [About](https://rinshad.dev/about): Long-form bio, skills, experience, and how he works
+- [Writing](https://rinshad.dev/blog): Engineering articles
+- [Contact](https://rinshad.dev/contact): Get in touch
+
+## Case studies
+
+- [AI Life Assistant Super App](https://rinshad.dev/work/ai-life-assistant): A streaming, voice-first AI copilot with tool-calling, multimodal input, and live agent traces in React Server Components, grounded in a 20,000+ chunk RAG knowledge base with sub-second HNSW retrieval. Stack: Next.js, Node.js, Gemini API, pgvector · HNSW, Redis.
+- [AI-Powered Real-Time Collaboration Platform](https://rinshad.dev/work/realtime-collab-platform): A Yjs CRDT collaborative editor with live presence and inline AI assistance, handling 20+ concurrent clients conflict-free over a stateless WebSocket layer fanned out via Redis Pub/Sub on AWS. Stack: Next.js, Yjs (CRDT), WebSockets, Redis Pub/Sub, AWS.
+- [Cloud-Native IoT Analytics Platform](https://rinshad.dev/work/iot-analytics-dashboard): A type-safe React client over 15+ Go/Gin REST APIs structured with Clean Architecture and a service/repository split, six services orchestrated with Docker Compose. Stack: React, Golang · Gin, PostgreSQL, Redis, Docker.
+
+## Writing
+
+- [Next.js Performance Patterns](https://rinshad.dev/blog/nextjs-performance-patterns): Practical patterns for fast React Server Component apps.
+
+## Optional
+
+- [Résumé (PDF)](https://rinshad.dev/rinshad-resume.pdf): Full résumé
+- [Sitemap](https://rinshad.dev/sitemap.xml): All public URLs
+- [GitHub](https://github.com/MohdRinshadmi)
+- [LinkedIn](https://linkedin.com/in/mohd-rinshadmi)

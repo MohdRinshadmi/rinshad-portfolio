@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import {
   motion,
   useScroll,
@@ -117,11 +118,18 @@ export function CaseStudyHero({ project }: { project: Project }) {
           style={hydrated && !prefersReducedMotion ? { y } : undefined}
           className="will-change-transform"
         >
-          <DeviceFrame
-            variant="browser"
-            label={project.title}
-            className="shadow-raised"
-          />
+          <DeviceFrame variant="browser" label={project.title} className="shadow-raised">
+            {project.image ? (
+              <Image
+                src={project.image}
+                alt={`${project.title} interface preview`}
+                fill
+                sizes="(min-width: 1024px) 80rem, 100vw"
+                className="object-cover"
+                priority
+              />
+            ) : undefined}
+          </DeviceFrame>
         </motion.div>
       </div>
     </header>

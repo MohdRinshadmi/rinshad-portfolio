@@ -8,7 +8,7 @@ import { WorkFilter } from "@/components/work/WorkFilter";
 export const metadata: Metadata = buildMetadata({
   title: "Work",
   description:
-    "Selected work — AI products, real-time systems, and full-stack platforms.",
+    "Selected full-stack work across web and mobile — React, Next.js, React Native, and Node.js apps spanning AI products, real-time systems, and cloud-native platforms.",
   path: "/work",
 });
 
@@ -29,7 +29,7 @@ export default function WorkPage() {
           <Eyebrow dot>Selected Work</Eyebrow>
 
           <h1 className="mt-5 font-display text-display-xl text-text text-balance">
-            AI products, real-time systems, and full-stack platforms.
+            Full-stack work — web, mobile, real-time, and AI.
           </h1>
 
           <p className="mt-6 max-w-[58ch] text-body-lg text-text-secondary">

@@ -10,7 +10,7 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 export const metadata: Metadata = buildMetadata({
   title: "Writing",
   description:
-    "Field notes on AI-native interfaces, real-time systems, and shipping fast production-grade React, Next.js, and Node.js.",
+    "Field notes on full-stack web and mobile engineering — shipping production-grade React, Next.js, React Native, and Node.js, plus AI-native interfaces and real-time systems.",
   path: "/blog",
 });
 
@@ -28,9 +28,9 @@ export default function BlogPage() {
             <span className="font-serif italic text-text-secondary">build log</span>
           </h1>
           <p className="mt-6 text-body-lg text-text-secondary">
-            Essays and field notes on AI-native interfaces, real-time systems, and
-            the engineering patterns I reach for to ship fast without cutting
-            corners.
+            Essays and field notes on full-stack web and mobile engineering —
+            AI-native interfaces, real-time systems, and the patterns I reach for
+            to ship fast without cutting corners.
           </p>
         </header>
 

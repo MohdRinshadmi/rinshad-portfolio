@@ -18,7 +18,7 @@ const FADE_Y = "linear-gradient(to bottom, transparent, #000 9%, #000 91%, trans
 /**
  * Prologue — the documentary's cover, typeset like a magazine front. A hairline
  * meta row, then the introduction: "I am Rinshad," in a light greeting (name in
- * terracotta serif italic) over two heavy caps lines — FULL-STACK / ENGINEER.
+ * terracotta serif italic) over two heavy caps lines — FULL-STACK WEB / & MOBILE ENGINEER.
  * Beside it, a vertical reel of project stills drifts top → bottom with the
  * work CTA floating over it. Scrolling away recedes the whole frame like a
  * title card giving way to chapter one.
@@ -165,7 +165,7 @@ export function Prologue() {
             initial={reduceMotion ? false : { opacity: 0, y: 28, scale: 0.985 }}
             animate={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: DURATION.hero, ease: EASE.emphasis, delay: 0.5 }}
-            className="relative h-[50svh] lg:h-[68svh] lg:self-center"
+            className="relative h-[56svh] lg:h-[74svh] lg:self-center lg:before:absolute lg:before:inset-y-0 lg:before:-left-10 lg:before:border-l lg:before:border-dashed lg:before:border-border lg:before:content-['']"
           >
             <div
               aria-hidden="true"

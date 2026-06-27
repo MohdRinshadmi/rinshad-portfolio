@@ -5,7 +5,7 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "Contact",
-  description: "Let's build something — open to AI and full-stack engineering roles.",
+  description: "Let's build something — a full-stack web and mobile engineer open to React, Next.js, React Native, and Node.js roles.",
   path: "/contact",
 });
 
@@ -21,7 +21,8 @@ export default function ContactPage() {
               <span className="font-serif italic text-text-secondary">something</span>.
             </h1>
             <p className="max-w-[52ch] text-body-lg text-text-secondary">
-              Open to AI and full-stack engineering roles. Tell me what you&apos;re building and
+              Open to full-stack web &amp; mobile engineering roles — React, Next.js,
+              React Native, and Node.js. Tell me what you&apos;re building and
               I&apos;ll get back to you.
             </p>
           </div>
