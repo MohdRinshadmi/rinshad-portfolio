@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-import { getProject, projects } from "@/lib/data";
+import { getProject, projects } from "@/lib/content/projects";
 import type { Project } from "@/lib/types";
 import { buildMetadata, projectJsonLd, jsonLdScript } from "@/lib/seo";
 
@@ -13,7 +13,7 @@ import { CaseStudyHero } from "@/components/work/CaseStudyHero";
 import { MetaRail } from "@/components/work/MetaRail";
 import { ArchitectureDiagram } from "@/components/work/ArchitectureDiagram";
 import { StatCard } from "@/components/work/StatCard";
-import { ContactCTA } from "@/components/sections/ContactCTA";
+import { ContactCTA } from "@/components/contact/ContactCTA";
 
 /* --------------------------------------------------------------------------
    Static generation + per-project metadata

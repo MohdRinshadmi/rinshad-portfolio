@@ -1,7 +1,7 @@
 import { ChapterMark } from "@/components/story/ChapterMark";
 import { Reveal } from "@/components/motion/Reveal";
 import { LineMask } from "@/components/motion/LineMask";
-import { chapterPrinciples } from "@/lib/story";
+import { chapterPrinciples } from "@/lib/content/story";
 
 /**
  * Chapter 05 — Principles. Five rules, beautifully typeset: a mono index in

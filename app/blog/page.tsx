@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { getAllPosts } from "@/lib/blog";
+import { getAllPosts } from "@/lib/server/blog";
 import { buildMetadata } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
 import { Chip } from "@/components/ui/Chip";

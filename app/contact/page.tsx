@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { ContactCTA } from "@/components/sections/ContactCTA";
+import { ContactCTA } from "@/components/contact/ContactCTA";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({

@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { siteConfig } from "@/lib/data";
+import { siteConfig } from "@/lib/config/site";
 
 /** Allow all crawlers; point them at the generated sitemap. */
 export default function robots(): MetadataRoute.Robots {

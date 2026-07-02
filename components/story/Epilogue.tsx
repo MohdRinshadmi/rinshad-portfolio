@@ -1,8 +1,8 @@
 import { ArrowUpRight } from "lucide-react";
 import { Reveal } from "@/components/motion/Reveal";
 import { ScrubText } from "@/components/motion/ScrubText";
-import { epilogue } from "@/lib/story";
-import { siteConfig } from "@/lib/data";
+import { epilogue } from "@/lib/content/story";
+import { siteConfig } from "@/lib/config/site";
 
 /**
  * Epilogue — the documentary's ending, not a contact form. A closing statement

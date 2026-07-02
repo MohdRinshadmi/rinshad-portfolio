@@ -71,13 +71,6 @@ export interface Project {
   featured: boolean;
 }
 
-/** Capability pillar for the homepage matrix (replaces % skill bars). */
-export interface Capability {
-  title: string;
-  blurb: string;
-  items: string[];
-}
-
 /** A single proof-strip fact (some count up, some are static labels). */
 export interface ProofStat {
   /** numeric target for count-up; omit for static-value stats */
@@ -122,12 +115,6 @@ export interface WorkProcess {
   icon: string;
 }
 
-export interface Testimonial {
-  quote: string;
-  name: string;
-  title: string;
-}
-
 export interface BlogPost {
   slug: string;
   title: string;
@@ -136,18 +123,4 @@ export interface BlogPost {
   readTime: string;
   tags: string[];
   coverImage?: string;
-}
-
-export interface SocialLink {
-  name: string;
-  url: string;
-  icon: string;
-}
-
-/** Kept for backwards-compat; new UI uses Capability/SkillGroup instead. */
-export interface Skill {
-  name: string;
-  icon: string;
-  category: "languages" | "frameworks" | "ai" | "realtime" | "tooling" | "workflow";
-  level: number;
 }

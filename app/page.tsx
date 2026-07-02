@@ -1,5 +1,4 @@
 import { Prologue } from "@/components/story/Prologue";
-import { TheBuilder } from "@/components/story/TheBuilder";
 import { BehindTheInterfaces } from "@/components/story/BehindTheInterfaces";
 import { SystemsCanvas } from "@/components/story/SystemsCanvas";
 import { WorkStories } from "@/components/story/WorkStories";
@@ -17,7 +16,8 @@ export default function Home() {
   return (
     <>
       <Prologue />
-      {/* <TheBuilder /> */}
+      {/* Parked chapter — re-import TheBuilder from @/components/story/TheBuilder to re-enable.
+      <TheBuilder /> */}
       <BehindTheInterfaces />
       <SystemsCanvas />
       <WorkStories />

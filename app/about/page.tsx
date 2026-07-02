@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { Search, Layout, Code2, Sparkles, Rocket, type LucideIcon } from "lucide-react";
 
 import { buildMetadata } from "@/lib/seo";
-import { about, siteConfig, skillGroups, workProcess } from "@/lib/data";
+import { siteConfig } from "@/lib/config/site";
+import { about, skillGroups, workProcess } from "@/lib/content/profile";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Chip } from "@/components/ui/Chip";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/motion/Reveal";
 import { Stagger, StaggerItem } from "@/components/motion/Stagger";
-import { ExperienceTimeline } from "@/components/sections/ExperienceTimeline";
+import { ExperienceTimeline } from "@/components/about/ExperienceTimeline";
 
 export const metadata: Metadata = buildMetadata({
   title: "About",

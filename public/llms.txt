@@ -10,9 +10,9 @@ Key facts:
 - Core stack: React, Next.js (App Router · RSC · SSR), React Native, TypeScript, Node.js, Golang, AWS
 - Frontend: React, React Native, Redux Toolkit, Zustand, TanStack Query, Tailwind CSS
 - Backend: Node.js · Express, Golang · Gin, REST, WebSockets, PostgreSQL · pgvector, Redis
-- AI: Vercel AI SDK, Claude API, OpenAI API, LangChain, RAG · pgvector, multi-agent systems, tool/function calling
+- AI/LLM: Gemini, Groq, Ollama (local LLMs), LangChain, Vercel AI SDK, RAG · pgvector · HNSW, embeddings, semantic search, streaming, tool/function calling
 - Payments: Stripe, PayPal, Razorpay (webhook-driven order lifecycle)
-- Impact: cut API latency 35%, raised Lighthouse from 62 to 89, led a live JS→TypeScript migration across web and mobile, processed 2,000+ monthly transactions, shipped 20+ production features
+- Impact: shipped 20+ production features across eCommerce, LMS, and AI platforms; architected 40+ REST API endpoints; cut API latency 35%; raised Lighthouse from 62 to 89 (3.8s → 2.1s load); processed 2,000+ monthly transactions; led a live JS→TypeScript migration across web and mobile; cut build times 60% (CRA → Vite)
 
 ## Pages
 
@@ -24,9 +24,11 @@ Key facts:
 
 ## Case studies
 
-- [AI Life Assistant Super App](https://rinshad.dev/work/ai-life-assistant): A streaming, voice-first AI copilot with tool-calling, multimodal input, and live agent traces in React Server Components, grounded in a 20,000+ chunk RAG knowledge base with sub-second HNSW retrieval. Stack: Next.js, Node.js, Gemini API, pgvector · HNSW, Redis.
-- [AI-Powered Real-Time Collaboration Platform](https://rinshad.dev/work/realtime-collab-platform): A Yjs CRDT collaborative editor with live presence and inline AI assistance, handling 20+ concurrent clients conflict-free over a stateless WebSocket layer fanned out via Redis Pub/Sub on AWS. Stack: Next.js, Yjs (CRDT), WebSockets, Redis Pub/Sub, AWS.
-- [Cloud-Native IoT Analytics Platform](https://rinshad.dev/work/iot-analytics-dashboard): A type-safe React client over 15+ Go/Gin REST APIs structured with Clean Architecture and a service/repository split, six services orchestrated with Docker Compose. Stack: React, Golang · Gin, PostgreSQL, Redis, Docker.
+Self-initiated projects built to explore production patterns in AI, real-time systems, and cloud-native architecture. Source: https://github.com/MohdRinshadmi
+
+- [AI Life Assistant Super App](https://rinshad.dev/work/ai-life-assistant): A streaming, voice-first AI copilot with tool-calling, speech-to-text, TTS playback, and live agent traces in React Server Components, grounded in a RAG knowledge base with sub-second HNSW retrieval and JWT refresh-token rotation. Stack: Next.js, Node.js, Python, Gemini API, pgvector · HNSW, Redis. Code: https://github.com/MohdRinshadmi/ai-life-assistant
+- [AI-Powered Real-Time Collaboration Platform](https://rinshad.dev/work/realtime-collab-platform): A Yjs CRDT collaborative editor with live presence and inline AI assistance, handling many concurrent clients conflict-free over a stateless WebSocket layer fanned out via Redis Pub/Sub, with end-to-end Playwright tests. Stack: Next.js, Yjs (CRDT), WebSockets, Redis Pub/Sub, Docker. Code: https://github.com/MohdRinshadmi/ai-real-time-collaboration
+- [Cloud-Native IoT Analytics Platform](https://rinshad.dev/work/iot-analytics-dashboard): A type-safe React client over 15+ Go/Gin REST APIs structured with Clean Architecture and a service/repository split, six services orchestrated with Docker Compose. Stack: React, Golang · Gin, PostgreSQL, Redis, Docker. Code: https://github.com/MohdRinshadmi/cloud-native-iot-dashboard
 
 ## Writing
 
@@ -34,7 +36,7 @@ Key facts:
 
 ## Optional
 
-- [Résumé (PDF)](https://rinshad.dev/rinshad-resume.pdf): Full résumé
+- [Résumé (PDF)](https://rinshad.dev/MohammedRinshadMI_FullStack.pdf): Full résumé
 - [Sitemap](https://rinshad.dev/sitemap.xml): All public URLs
 - [GitHub](https://github.com/MohdRinshadmi)
 - [LinkedIn](https://linkedin.com/in/mohd-rinshadmi)

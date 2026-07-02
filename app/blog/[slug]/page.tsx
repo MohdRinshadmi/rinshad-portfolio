@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { getAllPosts, getPostBySlug } from "@/lib/blog";
+import { getAllPosts, getPostBySlug } from "@/lib/server/blog";
 import { articleJsonLd, buildMetadata, jsonLdScript } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
 import type { BlogPost } from "@/lib/types";

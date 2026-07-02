@@ -5,8 +5,8 @@ import { ChapterMark } from "@/components/story/ChapterMark";
 import { ScrubText } from "@/components/motion/ScrubText";
 import { ScrollScale } from "@/components/motion/ScrollScale";
 import { ProjectArchitectureCanvas } from "@/components/story/ProjectArchitectureCanvas";
-import { projects } from "@/lib/data";
-import { chapterWork } from "@/lib/story";
+import { projects } from "@/lib/content/projects";
+import { chapterWork } from "@/lib/content/story";
 
 /**
  * Chapter 04 — Selected Work, as a stacking deck of dark "ink" cards. Each card
@@ -16,9 +16,9 @@ import { chapterWork } from "@/lib/story";
  * chapter appends layer over layer as you scroll. Keeping the card within a
  * viewport is what lets the whole diagram stay visible while it's pinned.
  */
-export function WorkStories() {
-  const featured = projects.filter((project) => project.featured);
+const featured = projects.filter((project) => project.featured);
 
+export function WorkStories() {
   return (
     <section
       id="work"

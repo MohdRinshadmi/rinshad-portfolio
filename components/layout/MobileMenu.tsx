@@ -11,7 +11,7 @@ import {
 } from "framer-motion";
 import { X, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { siteConfig, navLinks } from "@/lib/data";
+import { siteConfig, navLinks } from "@/lib/config/site";
 import { EASE, DURATION } from "@/lib/animation";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/SocialIcons";
 

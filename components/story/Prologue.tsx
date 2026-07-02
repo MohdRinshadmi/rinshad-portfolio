@@ -5,10 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { useHydrated } from "@/lib/use-hydrated";
+import { useHydrated } from "@/lib/hooks/use-hydrated";
 import { LineMask } from "@/components/motion/LineMask";
 import { MagneticButton } from "@/components/motion/MagneticButton";
-import { prologue } from "@/lib/story";
+import { prologue } from "@/lib/content/story";
 import { DURATION, EASE } from "@/lib/animation";
 
 /* Vertical edge fade for the reel (mask-fade-x's vertical sibling, kept local
@@ -179,7 +179,7 @@ export function Prologue() {
                 {/* two identical copies = a seamless -50% → 0 loop */}
                 {[0, 1].map((copy) => (
                   <div key={copy} className="flex flex-col gap-6 pb-6">
-                    {prologue.reel.items.map((item) => (
+                    {prologue.reel.items.map((item, itemIndex) => (
                       <figure
                         key={item.src}
                         className="relative overflow-hidden rounded-xl border border-border bg-surface shadow-card"
@@ -190,6 +190,9 @@ export function Prologue() {
                           width={item.width}
                           height={item.height}
                           sizes="(min-width: 1024px) 26rem, 92vw"
+                          // First still of the first copy is above the fold —
+                          // preload it as the reel's LCP candidate.
+                          priority={copy === 0 && itemIndex === 0}
                           className="h-auto w-full object-cover"
                         />
                         <figcaption className="absolute bottom-3 left-3 rounded-full bg-surface/85 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-text-secondary backdrop-blur-sm">

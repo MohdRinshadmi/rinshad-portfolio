@@ -11,10 +11,10 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { useHydrated } from "@/lib/use-hydrated";
+import { useHydrated } from "@/lib/hooks/use-hydrated";
 import { DeviceFrame } from "@/components/work/DeviceFrame";
 import type { ArchNode, Project } from "@/lib/types";
-import { chapterWork } from "@/lib/story";
+import { chapterWork } from "@/lib/content/story";
 import { cn } from "@/lib/utils";
 
 /**

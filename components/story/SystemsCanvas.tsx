@@ -8,10 +8,10 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { useHydrated } from "@/lib/use-hydrated";
+import { useHydrated } from "@/lib/hooks/use-hydrated";
 import { ChapterMark } from "@/components/story/ChapterMark";
 import { ScrubText } from "@/components/motion/ScrubText";
-import { chapterSystems } from "@/lib/story";
+import { chapterSystems } from "@/lib/content/story";
 
 /* Canvas geometry — nodes alternate left/right down a 380×1240 sheet. */
 const NODE_X = [120, 260] as const;

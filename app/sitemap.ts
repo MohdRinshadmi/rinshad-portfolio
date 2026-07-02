@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
-import { siteConfig, projects } from "@/lib/data";
-import { getAllPosts } from "@/lib/blog";
+import { siteConfig } from "@/lib/config/site";
+import { projects } from "@/lib/content/projects";
+import { getAllPosts } from "@/lib/server/blog";
 
 const BASE = siteConfig.url;
 
@@ -42,6 +43,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "yearly",
       priority: 0.6,
+    },
+    {
+      url: `${BASE}/uses`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.5,
     },
   ];
 

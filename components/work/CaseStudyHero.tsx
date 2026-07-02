@@ -15,7 +15,7 @@ import { StatTick } from "@/components/ui/StatTick";
 import { Button } from "@/components/ui/Button";
 import { GithubIcon } from "@/components/ui/SocialIcons";
 import { DeviceFrame } from "@/components/work/DeviceFrame";
-import { useHydrated } from "@/lib/use-hydrated";
+import { useHydrated } from "@/lib/hooks/use-hydrated";
 
 /**
  * CaseStudyHero — the <h1> of a `/work/[slug]` page.

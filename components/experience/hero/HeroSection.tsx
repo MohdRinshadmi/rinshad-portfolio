@@ -8,7 +8,7 @@ import { InkStage } from "../core/InkStage";
 import { useSceneGate } from "../core/useSceneGate";
 import { MagneticButton } from "@/components/motion/MagneticButton";
 import { journeyHero } from "@/lib/experience/data";
-import { siteConfig } from "@/lib/data";
+import { siteConfig } from "@/lib/config/site";
 import { EASE, lineMask, staggerContainer } from "@/lib/animation";
 
 const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });

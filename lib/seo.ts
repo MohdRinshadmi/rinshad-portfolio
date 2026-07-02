@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteConfig } from "./data";
+import { siteConfig } from "./config/site";
 import type { BlogPost, Project } from "./types";
 
 const BASE = siteConfig.url;
@@ -8,16 +8,24 @@ const BASE = siteConfig.url;
 export const SITE_KEYWORDS = [
   "Full-Stack Engineer",
   "Full-Stack Developer",
+  "Full-Stack Developer India",
   "Full-Stack Web and Mobile Developer",
   "Full-Stack Web and Mobile Engineer",
+  "Software Engineer India",
+  "SDE India",
   "Web and Mobile Developer",
   "React Native Developer",
-  "Mobile App Developer",
+  "React Native Developer India",
+  "Mobile App Developer India",
+  "React Developer India",
+  "Web Developer India",
   "React Developer",
   "Next.js Developer",
   "Node.js Developer",
   "Golang Developer",
   "TypeScript",
+  "Full-Stack Developer Kerala",
+  "Software Engineer Kerala",
   "AI Engineer",
   "LLM application developer",
   "RAG",
@@ -54,7 +62,7 @@ export function buildMetadata({
     alternates: { canonical: url },
     openGraph: {
       type: "website",
-      locale: "en_US",
+      locale: "en_IN",
       url,
       title: ogTitle,
       description,
@@ -87,6 +95,26 @@ export function personJsonLd() {
       addressLocality: "Palakkad",
       addressRegion: "Kerala",
       addressCountry: "IN",
+    },
+    nationality: { "@type": "Country", name: "India" },
+    homeLocation: {
+      "@type": "Place",
+      name: "Palakkad, Kerala, India",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Palakkad",
+        addressRegion: "Kerala",
+        addressCountry: "IN",
+      },
+    },
+    workLocation: [
+      { "@type": "Place", name: "Remote" },
+      { "@type": "Place", name: "India" },
+    ],
+    knowsLanguage: ["English", "Malayalam", "Hindi"],
+    seeks: {
+      "@type": "Demand",
+      name: "Full-Stack Web & Mobile Engineering roles (remote or relocation)",
     },
     sameAs: [siteConfig.social.github, siteConfig.social.linkedin],
     knowsAbout: [

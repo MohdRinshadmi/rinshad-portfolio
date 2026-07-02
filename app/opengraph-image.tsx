@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { siteConfig } from "@/lib/data";
+import { siteConfig } from "@/lib/config/site";
 
 /**
  * Root Open Graph card. Satori (next/og) cannot resolve Tailwind utilities, so

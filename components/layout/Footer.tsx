@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/SocialIcons";
-import { navLinks, siteConfig } from "@/lib/data";
+import { footerLinks, siteConfig } from "@/lib/config/site";
 
 const socials = [
   { name: "GitHub", href: siteConfig.social.github, Icon: GithubIcon },
@@ -44,7 +44,7 @@ export function Footer() {
                 Navigate
               </h2>
               <ul className="flex flex-col gap-3">
-                {navLinks.map((link) => (
+                {footerLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}

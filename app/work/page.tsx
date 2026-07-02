@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { projects } from "@/lib/data";
+import { projects } from "@/lib/content/projects";
 import { buildMetadata } from "@/lib/seo";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { WorkFilter } from "@/components/work/WorkFilter";
@@ -33,9 +33,9 @@ export default function WorkPage() {
           </h1>
 
           <p className="mt-6 max-w-[58ch] text-body-lg text-text-secondary">
-            A focused set of production work — streaming AI copilots, conflict-free
-            real-time collaboration, and live telemetry at scale. Each one shipped
-            to real users, owned end-to-end from architecture to performance.
+            Self-initiated systems built to explore production patterns — streaming
+            AI copilots, conflict-free real-time collaboration, and cloud-native
+            telemetry — each owned end-to-end, from architecture to deployment.
           </p>
         </header>
 

@@ -5,8 +5,8 @@ import { ChapterMark } from "@/components/story/ChapterMark";
 import { ScrubText } from "@/components/motion/ScrubText";
 import { Reveal } from "@/components/motion/Reveal";
 import { CountUp } from "@/components/motion/CountUp";
-import { chapterBuilder } from "@/lib/story";
-import { proofStats } from "@/lib/data";
+import { chapterBuilder } from "@/lib/content/story";
+import { proofStats } from "@/lib/content/profile";
 import { staggerContainerFast, fadeUp, VIEWPORT } from "@/lib/animation";
 import { cn } from "@/lib/utils";
 

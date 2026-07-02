@@ -2,13 +2,20 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { Menu, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { siteConfig, navLinks } from "@/lib/data";
+import { siteConfig, navLinks } from "@/lib/config/site";
 import { EASE, DURATION } from "@/lib/animation";
-import { MobileMenu } from "./MobileMenu";
+
+/* Lazy chunk: the overlay + its framer exit choreography only download on the
+   first tap of the hamburger, not with every page's shell. */
+const MobileMenu = dynamic(
+  () => import("./MobileMenu").then((mod) => ({ default: mod.MobileMenu })),
+  { ssr: false },
+);
 
 /** Staggered entrance for the bar's three groups (wordmark · nav · actions). */
 const barContainer: Variants = {
@@ -23,6 +30,9 @@ const barItem: Variants = {
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  // Latches true on first open so the lazy menu stays mounted afterwards
+  // (AnimatePresence needs the mount to run its exit animation).
+  const [menuMounted, setMenuMounted] = useState(false);
   const [hovered, setHovered] = useState<string | null>(null);
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
@@ -147,7 +157,10 @@ export function Navbar() {
             {/* Hamburger (mobile) */}
             <button
               type="button"
-              onClick={() => setMenuOpen(true)}
+              onClick={() => {
+                setMenuMounted(true);
+                setMenuOpen(true);
+              }}
               aria-label="Open menu"
               aria-expanded={menuOpen}
               className="-mr-1 inline-flex h-11 w-11 items-center justify-center rounded-md text-text-secondary transition-colors hover:text-text md:hidden"
@@ -158,7 +171,7 @@ export function Navbar() {
         </motion.div>
       </motion.header>
 
-      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+      {menuMounted && <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />}
     </>
   );
 }

@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ChapterMark } from "@/components/story/ChapterMark";
 import { Reveal } from "@/components/motion/Reveal";
-import { chapterInterfaces } from "@/lib/story";
+import { chapterInterfaces } from "@/lib/content/story";
 import { cn } from "@/lib/utils";
 
 /**

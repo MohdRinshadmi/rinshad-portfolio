@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Download, Loader2, Send } from "lucide-react";
 import { InkStage, StageHeading } from "../core/InkStage";
 import { useSceneGate } from "../core/useSceneGate";
-import { siteConfig, socialLinks } from "@/lib/data";
+import { siteConfig, socialLinks } from "@/lib/config/site";
 import { EASE } from "@/lib/animation";
 import { cn } from "@/lib/utils";
 

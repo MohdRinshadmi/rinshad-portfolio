@@ -5,7 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { GuideRails } from "@/components/layout/GuideRails";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
-import { siteConfig } from "@/lib/data";
+import { siteConfig } from "@/lib/config/site";
 import { SITE_KEYWORDS, personJsonLd, jsonLdScript } from "@/lib/seo";
 
 const geist = Geist({ subsets: ["latin"], display: "swap", variable: "--font-geist" });
@@ -41,10 +41,19 @@ export const metadata: Metadata = {
   keywords: SITE_KEYWORDS,
   authors: [{ name: siteConfig.fullName, url: siteConfig.url }],
   creator: siteConfig.fullName,
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    languages: { "en-IN": "/", "en": "/", "x-default": "/" },
+  },
+  other: {
+    "geo.region": "IN-KL",
+    "geo.placename": "Palakkad, Kerala, India",
+    "geo.position": "10.7867;76.6548",
+    ICBM: "10.7867, 76.6548",
+  },
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "en_IN",
     url: siteConfig.url,
     title: `${siteConfig.fullName} — ${siteConfig.role}`,
     description: siteConfig.bio,

@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { useHydrated } from "@/lib/use-hydrated";
+import { useHydrated } from "@/lib/hooks/use-hydrated";
 
 interface ScrollScaleProps {
   children: React.ReactNode;

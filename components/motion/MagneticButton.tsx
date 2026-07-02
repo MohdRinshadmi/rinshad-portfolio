@@ -3,7 +3,7 @@
 import { useRef, type PointerEvent } from "react";
 import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 import { EASE } from "@/lib/animation";
-import { useHydrated } from "@/lib/use-hydrated";
+import { useHydrated } from "@/lib/hooks/use-hydrated";
 import { cn } from "@/lib/utils";
 
 interface MagneticButtonProps {

@@ -5,7 +5,7 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import type { FlagshipProject } from "@/lib/experience/data";
 import { useExperience } from "@/lib/experience/store";
-import { useHydrated } from "@/lib/use-hydrated";
+import { useHydrated } from "@/lib/hooks/use-hydrated";
 
 /* ============================================================================
    ModuleCard — one interactive module on the command deck. A real <button>
