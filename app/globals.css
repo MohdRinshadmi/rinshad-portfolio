@@ -187,6 +187,20 @@ body {
     }
   }
 
+  /* Rail gutter — the inner edge of the GuideRails dashed frame (the 90rem
+     container-wide well + its 3rem gutter). Pinned horizontal chapters use
+     these so their lead-in, tail, and progress rail sit inside the frame;
+     below the 90rem well it collapses to the plain 3rem gutter. */
+  .pl-rail {
+    padding-left: max(3rem, calc((100vw - 90rem) / 2 + 3rem));
+  }
+  .pr-rail {
+    padding-right: max(3rem, calc((100vw - 90rem) / 2 + 3rem));
+  }
+  .inset-x-rail {
+    inset-inline: max(3rem, calc((100vw - 90rem) / 2 + 3rem));
+  }
+
   /* Premium vertical section rhythm */
   .section-py {
     padding-block: clamp(4rem, 7vw, 6.5rem);

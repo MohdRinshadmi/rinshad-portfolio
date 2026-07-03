@@ -30,6 +30,13 @@ export const prologue = {
     "Mohammed Rinshad — full-stack web & mobile engineer. Two and a half years, twenty-plus production features shipped. This is how the work actually happens.",
   availability: "Open to AI & full-stack engineering roles",
   scrollCue: "Scroll to begin",
+  /** The cover portrait — right column on desktop, above the masthead on phones. */
+  portrait: {
+    src: "/images/rinshad-portrait-v2.jpg",
+    alt: "Portrait of Mohammed Rinshad, full-stack web & mobile engineer",
+    width: 1200,
+    height: 1277,
+  },
   /** Vertical project reel — the cover photograph, in motion. Placeholder art
       (picsum seeds keep the same photo every build) until real shots exist. */
   reel: {

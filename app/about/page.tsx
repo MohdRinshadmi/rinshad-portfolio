@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Search, Layout, Code2, Sparkles, Rocket, type LucideIcon } from "lucide-react";
 
 import { buildMetadata } from "@/lib/seo";
@@ -62,27 +63,58 @@ export default function AboutPage() {
           ================================================================== */}
       <section id="story" className="section-py pt-16 sm:pt-20">
         <div className="container-page">
-          <Reveal>
-            <p className="max-w-[24ch] font-display text-display-lg text-balance text-text">
-              {about.intro}
-            </p>
-          </Reveal>
+          {/* Story left · photo right on lg+ (photo keeps first place in the
+              DOM so it stacks centered on top below lg). items-center keeps
+              the near-square portrait balanced against the text block. */}
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,6fr)] lg:items-center lg:gap-20">
+            {/* ── Portrait — larger and calmer than the hero's: hairline
+                gradient edge, soft shadow, and a gentle lift on hover. */}
+            <Reveal className="mx-auto w-full max-w-88 lg:order-last lg:mx-0 lg:max-w-none">
+              <div className="group relative">
+                {/* faint terracotta wash — ties the plate to the page aurora */}
+                <div
+                  aria-hidden
+                  className="absolute -inset-8 -z-10 bg-[radial-gradient(55%_50%_at_45%_35%,rgba(199,92,55,0.10),transparent_72%)] blur-2xl"
+                />
+                <div className="rounded-3xl bg-linear-to-br from-accent/50 via-border to-border p-px shadow-card transition-[transform,box-shadow] duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-raised">
+                  <Image
+                    src="/images/rinshad-portrait-v2.jpg"
+                    alt="Mohammed Rinshad, full-stack web and mobile engineer, photographed outdoors in Kerala"
+                    width={1200}
+                    height={1277}
+                    priority
+                    sizes="(min-width: 1024px) 32rem, (min-width: 640px) 22rem, 88vw"
+                    className="h-auto w-full rounded-[calc(1.5rem-1px)] object-cover"
+                  />
+                </div>
+              </div>
+            </Reveal>
 
-          <div className="mt-10 flex flex-col gap-6 sm:mt-12">
-            {about.paragraphs.map((paragraph, i) => (
-              <Reveal key={i} delay={0.04 * i}>
-                <p className="max-w-[66ch] text-body-lg text-text-secondary">
-                  {paragraph}
+            {/* ── The story ─────────────────────────────────────────── */}
+            <div>
+              <Reveal>
+                <p className="max-w-[24ch] font-display text-display-lg text-balance text-text">
+                  {about.intro}
                 </p>
               </Reveal>
-            ))}
-          </div>
 
-          <Reveal delay={0.08} className="mt-10 sm:mt-12">
-            <p className="max-w-[66ch] border-l border-accent/30 pl-5 text-body-lg text-text">
-              {about.closing}
-            </p>
-          </Reveal>
+              <div className="mt-10 flex flex-col gap-6 sm:mt-12">
+                {about.paragraphs.map((paragraph, i) => (
+                  <Reveal key={i} delay={0.04 * i}>
+                    <p className="max-w-[66ch] text-body-lg text-text-secondary">
+                      {paragraph}
+                    </p>
+                  </Reveal>
+                ))}
+              </div>
+
+              <Reveal delay={0.08} className="mt-10 sm:mt-12">
+                <p className="max-w-[66ch] border-l border-accent/30 pl-5 text-body-lg text-text">
+                  {about.closing}
+                </p>
+              </Reveal>
+            </div>
+          </div>
         </div>
       </section>
 

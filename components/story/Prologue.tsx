@@ -11,8 +11,7 @@ import { MagneticButton } from "@/components/motion/MagneticButton";
 import { prologue } from "@/lib/content/story";
 import { DURATION, EASE } from "@/lib/animation";
 
-/* Vertical edge fade for the reel (mask-fade-x's vertical sibling, kept local
-   so globals.css stays untouched). */
+/* Vertical edge fade for the hover reel (mask-fade-x's vertical sibling). */
 const FADE_Y = "linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent)";
 
 /**
@@ -120,7 +119,7 @@ export function Prologue() {
           />
         </div>
 
-        <div className="grid flex-1 items-center gap-14 pt-12 lg:grid-cols-[1fr_minmax(20rem,26rem)] lg:gap-20 lg:pt-0 xl:px-12">
+        <div className="grid flex-1 items-center gap-14 pt-12 lg:grid-cols-[1fr_minmax(22rem,28rem)] lg:gap-20 lg:pt-0 xl:grid-cols-[1fr_minmax(24rem,30rem)] xl:px-12">
           {/* ── The introduction ────────────────────────────────────────── */}
           <div>
             <h1 className="font-display text-text">
@@ -160,71 +159,107 @@ export function Prologue() {
             </motion.div>
           </div>
 
-          {/* ── Project reel — stills drifting top → bottom ─────────────── */}
+          {/* ── Portrait — the cover photograph ──────────────────────────
+              Above the masthead on phones (order-first), right column on lg+.
+              A terracotta gradient ring frames the shot; hover lifts it with a
+              soft glow + gentle zoom. aspect-[3/4] reserves the box, so the
+              priority-loaded image paints with zero layout shift. */}
           <motion.div
             initial={reduceMotion ? false : { opacity: 0, y: 28, scale: 0.985 }}
             animate={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: DURATION.hero, ease: EASE.emphasis, delay: 0.5 }}
-            className="relative h-[56svh] lg:h-[74svh] lg:self-center lg:before:absolute lg:before:inset-y-0 lg:before:-left-10 lg:before:border-l lg:before:border-dashed lg:before:border-border lg:before:content-['']"
+            className="relative order-first w-full max-w-72 justify-self-center sm:max-w-88 lg:order-none lg:max-w-none lg:justify-self-auto lg:self-center lg:before:absolute lg:before:inset-y-0 lg:before:-left-10 lg:before:border-l lg:before:border-dashed lg:before:border-border lg:before:content-['']"
           >
+            {/* Soft terracotta wash behind the frame — the cover's aurora,
+                gathered around the photograph. */}
             <div
               aria-hidden="true"
-              className="absolute inset-0 overflow-hidden"
-              style={{ maskImage: FADE_Y, WebkitMaskImage: FADE_Y }}
-            >
+              className="absolute -inset-10 -z-20 bg-[radial-gradient(60%_55%_at_50%_38%,rgba(199,92,55,0.12),transparent_72%)] blur-2xl"
+            />
+
+            {/* Hover story: the portrait recedes (soft zoom + fade), and the
+                project reel from the earlier cover drifts up in its place —
+                hover off returns the portrait. Pure CSS, so touch devices and
+                keyboard users simply keep the portrait. */}
+            <div className="group relative">
+              {/* Offset plate — a dashed hairline frame peeking out behind the
+                  bottom-right corner, rhyming with the page's guide rails. It
+                  eases further out as the frame is hovered. */}
               <div
-                className="animate-marquee-y will-change-transform hover:[animation-play-state:paused]"
-                style={{ "--marquee-duration": "44s" } as CSSProperties}
-              >
-                {/* two identical copies = a seamless -50% → 0 loop */}
-                {[0, 1].map((copy) => (
-                  <div key={copy} className="flex flex-col gap-6 pb-6">
-                    {prologue.reel.items.map((item, itemIndex) => (
-                      <figure
-                        key={item.src}
-                        className="relative overflow-hidden rounded-xl border border-border bg-surface shadow-card"
-                      >
-                        <Image
-                          src={item.src}
-                          alt={item.label}
-                          width={item.width}
-                          height={item.height}
-                          sizes="(min-width: 1024px) 26rem, 92vw"
-                          // First still of the first copy is above the fold —
-                          // preload it as the reel's LCP candidate.
-                          priority={copy === 0 && itemIndex === 0}
-                          className="h-auto w-full object-cover"
-                        />
-                        <figcaption className="absolute bottom-3 left-3 rounded-full bg-surface/85 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-text-secondary backdrop-blur-sm">
-                          {item.label}
-                        </figcaption>
-                      </figure>
-                    ))}
+                aria-hidden="true"
+                className="absolute inset-0 -z-10 translate-x-4 translate-y-4 rounded-4xl border border-dashed border-border-strong transition-transform duration-500 ease-out group-hover:translate-x-5 group-hover:translate-y-5"
+              />
+              <div className="rounded-4xl bg-linear-to-br from-accent/70 via-accent/15 to-border p-[3px] shadow-card transition-shadow duration-500 ease-out group-hover:shadow-glow">
+                <figure className="relative aspect-[3/4] overflow-hidden rounded-[calc(2rem-3px)] bg-surface">
+                  <Image
+                    src={prologue.portrait.src}
+                    alt={prologue.portrait.alt}
+                    fill
+                    priority
+                    sizes="(min-width: 1280px) 30rem, (min-width: 1024px) 28rem, (min-width: 640px) 22rem, 18rem"
+                    className="object-cover transition-[transform,opacity] duration-500 ease-out group-hover:scale-[1.06] group-hover:opacity-0"
+                  />
+
+                  {/* Project reel — fades in a beat after the portrait recedes */}
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0 opacity-0 transition-opacity delay-150 duration-500 ease-out group-hover:opacity-100"
+                    style={{ maskImage: FADE_Y, WebkitMaskImage: FADE_Y }}
+                  >
+                    <div
+                      className="animate-marquee-y will-change-transform"
+                      style={{ "--marquee-duration": "44s" } as CSSProperties}
+                    >
+                      {/* two identical copies = a seamless -50% → 0 loop */}
+                      {[0, 1].map((copy) => (
+                        <div key={copy} className="flex flex-col gap-4 px-3 pb-4 pt-3">
+                          {prologue.reel.items.map((item) => (
+                            <div
+                              key={item.src}
+                              // Taller-than-wide crop: full frame width, 4:5 height,
+                              // object-cover trims the landscape source.
+                              className="relative aspect-4/5 w-full overflow-hidden rounded-xl border border-border bg-surface shadow-card"
+                            >
+                              <Image
+                                src={item.src}
+                                alt=""
+                                fill
+                                sizes="(min-width: 1024px) 26rem, 19rem"
+                                className="object-cover"
+                              />
+                              <span className="absolute bottom-2.5 left-2.5 rounded-full bg-surface/85 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.14em] text-text-secondary backdrop-blur-sm">
+                                {item.label}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                ))}
+                </figure>
               </div>
             </div>
 
-            {/* CTA floats over the reel, like the reference pill */}
-            <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
-              <motion.div
-                initial={reduceMotion ? false : { opacity: 0, scale: 0.9 }}
-                animate={reduceMotion ? undefined : { opacity: 1, scale: 1 }}
-                transition={{ duration: DURATION.base, ease: EASE.out, delay: 1.05 }}
-              >
-                <MagneticButton className="pointer-events-auto">
-                  <Link
-                    href={prologue.reel.href}
-                    className="group flex items-center gap-3 rounded-full bg-ink py-2.5 pl-6 pr-2.5 text-sm font-medium text-ink-text shadow-raised ring-hairline-ink transition-colors duration-200 hover:bg-ink-raised"
-                  >
-                    {prologue.reel.cta}
-                    <span className="flex size-9 items-center justify-center rounded-full bg-white/10 transition-colors duration-200 group-hover:bg-accent group-hover:text-accent-fg">
-                      <ArrowUpRight aria-hidden="true" className="size-4" />
-                    </span>
-                  </Link>
-                </MagneticButton>
-              </motion.div>
-            </div>
+            {/* CTA — the hero's path into the work, floating over the frame's
+                bottom edge like a magazine cover line */}
+            <motion.div
+              initial={reduceMotion ? false : { opacity: 0, scale: 0.9 }}
+              animate={reduceMotion ? undefined : { opacity: 1, scale: 1 }}
+              transition={{ duration: DURATION.base, ease: EASE.out, delay: 1.05 }}
+              className="absolute inset-x-0 -bottom-6 z-10 hidden justify-center lg:flex"
+            >
+              <MagneticButton>
+                <Link
+                  href={prologue.reel.href}
+                  className="group/cta flex items-center gap-3 rounded-full bg-ink py-2.5 pl-6 pr-2.5 text-sm font-medium text-ink-text shadow-raised ring-hairline-ink transition-colors duration-200 hover:bg-ink-raised"
+                >
+                  {prologue.reel.cta}
+                  <span className="flex size-9 items-center justify-center rounded-full bg-white/10 transition-colors duration-200 group-hover/cta:bg-accent group-hover/cta:text-accent-fg">
+                    <ArrowUpRight aria-hidden="true" className="size-4" />
+                  </span>
+                </Link>
+              </MagneticButton>
+            </motion.div>
           </motion.div>
         </div>
       </motion.div>

@@ -37,6 +37,8 @@ export const experience: Experience[] = [
       "Architected 40+ RESTful API endpoints with Express.js and Sequelize ORM — middleware-based validation, JWT authentication, structured error handling, and SQL query optimization cutting average API response time 35%.",
       "Led the frontend migration from Create React App to Vite, cutting build times from ~90s to ~35s (60%+ reduction) across a 4-person frontend team.",
       "Optimized React rendering, code-splitting, and CDN-based asset delivery — lifting the Lighthouse performance score from 62 to 89 and cutting initial page load from 3.8s to 2.1s.",
+      "Deployed and published React Native apps to the Google Play Store and Apple App Store — release builds, signing, and store-review compliance, with production releases monitored through crash reporting and performance tracking.",
+      "Built an offline-first geolocation tracking system with React Native and SQLite — background location capture, local buffering, and retry-based recovery kept workforce tracking reliable through prolonged network outages.",
     ],
     technologies: ["React", "Next.js", "React Native", "Node.js · Express", "TypeScript", "MySQL · Sequelize", "Redis", "Docker"],
   },

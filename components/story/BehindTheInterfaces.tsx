@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ChapterMark } from "@/components/story/ChapterMark";
 import { Reveal } from "@/components/motion/Reveal";
@@ -17,14 +17,26 @@ import { cn } from "@/lib/utils";
  */
 export function BehindTheInterfaces() {
   const railRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [shift, setShift] = useState(0);
+
   const { scrollYProgress } = useScroll({
     target: railRef,
     offset: ["start start", "end end"],
   });
-  // Track is 297vw (8 lead + 34 intro + 5×44 stages + 5×5 gaps + 10 tail); shift
-  // so the last card's right edge ends 8vw from the right, mirroring the lead-in:
-  // (287vw last-card-right − 92vw) / 297vw track. Headless-measured, vw-invariant.
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-65.7%"]);
+
+  // Travel exactly (track width − viewport). The track carries rail-aligned
+  // lead-in/tail padding (`pl-rail`/`pr-rail`), so the chapter starts AND ends
+  // flush inside the GuideRails dashed frame — no hand-tuned percentage.
+  useEffect(() => {
+    const measure = () =>
+      setShift(Math.max(0, (trackRef.current?.scrollWidth ?? 0) - window.innerWidth));
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  const x = useTransform(scrollYProgress, [0, 1], [0, -shift]);
 
   const stages = chapterInterfaces.stages;
 
@@ -33,7 +45,11 @@ export function BehindTheInterfaces() {
       {/* ── Pinned horizontal travel (lg + motion ok) ─────────────────── */}
       <div ref={railRef} className="relative hidden h-[420vh] motion-safe:lg:block">
         <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
-          <motion.div style={{ x }} className="flex w-max items-stretch gap-[5vw] pl-[8vw] pr-[10vw]">
+          <motion.div
+            ref={trackRef}
+            style={{ x }}
+            className="flex w-max items-stretch gap-[5vw] pl-rail pr-rail"
+          >
             <div className="flex w-[34vw] flex-col justify-center">
               <ChapterMark
                 number={chapterInterfaces.number}
@@ -47,7 +63,7 @@ export function BehindTheInterfaces() {
           </motion.div>
 
           {/* Progress rail */}
-          <div className="absolute inset-x-[8vw] bottom-10">
+          <div className="absolute inset-x-rail bottom-10">
             <div className="flex items-baseline justify-between pb-3 font-mono text-[10px] uppercase tracking-[0.16em] text-text-tertiary">
               <span>{stages[0].step}</span>
               <span>{stages[stages.length - 1].step}</span>
