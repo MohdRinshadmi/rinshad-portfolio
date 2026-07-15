@@ -2,25 +2,23 @@ import { ImageResponse } from "next/og";
 import { siteConfig } from "@/lib/config/site";
 
 /**
- * Root Open Graph card. Satori (next/og) cannot resolve Tailwind utilities, so
- * styles are inline and use only the flexbox + CSS subset it supports — NO grid.
- * Palette mirrors the design tokens: ink #08080A canvas, Electric Indigo #6e56f7
- * accent (used only for the rule + a single chromatic note), near-monochrome text.
+ * Root Open Graph / Twitter card. Matches the live brand — warm paper, ink
+ * text, a single terracotta accent — so the shared card and the landing page
+ * read as one thing. Satori (next/og) can't resolve Tailwind, so styles are
+ * inline and use only its flexbox + gradient subset (NO grid).
  */
 
 export const alt = `${siteConfig.fullName} — ${siteConfig.role}`;
-
 export const size = { width: 1200, height: 630 };
-
 export const contentType = "image/png";
 
 export default async function Image() {
-  const INK = "#08080A";
-  const ACCENT = "#6E56F7";
-  const TEXT = "#FAFAF9";
-  const SECONDARY = "#A1A1AA";
-  const TERTIARY = "#71717A";
-  const HAIRLINE = "rgba(255,255,255,0.10)";
+  const PAPER = "#f7f5f2";
+  const INK = "#0a0a0a";
+  const ACCENT = "#c75c37";
+  const SECONDARY = "#6b6b66";
+  const TERTIARY = "#8e8e88";
+  const HAIRLINE = "rgba(10,10,10,0.12)";
 
   return new ImageResponse(
     (
@@ -31,16 +29,15 @@ export default async function Image() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: INK,
-          // Subtle aurora wash — supported radial gradients, transform/opacity-free.
+          background: PAPER,
           backgroundImage:
-            "radial-gradient(900px 600px at 18% 12%, rgba(110,86,247,0.20), transparent 60%), radial-gradient(700px 600px at 92% 88%, rgba(56,40,180,0.16), transparent 60%)",
+            "radial-gradient(760px 520px at 16% 14%, rgba(199,92,55,0.14), transparent 62%), radial-gradient(640px 520px at 92% 90%, rgba(10,10,10,0.04), transparent 60%)",
           padding: "80px",
           fontFamily:
             'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif',
         }}
       >
-        {/* Top row — eyebrow label + live availability marker */}
+        {/* Top row — wordmark + live availability marker */}
         <div
           style={{
             display: "flex",
@@ -93,27 +90,26 @@ export default async function Image() {
           <div
             style={{
               display: "flex",
-              fontSize: 96,
+              fontSize: 94,
               lineHeight: 1.0,
               fontWeight: 600,
               letterSpacing: "-0.035em",
-              color: TEXT,
+              color: INK,
               maxWidth: 1000,
             }}
           >
             {siteConfig.fullName}
           </div>
 
-          {/* The single accent rule */}
           <div
             style={{
               display: "flex",
               width: 132,
-              height: 4,
+              height: 5,
               borderRadius: 999,
               background: ACCENT,
-              marginTop: 36,
-              marginBottom: 36,
+              marginTop: 34,
+              marginBottom: 34,
             }}
           />
 
@@ -124,14 +120,14 @@ export default async function Image() {
               lineHeight: 1.2,
               letterSpacing: "-0.01em",
               color: SECONDARY,
-              maxWidth: 900,
+              maxWidth: 920,
             }}
           >
-            {siteConfig.role}
+            {siteConfig.role} · React · Next.js · React Native · Node.js · AWS
           </div>
         </div>
 
-        {/* Bottom — one stat line, quiet mono, hairline-topped */}
+        {/* Bottom — one quiet proof line, hairline-topped */}
         <div
           style={{
             display: "flex",
@@ -145,12 +141,21 @@ export default async function Image() {
             color: TERTIARY,
           }}
         >
-          <span style={{ color: ACCENT, marginRight: 12 }}>▸</span>
+          <span
+            style={{
+              display: "flex",
+              width: 26,
+              height: 5,
+              borderRadius: 999,
+              background: ACCENT,
+              marginRight: 16,
+            }}
+          />
           <span style={{ color: SECONDARY }}>2.5+ yrs</span>
           <span style={{ margin: "0 16px", color: TERTIARY }}>·</span>
           <span style={{ color: SECONDARY }}>20+ shipped</span>
           <span style={{ margin: "0 16px", color: TERTIARY }}>·</span>
-          <span style={{ color: SECONDARY }}>Web · APIs · Cloud</span>
+          <span style={{ color: SECONDARY }}>Palakkad, India · Remote</span>
         </div>
       </div>
     ),

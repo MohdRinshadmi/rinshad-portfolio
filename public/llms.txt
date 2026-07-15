@@ -34,6 +34,15 @@ Self-initiated projects built to explore production patterns in AI, real-time sy
 
 - [Next.js Performance Patterns](https://rinshad.dev/blog/nextjs-performance-patterns): Practical patterns for fast React Server Component apps.
 
+## FAQ
+
+- What kind of developer is Rinshad? A full-stack web & mobile engineer working end-to-end: React, Next.js, and React Native front-ends wired to Node.js and Golang REST APIs, backed by PostgreSQL, Redis, and Docker.
+- Is he available for hire? Yes — open to full-stack web & mobile engineering roles, remote across India and worldwide or on-site with relocation. Email rinshad803@gmail.com (usually replies within 24h).
+- Does he build AI/LLM features? Yes — streaming AI copilots, RAG over pgvector with HNSW indexing, semantic search, tool/function calling, and multi-agent workflows with LangChain and the Vercel AI SDK.
+- Does he build mobile apps? Yes — cross-platform React Native apps published to the Apple App Store and Google Play Store, including an offline-first geolocation tracking system.
+- What results has he delivered? Cut API latency 35% across 40+ Express endpoints, raised Lighthouse 62→89 (3.8s→2.1s), processed 2,000+ monthly transactions, and cut build times 60% (CRA→Vite).
+- Where is he based? Palakkad, Kerala, India; works as a Software Engineer in Calicut; open to relocation (UAE/Dubai, Germany, UK).
+
 ## Optional
 
 - [Résumé (PDF)](https://rinshad.dev/MohammedRinshadMI_FullStack.pdf): Full résumé

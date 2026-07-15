@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 
 import { projects } from "@/lib/content/projects";
-import { buildMetadata } from "@/lib/seo";
+import { siteConfig } from "@/lib/config/site";
+import { buildMetadata, graph, webPage, breadcrumb } from "@/lib/seo";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { WorkFilter } from "@/components/work/WorkFilter";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = buildMetadata({
   title: "Work",
@@ -11,6 +13,34 @@ export const metadata: Metadata = buildMetadata({
     "Selected full-stack work across web and mobile — React, Next.js, React Native, and Node.js apps spanning AI products, real-time systems, and cloud-native platforms.",
   path: "/work",
 });
+
+const workGraph = graph(
+  webPage({
+    path: "/work",
+    title: "Selected Work — Full-Stack Web, Mobile & AI Projects",
+    description:
+      "Case studies of production-grade systems built by Mohammed Rinshad — streaming AI copilots, real-time collaboration, and cloud-native platforms.",
+    type: "CollectionPage",
+  }),
+  breadcrumb(
+    [
+      { name: "Home", path: "/" },
+      { name: "Work", path: "/work" },
+    ],
+    "/work",
+  ),
+  {
+    "@type": "ItemList",
+    "@id": `${siteConfig.url}/work#projects`,
+    numberOfItems: projects.length,
+    itemListElement: projects.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${siteConfig.url}/work/${p.slug}`,
+      name: p.title,
+    })),
+  },
+);
 
 /**
  * /work — index of selected projects.
@@ -23,6 +53,7 @@ export const metadata: Metadata = buildMetadata({
 export default function WorkPage() {
   return (
     <div className="section-py">
+      <JsonLd data={workGraph} />
       <div className="container-page">
         {/* Lite header */}
         <header className="max-w-3xl">

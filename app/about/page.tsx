@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Search, Layout, Code2, Sparkles, Rocket, type LucideIcon } from "lucide-react";
 
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, graph, webPage, breadcrumb } from "@/lib/seo";
 import { siteConfig } from "@/lib/config/site";
 import { about, skillGroups, workProcess } from "@/lib/content/profile";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Chip } from "@/components/ui/Chip";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -16,7 +17,27 @@ export const metadata: Metadata = buildMetadata({
   title: "About",
   description: siteConfig.bio,
   path: "/about",
+  type: "profile",
 });
+
+// /about is a canonical AboutPage whose subject is the Person entity.
+const aboutGraph = graph(
+  webPage({
+    path: "/about",
+    title: `About ${siteConfig.fullName} — ${siteConfig.role}`,
+    description: siteConfig.bio,
+    type: "AboutPage",
+    mainEntityId: `${siteConfig.url}/#person`,
+    primaryImage: siteConfig.portrait.src,
+  }),
+  breadcrumb(
+    [
+      { name: "Home", path: "/" },
+      { name: "About", path: "/about" },
+    ],
+    "/about",
+  ),
+);
 
 /** Map the data-driven icon strings to lucide components (workProcess). */
 const PROCESS_ICONS: Record<string, LucideIcon> = {
@@ -30,6 +51,7 @@ const PROCESS_ICONS: Record<string, LucideIcon> = {
 export default function AboutPage() {
   return (
     <div>
+      <JsonLd data={aboutGraph} />
       {/* ====================================================================
           HERO-LITE — eyebrow + the single H1
           ================================================================== */}

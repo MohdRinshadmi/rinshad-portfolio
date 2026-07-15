@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getAllPosts } from "@/lib/server/blog";
-import { buildMetadata } from "@/lib/seo";
+import { siteConfig } from "@/lib/config/site";
+import { buildMetadata, graph, breadcrumb, ID } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
 import { Chip } from "@/components/ui/Chip";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = buildMetadata({
   title: "Writing",
@@ -17,8 +19,38 @@ export const metadata: Metadata = buildMetadata({
 export default function BlogPage() {
   const posts = getAllPosts();
 
+  const blogGraph = graph(
+    {
+      "@type": "Blog",
+      "@id": `${siteConfig.url}/blog#blog`,
+      url: `${siteConfig.url}/blog`,
+      name: `${siteConfig.name} — Writing`,
+      description:
+        "Field notes on full-stack web and mobile engineering, AI-native interfaces, and real-time systems.",
+      inLanguage: "en-IN",
+      author: { "@id": ID.person },
+      publisher: { "@id": ID.organization },
+      isPartOf: { "@id": ID.website },
+      blogPost: posts.map((p) => ({
+        "@type": "BlogPosting",
+        "@id": `${siteConfig.url}/blog/${p.slug}#article`,
+        headline: p.title,
+        url: `${siteConfig.url}/blog/${p.slug}`,
+        datePublished: p.date,
+      })),
+    },
+    breadcrumb(
+      [
+        { name: "Home", path: "/" },
+        { name: "Writing", path: "/blog" },
+      ],
+      "/blog",
+    ),
+  );
+
   return (
     <div className="section-pt pb-32">
+      <JsonLd data={blogGraph} />
       <div className="container-page">
         {/* Header */}
         <header className="max-w-[68ch]">

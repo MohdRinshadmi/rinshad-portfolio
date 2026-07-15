@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, graph, webPage, breadcrumb } from "@/lib/seo";
 import { usesIntro, usesCategories, colophon } from "@/lib/content/uses";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/motion/Reveal";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = buildMetadata({
   title: "Uses",
@@ -10,6 +11,23 @@ export const metadata: Metadata = buildMetadata({
     "The tools behind the work — the AI-native coding workflow (Claude Code, Cursor), the React/Next.js/React Native + Node.js/Go stack, and the testing and deployment setup I ship with.",
   path: "/uses",
 });
+
+const usesGraph = graph(
+  webPage({
+    path: "/uses",
+    title: "Uses — Tools, Stack & Setup",
+    description:
+      "The daily toolkit: AI-native coding workflow, the React/Next.js/React Native + Node.js/Go stack, and the testing and deployment setup.",
+    type: "CollectionPage",
+  }),
+  breadcrumb(
+    [
+      { name: "Home", path: "/" },
+      { name: "Uses", path: "/uses" },
+    ],
+    "/uses",
+  ),
+);
 
 /**
  * /uses — the daily toolkit as editorial hairline rows: a category label in
@@ -19,6 +37,7 @@ export const metadata: Metadata = buildMetadata({
 export default function UsesPage() {
   return (
     <div className="section-pt pb-32">
+      <JsonLd data={usesGraph} />
       <div className="container-page">
         {/* Header */}
         <header className="max-w-[68ch]">

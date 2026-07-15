@@ -10,7 +10,7 @@ export const projects: Project[] = [
     tagline: "A streaming AI copilot with tool-calling and live agent traces.",
     description:
       "The web companion for an AI life-assistant super app — a streaming copilot with multimodal inputs and transparent, live agent-trace rendering inside React Server Components.",
-    image: "/images/projects/ai-copilot.svg",
+    image: "/images/projects/ai-life-assistant.png",
     platform: "WEB · AI COPILOT",
     year: "2024",
     role: "Solo developer",

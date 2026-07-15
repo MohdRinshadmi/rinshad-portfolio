@@ -88,7 +88,10 @@ export function ProjectCard({ project, variant = "grid", index = 0, className }:
               src={project.image}
               alt=""
               fill
-              sizes="(min-width: 1024px) 36rem, 92vw"
+              quality={90}
+              // The 16:12 screen cover-crops wide app screenshots (~2.3:1), so
+              // the source must be ~1.7× the displayed width to stay sharp.
+              sizes="(min-width: 1024px) 62rem, 155vw"
               className="object-cover"
             />
           ) : undefined}

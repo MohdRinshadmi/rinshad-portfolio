@@ -5,7 +5,9 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { getProject, projects } from "@/lib/content/projects";
 import type { Project } from "@/lib/types";
-import { buildMetadata, projectJsonLd, jsonLdScript } from "@/lib/seo";
+import { siteConfig } from "@/lib/config/site";
+import { buildMetadata, graph, webPage, projectNode, breadcrumb } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/motion/Reveal";
@@ -34,8 +36,10 @@ export async function generateMetadata({
 
   return buildMetadata({
     title: project.title,
-    description: project.tagline,
+    description: `${project.tagline} — ${project.description}`,
     path: `/work/${slug}`,
+    type: "article",
+    tags: project.tags,
   });
 }
 
@@ -285,13 +289,31 @@ export default async function CaseStudyPage({
 
   const index = projects.findIndex((p) => p.slug === slug);
 
+  // WebPage → the case study (SoftwareSourceCode/CreativeWork) → breadcrumb,
+  // all cross-linked to the site-wide Person/WebSite graph by @id.
+  const caseStudyGraph = graph(
+    webPage({
+      path: `/work/${slug}`,
+      title: project.title,
+      description: project.tagline,
+      mainEntityId: `${siteConfig.url}/work/${slug}#project`,
+      primaryImage: project.image,
+    }),
+    projectNode(project),
+    breadcrumb(
+      [
+        { name: "Home", path: "/" },
+        { name: "Work", path: "/work" },
+        { name: project.title, path: `/work/${slug}` },
+      ],
+      `/work/${slug}`,
+    ),
+  );
+
   return (
     <div>
       {/* JSON-LD structured data for this case study */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLdScript(projectJsonLd(project)) }}
-      />
+      <JsonLd data={caseStudyGraph} />
 
       <CaseStudyHero project={project} />
 

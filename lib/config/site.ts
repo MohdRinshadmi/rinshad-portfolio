@@ -18,6 +18,22 @@ export const siteConfig = {
   responsePromise: "Usually replies within 24h",
   resumeUrl: "/MohammedRinshadMI_FullStack.pdf",
   url: "https://rinshad.dev",
+  /** Real headshot — used for Person schema image (knowledge-panel eligible). */
+  portrait: { src: "/images/rinshad-portrait-v2.jpg", width: 1200, height: 1277 },
+  /** Geo (Palakkad, Kerala) — powers geo meta + PostalAddress/GeoCoordinates. */
+  geo: { lat: 10.7867, lng: 76.6548, region: "IN-KL", placename: "Palakkad, Kerala, India" },
+  /** Current employer — entity node for Person.worksFor (strengthens the graph). */
+  employer: {
+    name: "Infinite Open Source Solution LLP",
+    url: "https://ioss.in",
+    location: "Calicut, Kerala, India",
+  },
+  /** Where I studied — entity node for Person.alumniOf. */
+  education: {
+    name: "SJES College of Management",
+    affiliation: "Bangalore North University",
+    url: "https://sjes.in",
+  },
   social: {
     github: "https://github.com/MohdRinshadmi",
     linkedin: "https://linkedin.com/in/mohd-rinshadmi",

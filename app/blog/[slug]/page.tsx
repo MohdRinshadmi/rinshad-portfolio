@@ -4,10 +4,12 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { getAllPosts, getPostBySlug } from "@/lib/server/blog";
-import { articleJsonLd, buildMetadata, jsonLdScript } from "@/lib/seo";
+import { siteConfig } from "@/lib/config/site";
+import { buildMetadata, graph, webPage, articleNode, breadcrumb } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
 import type { BlogPost } from "@/lib/types";
 import { Chip } from "@/components/ui/Chip";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { mdxComponents } from "@/mdx-components";
 
 /** Build a typed BlogPost from a slug's frontmatter (shared by metadata + JSON-LD). */
@@ -40,6 +42,10 @@ export async function generateMetadata({
     title: post.title,
     description: post.excerpt,
     path: `/blog/${slug}`,
+    type: "article",
+    publishedTime: post.date,
+    modifiedTime: post.date,
+    tags: post.tags,
   });
 }
 
@@ -55,12 +61,28 @@ export default async function BlogPostPage({
   const { frontmatter, content } = getPostBySlug(slug);
   const post = toBlogPost(slug, frontmatter);
 
+  const articleGraph = graph(
+    webPage({
+      path: `/blog/${slug}`,
+      title: post.title,
+      description: post.excerpt,
+      mainEntityId: `${siteConfig.url}/blog/${slug}#article`,
+      primaryImage: post.coverImage,
+    }),
+    articleNode(post),
+    breadcrumb(
+      [
+        { name: "Home", path: "/" },
+        { name: "Writing", path: "/blog" },
+        { name: post.title, path: `/blog/${slug}` },
+      ],
+      `/blog/${slug}`,
+    ),
+  );
+
   return (
     <article className="section-pt pb-32">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLdScript(articleJsonLd(post)) }}
-      />
+      <JsonLd data={articleGraph} />
 
       <div className="container-page">
         <div className="mx-auto max-w-[68ch]">

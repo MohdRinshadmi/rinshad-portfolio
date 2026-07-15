@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
     root: __dirname,
   },
   images: {
+    // Next 16 only allows quality=75 unless listed; 90 keeps UI screenshots
+    // (fine text on dark gradients) crisp where they're cropped/enlarged.
+    qualities: [75, 90],
     // Local project mockups are SVGs; allow the optimizer to serve them.
     // Safe here because every SVG under /public is authored in-repo (no scripts).
     dangerouslyAllowSVG: true,

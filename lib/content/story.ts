@@ -44,9 +44,9 @@ export const prologue = {
     href: "/work",
     items: [
       {
-        src: "https://picsum.photos/seed/rinshad-copilot/720/540?grayscale",
-        width: 720,
-        height: 540,
+        src: "/images/projects/ai-life-assistant.png",
+        width: 1911,
+        height: 836,
         label: "AI Life Assistant — streaming copilot",
       },
       {

@@ -224,7 +224,13 @@ export function Prologue() {
                                 src={item.src}
                                 alt=""
                                 fill
-                                sizes="(min-width: 1024px) 26rem, 19rem"
+                                quality={90}
+                                // The 4:5 card center-crops very wide app
+                                // screenshots — the browser needs ~2.9× the
+                                // card's width from the source to render the
+                                // crop sharp, so hint big and let the
+                                // optimizer cap at the original.
+                                sizes="(min-width: 1024px) 75rem, 55rem"
                                 className="object-cover"
                               />
                               <span className="absolute bottom-2.5 left-2.5 rounded-full bg-surface/85 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.14em] text-text-secondary backdrop-blur-sm">

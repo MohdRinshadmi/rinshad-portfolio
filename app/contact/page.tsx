@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { ContactCTA } from "@/components/contact/ContactCTA";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, graph, webPage, breadcrumb } from "@/lib/seo";
+import { siteConfig } from "@/lib/config/site";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = buildMetadata({
   title: "Contact",
@@ -9,9 +11,28 @@ export const metadata: Metadata = buildMetadata({
   path: "/contact",
 });
 
+const contactGraph = graph(
+  webPage({
+    path: "/contact",
+    title: `Contact ${siteConfig.fullName}`,
+    description:
+      "Hire a full-stack web & mobile engineer — React, Next.js, React Native, and Node.js. Open to roles across India and worldwide.",
+    type: "ContactPage",
+    mainEntityId: `${siteConfig.url}/#person`,
+  }),
+  breadcrumb(
+    [
+      { name: "Home", path: "/" },
+      { name: "Contact", path: "/contact" },
+    ],
+    "/contact",
+  ),
+);
+
 export default function ContactPage() {
   return (
     <div>
+      <JsonLd data={contactGraph} />
       <header className="section-pt">
         <div className="container-page">
           <div className="flex flex-col gap-5">

@@ -19,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "monthly",
       priority: 1,
+      images: [`${BASE}/opengraph-image`],
     },
     {
       url: `${BASE}/work`,
@@ -57,6 +58,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: now,
     changeFrequency: "yearly",
     priority: 0.8,
+    // Per-project OG card + any real screenshot — enables image search coverage.
+    images: [
+      `${BASE}/work/${project.slug}/opengraph-image`,
+      ...(project.image ? [`${BASE}${project.image}`] : []),
+    ],
   }));
 
   const postRoutes: MetadataRoute.Sitemap = getAllPosts().map((post) => ({

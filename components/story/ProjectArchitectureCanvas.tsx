@@ -157,15 +157,17 @@ export function ProjectArchitectureCanvas({ project }: { project: Project; index
         </div>
 
         <div className="lg:col-span-5 lg:col-start-8">
-          {/* Project shot — framed in dark browser chrome (placeholder art
-              until real screenshots exist). */}
+          {/* Project shot — framed in dark browser chrome. */}
           <DeviceFrame variant="browser" label={project.title}>
             {project.image ? (
               <Image
                 src={project.image}
                 alt=""
                 fill
-                sizes="(min-width: 1024px) 26rem, 90vw"
+                quality={90}
+                // 16:12 screen cover-crops wide screenshots — request ~1.7×
+                // the displayed width so the crop stays sharp.
+                sizes="(min-width: 1024px) 45rem, 155vw"
                 className="object-cover"
               />
             ) : undefined}

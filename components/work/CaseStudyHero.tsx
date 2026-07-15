@@ -124,7 +124,10 @@ export function CaseStudyHero({ project }: { project: Project }) {
                 src={project.image}
                 alt={`${project.title} interface preview`}
                 fill
-                sizes="(min-width: 1024px) 80rem, 100vw"
+                quality={90}
+                // 16:12 screen cover-crops wide screenshots — request ~1.7×
+                // the displayed width so the crop stays sharp.
+                sizes="(min-width: 1024px) 135rem, 170vw"
                 className="object-cover"
                 priority
               />
