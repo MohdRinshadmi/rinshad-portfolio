@@ -1,0 +1,151 @@
+<!--
+  DEV.TO CROSS-POST — paste everything below the marker into dev.to's editor
+  (Settings → "Use Markdown editor" / or the frontmatter is parsed automatically).
+
+  HOW TO PUBLISH
+  1. Publish the canonical post on rinshad.dev FIRST and let Google index it
+     (Search Console → URL Inspection → Request Indexing). Wait ~2-3 days.
+     Canonical only consolidates authority if the original is already known.
+  2. Then publish here with `canonical_url` pointing back. Dev.to emits
+     <link rel="canonical"> to your domain, so rinshad.dev gets the ranking
+     credit and you get the referral traffic + backlink.
+  3. Repeat on Hashnode (it has the same canonical field) and Medium
+     (Import Story → auto-canonicals to the source).
+
+  TAGS: dev.to allows max 4, lowercase alphanumeric only (no hyphens/spaces).
+
+  BEFORE YOU HIT PUBLISH — verify the code blocks against your real
+  implementation. The pgvector/HNSW SQL and the AbortController pattern are
+  version-stable, but adjust anything that drifted from what you actually
+  shipped. This goes out under your name; it should be true to your code.
+-->
+
+--- PASTE FROM HERE ---
+
+---
+title: "Streaming Is a UI Architecture, Not a Feature"
+published: false
+description: "What I learned building a voice-first RAG copilot in Next.js: partial states, sub-second pgvector retrieval with HNSW, tool calls as UI, and the cancel bug that taught me the most."
+tags: nextjs, ai, typescript, postgres
+canonical_url: https://rinshad.dev/blog/streaming-rag-copilot-nextjs
+---
+
+Users asked my AI copilot hard questions, and the UI answered with a spinner. Long, tool-heavy runs locked the screen for thirty seconds. People didn't distrust the answers — they distrusted the silence.
+
+The instinct is to reach for a nicer loader. That's the wrong fix. Once tokens arrive over seconds instead of milliseconds, "loading" stops being a moment and becomes **most of the experience**. Partial messages, cancellation, and tool-call traces aren't edge cases you bolt on at the end — they're the primary states of the interface.
+
+So: streaming is not a feature you add to a chat UI. It's the architecture you design the chat UI around. Here's what that actually meant in code.
+
+## 1. Design the partial states first
+
+Before writing a component, I wrote down every state a message can be in:
+
+- **queued** — request sent, nothing back yet
+- **streaming** — tokens arriving, message is incomplete but renderable
+- **tool-running** — the model called a tool; we're waiting on *our* code
+- **cancelled** — user bailed mid-stream; we have half a message
+- **error** — the stream broke at token 400 of 900
+- **complete**
+
+The naive design has two states (loading / done) and treats everything else as a bug. The honest design has six, and four of them are visible for most of the run. Every one of those needs a defined visual and a defined reconciliation rule.
+
+That list is the actual spec. Once it existed, the "spinner problem" disappeared by construction — there was no longer a single opaque `isLoading` boolean to hide behind.
+
+## 2. Retrieval has to keep up with speech
+
+The copilot is grounded in a RAG knowledge base of thousands of documents. A voice interface makes the latency budget brutal: if retrieval takes three seconds, the conversation is dead no matter how fast your model streams.
+
+A naive similarity search scans every row and computes distance for each. At a few thousand documents with 768-dimension embeddings, that's seconds. The fix is an approximate-nearest-neighbour index. In Postgres with `pgvector`, that's HNSW:
+
+```sql
+-- Cosine distance, matching how the embeddings were normalized.
+CREATE INDEX ON documents
+USING hnsw (embedding vector_cosine_ops)
+WITH (m = 16, ef_construction = 64);
+```
+
+`m` controls graph connectivity, `ef_construction` how hard the index works at build time. Both trade build cost and memory for recall. The query side has its own knob:
+
+```sql
+-- Higher = better recall, slower query. Tune per workload.
+SET hnsw.ef_search = 40;
+
+SELECT id, content, 1 - (embedding <=> $1) AS similarity
+FROM documents
+ORDER BY embedding <=> $1
+LIMIT 8;
+```
+
+That took retrieval from seconds on a sequential scan to **sub-second across thousands of embedded documents**.
+
+Two things I'd tell my past self:
+
+1. **`ORDER BY ... LIMIT` is what triggers the index.** If you filter with a `WHERE` clause on distance instead, you can silently fall back to a scan and wonder why your "indexed" query is slow.
+2. **HNSW is approximate.** You are trading recall for latency. Measure it — don't assume the top-8 you get back is the true top-8. For a copilot that's a fine trade; for billing reconciliation it wouldn't be.
+
+Ingestion — chunking and embedding — runs as a separate Python pipeline, not inline with requests. Nothing about the read path should depend on how documents got there.
+
+## 3. Stream through the server, not around it
+
+The request path is: client → Node API → model + tools → back. The API layer isn't a proxy for tidiness — it owns the things the browser must never own: JWT refresh-token rotation, and Redis-backed rate limiting so one client can't drain a model budget.
+
+The important property is that the response is a **stream all the way down**. The moment any layer buffers the full completion to inspect it, you've reintroduced the thirty-second spinner one level deeper. If you need to inspect tokens (moderation, logging), do it *as they pass*, not after they've all arrived.
+
+## 4. Tool calls are UI, not plumbing
+
+When the model calls a tool, most implementations hide it — the user sees a spinner while your code runs a search. I render it inline, as it happens:
+
+> `searchKnowledge("Q3 retention numbers")` → 8 results → answering
+
+Showing the agent's work builds more trust than hiding it behind a spinner. It also turns a black box into something debuggable in production: when an answer is wrong, you can see *why* — bad tool input, bad retrieval, or bad synthesis. That's three different bugs that look identical from behind a loader.
+
+The rule I settled on: **if the agent is doing something that takes time, the user gets to see what it is.** Silence is the only thing users actually punish.
+
+## 5. The cancel bug that taught me the most
+
+Here's the hardest bug I hit, and it's the one nobody designs for.
+
+A user cancels mid-stream. You abort the request. What's on screen is half a sentence. Now what?
+
+You have to decide, explicitly:
+
+- Does the half-message **stay** (it's real — the model said it) or **vanish** (it's incomplete)?
+- If it stays, is it part of conversation history sent on the next turn?
+- If a tool call was in flight, does its result land in a message that no longer exists?
+
+That last one is where it bit me. The abort killed the render, but an in-flight tool promise still resolved and tried to hydrate a message that had been reconciled away. Classic race — invisible until a user cancels at exactly the wrong moment.
+
+The fix was to make cancellation a **first-class state transition** rather than a teardown. One `AbortController` per run, threaded through both the model stream and any tool execution, with the store owning what a cancelled run reconciles to:
+
+```ts
+const controller = new AbortController();
+
+// Both the model stream and tool execution observe the same signal.
+const run = startRun({ messages, signal: controller.signal });
+
+// Cancelling is a transition, not a teardown: the store decides
+// what a half-streamed message becomes.
+function cancel() {
+  controller.abort();
+  store.reconcile(runId, { status: "cancelled", keepPartial: true });
+}
+```
+
+The principle generalizes: **anything that can be interrupted needs a defined resting state.** "Just abort it" is not a design.
+
+## 6. Keep the agent state reusable
+
+All of this — retries, cancellation, partial-message hydration — lives in a small state store with hooks on top, not inside the chat component. That wasn't foresight about reuse; it was that a component owning six states, an abort controller, and a tool-call log is untestable.
+
+The payoff came later: the same primitives now power every conversation surface in the product. Streaming state is infrastructure, and infrastructure shouldn't live in a `<Chat />`.
+
+## What I'd keep
+
+- **Write the state list before the component.** It *is* the spec.
+- **Index before you optimize the model.** Retrieval latency and token latency add up, and retrieval is usually the cheaper win.
+- **Show the tool calls.** Transparency outperforms polish.
+- **Design the interrupted state.** Cancel is a feature, not an error path.
+
+The whole thing — voice in, streaming answer out, grounded in RAG, with live agent traces — is written up as a full case study with the architecture diagram and before/after numbers: [AI Life Assistant Super App](https://rinshad.dev/work/ai-life-assistant).
+
+If you're building something in this space, I'd genuinely like to hear how you handled the cancel-reconciliation problem — I don't think I've seen two teams solve it the same way. I write more of these at [rinshad.dev](https://rinshad.dev).
