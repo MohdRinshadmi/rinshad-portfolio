@@ -151,7 +151,7 @@ export default async function Image() {
               marginRight: 16,
             }}
           />
-          <span style={{ color: SECONDARY }}>2.5+ yrs</span>
+          <span style={{ color: SECONDARY }}>3+ yrs</span>
           <span style={{ margin: "0 16px", color: TERTIARY }}>·</span>
           <span style={{ color: SECONDARY }}>20+ shipped</span>
           <span style={{ margin: "0 16px", color: TERTIARY }}>·</span>

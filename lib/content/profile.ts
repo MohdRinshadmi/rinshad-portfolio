@@ -14,7 +14,7 @@ export const proofStats: ProofStat[] = [
   { to: 20, suffix: "+", label: "Production features shipped" },
   { to: 2000, suffix: "+", label: "Monthly transactions processed" },
   { to: 89, prefix: "62→", label: "Lighthouse performance score" },
-  { to: 2.5, suffix: "+", label: "Years shipping" },
+  { to: 3, suffix: "+", label: "Years shipping" },
 ];
 
 /* ============================================================================
@@ -56,17 +56,26 @@ export const education: Education[] = [
 ];
 
 /* ============================================================================
-   FULL SKILL INVENTORY (for /about) — verbatim from the résumé
+   FULL SKILL INVENTORY (for /about) — résumé-backed, plus the day-to-day
+   tooling the résumé doesn't have room to list.
    ========================================================================== */
 export const skillGroups: SkillGroup[] = [
   { label: "Languages", items: ["TypeScript", "JavaScript (ES6+)", "Golang", "Python", "SQL", "HTML5 · CSS3"] },
+  {
+    label: "Computer Science",
+    items: ["Data Structures & Algorithms", "Object-Oriented Programming", "Operating Systems", "Database Management Systems", "Computer Networks"],
+  },
   {
     label: "Frameworks & Libraries",
     items: ["React", "React Native", "Next.js (App Router · RSC · Server Actions)", "Remix (familiar)"],
   },
   {
     label: "Backend & Data",
-    items: ["Node.js · Express", "Golang · Gin · GORM", "Sequelize ORM", "REST · WebSockets", "PostgreSQL · pgvector", "Redis", "MongoDB · MySQL", "Event-driven microservices"],
+    items: ["Node.js · Express", "Golang · Gin · GORM", "Sequelize ORM", "REST · WebSockets", "Redis Pub/Sub", "JWT · OAuth", "PostgreSQL · pgvector (HNSW)", "Redis", "MongoDB · MySQL", "Event-driven microservices"],
+  },
+  {
+    label: "Architecture",
+    items: ["Clean Architecture", "Repository & service-layer patterns", "Dependency injection", "Monorepo", "CRDT (Yjs)", "Real-time systems"],
   },
   {
     label: "Payments",
@@ -82,7 +91,7 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     label: "Testing, Build & Tooling",
-    items: ["Jest", "Vitest", "React Testing Library", "Playwright", "ESLint", "Prettier", "Vite", "Webpack", "Turbopack", "Storybook", "GitHub Actions"],
+    items: ["Jest", "Vitest", "React Testing Library", "Playwright", "Git", "ESLint", "Prettier", "Vite", "Webpack", "Turbopack", "Storybook", "GitHub Actions"],
   },
   {
     label: "AI Workflow & Performance",
@@ -90,7 +99,7 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     label: "Cloud & Deployment",
-    items: ["AWS", "Docker · Docker Compose", "Nginx · PM2 · Linux/VPS", "Serverless", "Vercel", "Netlify", "GitHub Actions CI/CD"],
+    items: ["AWS (EC2 · S3 · IAM · CloudWatch)", "Docker · Docker Compose", "Nginx · PM2 · Linux/VPS", "Serverless", "Vercel", "Netlify", "GitHub Actions CI/CD"],
   },
 ];
 
@@ -142,7 +151,7 @@ export const about = {
   intro:
     "I'm Rinshad — a full-stack web & mobile engineer who builds production apps end-to-end, from React, Next.js, and React Native front-ends to Node.js and Go APIs and the data layer.",
   paragraphs: [
-    "Over the last 2.5 years I've shipped 20+ production features across eCommerce, LMS, and AI platforms on React, Next.js, React Native, TypeScript, Node.js, Golang, and AWS — plus self-initiated systems built to explore production patterns: streaming AI copilots, real-time collaboration, and live telemetry dashboards. I build React and React Native front-ends — hooks, React Server Components, SSR, Redux Toolkit, and React Query — wired to Node.js and Go APIs running LLM applications, RAG, semantic search, and tool calling with LangChain and the Vercel AI SDK, backed by PostgreSQL + pgvector, Redis, and event-driven services.",
+    "Over the last 3 years I've shipped 20+ production features across eCommerce, LMS, and AI platforms on React, Next.js, React Native, TypeScript, Node.js, Golang, and AWS — plus self-initiated systems built to explore production patterns: streaming AI copilots, real-time collaboration, and live telemetry dashboards. I build React and React Native front-ends — hooks, React Server Components, SSR, Redux Toolkit, and React Query — wired to Node.js and Go APIs running LLM applications, RAG, semantic search, and tool calling with LangChain and the Vercel AI SDK, backed by PostgreSQL + pgvector, Redis, and event-driven services.",
     "I care about the parts users feel: sub-second streaming, conflict-free real-time editing, and transparent agents that show their work. I cut API latency 35% across 40+ Express REST endpoints, raised Lighthouse from 62 to 89 (3.8s → 2.1s initial load), processed 2,000+ monthly Stripe, PayPal, and Razorpay transactions with webhook-driven order lifecycles, led a live JS→TypeScript migration across web and mobile that erased a recurring class of runtime errors, and cut team build times 60% by migrating CRA to Vite.",
     "AI isn't a bolt-on for me — I design for it: streaming states, cancellation, tool-call traces, and latency budgets, treated as first-class UI in production.",
   ],

@@ -67,7 +67,7 @@ export function TimelineSection() {
             <StageHeading
               eyebrow="02 — TRAJECTORY"
               title="The corridor"
-              blurb="Two and a half years, traveled milestone by milestone."
+              blurb="Three years, traveled milestone by milestone."
             />
 
             {/* Active milestone card — the real content of this stage. */}

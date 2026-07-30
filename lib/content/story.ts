@@ -27,7 +27,7 @@ export const prologue = {
     lines: ["full-stack web", "& mobile engineer"],
   },
   byline:
-    "Mohammed Rinshad — full-stack web & mobile engineer. Two and a half years, twenty-plus production features shipped. This is how the work actually happens.",
+    "Mohammed Rinshad — full-stack web & mobile engineer. Three years, twenty-plus production features shipped. This is how the work actually happens.",
   availability: "Open to AI & full-stack engineering roles",
   scrollCue: "Scroll to begin",
   /** The cover portrait — right column on desktop, above the masthead on phones. */
@@ -77,7 +77,7 @@ export const chapterBuilder = {
   title: "The Builder",
   /** Large scrubbed paragraphs — the narrative spine. */
   paragraphs: [
-    "Some engineers collect technologies. I collect shipped systems — twenty-some of them over the last two and a half years, across web and mobile: streaming AI copilots, conflict-free collaborative editors, React Native apps, and a cloud-native analytics platform engineered on Clean Architecture to scale.",
+    "Some engineers collect technologies. I collect shipped systems — twenty-some of them over the last three years, across web and mobile: streaming AI copilots, conflict-free collaborative editors, React Native apps, and a cloud-native analytics platform engineered on Clean Architecture to scale.",
     "Each one started messy. A vague brief, an impossible latency budget, a codebase mid-migration. The work is the same every time: understand the problem until it stops being scary, draw the system before writing the code, then ship, watch it break, and stay until it doesn't.",
   ],
   quote: "The fastest way to understand a system is to ship it — and stay until it stops breaking.",

@@ -461,9 +461,8 @@ export interface Achievement {
 export const achievements: Achievement[] = [
   {
     id: "years",
-    value: 2.5,
+    value: 3,
     suffix: "+",
-    decimals: 1,
     label: "Years in production",
     detail: "Shipping continuously since 2023 — web, mobile, and AI systems.",
   },

@@ -31,7 +31,7 @@
 
 ### What I do
 
-2.5+ years shipping **20+ production features** across eCommerce, LMS, and AI platforms. I build React and React Native front-ends wired to Node.js and Go APIs, with AI/LLM features, real-time collaboration, and payment systems behind them.
+3+ years shipping **20+ production features** across eCommerce, LMS, and AI platforms. I build React and React Native front-ends wired to Node.js and Go APIs, with AI/LLM features, real-time collaboration, and payment systems behind them.
 
 - ⚡ Cut API latency **35%** across 40+ Express REST endpoints
 - 📈 Raised Lighthouse **62 → 89** (3.8s → 2.1s initial load)

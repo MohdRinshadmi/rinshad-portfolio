@@ -184,7 +184,7 @@ function personNode() {
         { "@type": "AdministrativeArea", name: "Kerala" },
       ],
       skills:
-        "React, Next.js, React Native, TypeScript, Node.js, Golang, AWS, Docker, PostgreSQL, Redis, RAG, LLM integration, WebSockets, real-time systems",
+        "React, Next.js, React Native, TypeScript, Node.js, Golang, AWS, Docker, PostgreSQL, Redis, RAG, LLM integration, WebSockets, real-time systems, Clean Architecture, data structures and algorithms",
     },
     seeks: {
       "@type": "Demand",
@@ -214,6 +214,12 @@ function personNode() {
       "Microservices",
       "CI/CD",
       "System Design",
+      "Clean Architecture",
+      "Data Structures and Algorithms",
+      "Object-Oriented Programming",
+      "Operating Systems",
+      "Database Management Systems",
+      "Computer Networks",
       "Vercel AI SDK",
       "LangChain",
       "LLM applications",

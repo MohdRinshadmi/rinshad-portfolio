@@ -10,7 +10,7 @@ export const faqs: FaqItem[] = [
   {
     question: "Who is Mohammed Rinshad?",
     answer:
-      "Mohammed Rinshad M I is a Full-Stack Web & Mobile Engineer based in Palakkad, Kerala, India, with 2.5+ years of experience shipping 20+ production features across eCommerce, LMS, and AI platforms. He builds end-to-end products on React, Next.js, React Native, TypeScript, Node.js, Golang, and AWS — including AI/LLM features, real-time systems, and payment integrations.",
+      "Mohammed Rinshad M I is a Full-Stack Web & Mobile Engineer based in Palakkad, Kerala, India, with 3+ years of experience shipping 20+ production features across eCommerce, LMS, and AI platforms. He builds end-to-end products on React, Next.js, React Native, TypeScript, Node.js, Golang, and AWS — including AI/LLM features, real-time systems, and payment integrations.",
   },
   {
     question: "What kind of developer is Rinshad — full-stack, frontend, or backend?",
@@ -25,7 +25,7 @@ export const faqs: FaqItem[] = [
   {
     question: "What is Rinshad's technology stack?",
     answer:
-      "Core stack: React, Next.js (App Router, React Server Components, SSR), React Native, and TypeScript on the front end; Node.js/Express and Golang/Gin on the back end; PostgreSQL with pgvector, Redis, and MongoDB for data; and AWS, Docker, and CI/CD for delivery. On the AI side he uses the Vercel AI SDK, LangChain, Gemini, and Groq for RAG, semantic search, streaming chat, and tool/function calling.",
+      "Core stack: React, Next.js (App Router, React Server Components, SSR), React Native, and TypeScript on the front end; Node.js/Express and Golang/Gin on the back end; PostgreSQL with pgvector, Redis, MySQL, and MongoDB for data; and AWS (EC2, S3, IAM, CloudWatch), Docker, and CI/CD for delivery. He structures systems with Clean Architecture — repository and service layers with dependency injection. On the AI side he uses the Vercel AI SDK, LangChain, Gemini, and Groq for RAG, semantic search, streaming chat, and tool/function calling.",
   },
   {
     question: "Does Rinshad build AI and LLM features?",
