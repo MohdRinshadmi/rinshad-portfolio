@@ -4,11 +4,11 @@ import { useRef } from "react";
 import {
   motion,
   useReducedMotion,
-  useScroll,
   useTransform,
   type MotionValue,
 } from "framer-motion";
 import { useHydrated } from "@/lib/hooks/use-hydrated";
+import { useScrubProgress } from "@/lib/hooks/use-scrub-progress";
 import { ChapterMark } from "@/components/story/ChapterMark";
 import { ScrubText } from "@/components/motion/ScrubText";
 import { chapterSystems } from "@/lib/content/story";
@@ -39,10 +39,7 @@ export function SystemsCanvas() {
   const hydrated = useHydrated();
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: canvasRef,
-    offset: ["start 0.8", "end 0.6"],
-  });
+  const scrollYProgress = useScrubProgress(canvasRef, ["start 0.8", "end 0.6"]);
 
   const nodes = chapterSystems.nodes;
   const animate = hydrated && !reduceMotion;

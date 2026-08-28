@@ -48,7 +48,7 @@ export async function GET() {
     <title>${esc(siteConfig.fullName)} — Writing</title>
     <link>${BASE}/blog</link>
     <atom:link href="${BASE}/feed.xml" rel="self" type="application/rss+xml" />
-    <description>Field notes on full-stack web and mobile engineering — React, Next.js, React Native, Node.js, AI/LLM, and real-time systems.</description>
+    <description>Field notes on backend and full-stack engineering — Node.js, TypeScript, Golang, REST API design, PostgreSQL, Redis, Docker, AI/LLM data pipelines, and real-time systems.</description>
     <language>en-IN</language>
     <lastBuildDate>${updated}</lastBuildDate>
 ${items}

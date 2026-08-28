@@ -61,12 +61,13 @@ function ProofBand() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <div
-      aria-label="Proof points"
-      className="mt-24 border-y border-border bg-bg-subtle sm:mt-32"
-    >
+    <div className="mt-24 border-y border-border bg-bg-subtle sm:mt-32">
       <div className="container-page">
+        {/* The name belongs on the list, not the wrapper: a bare <div> maps to
+            the `generic` role, which prohibits an accessible name (Lighthouse
+            `aria-prohibited-attr`). `role=list` supports one. */}
         <motion.ul
+          aria-label="Proof points"
           variants={reduceMotion ? undefined : staggerContainerFast}
           initial={reduceMotion ? undefined : "hidden"}
           whileInView={reduceMotion ? undefined : "visible"}

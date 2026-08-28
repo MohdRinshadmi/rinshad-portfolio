@@ -12,7 +12,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 export const metadata: Metadata = buildMetadata({
   title: "Writing",
   description:
-    "Field notes on full-stack web and mobile engineering — shipping production-grade React, Next.js, React Native, and Node.js, plus AI-native interfaces and real-time systems.",
+    "Field notes on backend and full-stack engineering — REST API design, relational schemas, caching, containers, and distributed real-time systems, plus the AI data pipelines behind them.",
   path: "/blog",
 });
 
@@ -26,7 +26,7 @@ export default function BlogPage() {
       url: `${siteConfig.url}/blog`,
       name: `${siteConfig.name} — Writing`,
       description:
-        "Field notes on full-stack web and mobile engineering, AI-native interfaces, and real-time systems.",
+        "Field notes on backend and full-stack engineering, API design, data modelling, and real-time systems.",
       inLanguage: "en-IN",
       author: { "@id": ID.person },
       publisher: { "@id": ID.organization },
@@ -60,9 +60,9 @@ export default function BlogPage() {
             <span className="font-serif italic text-text-secondary">build log</span>
           </h1>
           <p className="mt-6 text-body-lg text-text-secondary">
-            Essays and field notes on full-stack web and mobile engineering —
-            AI-native interfaces, real-time systems, and the patterns I reach for
-            to ship fast without cutting corners.
+            Essays and field notes on backend and full-stack engineering — API
+            design, data modelling, real-time systems, and the patterns I reach
+            for to ship fast without cutting corners.
           </p>
         </header>
 

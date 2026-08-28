@@ -7,7 +7,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = buildMetadata({
   title: "Contact",
-  description: "Let's build something — a full-stack web and mobile engineer open to React, Next.js, React Native, and Node.js roles.",
+  description: "Let's build something — a full-stack software engineer open to backend and full-stack roles across Node.js, TypeScript, Python, PostgreSQL, Docker, and AWS.",
   path: "/contact",
 });
 
@@ -16,7 +16,7 @@ const contactGraph = graph(
     path: "/contact",
     title: `Contact ${siteConfig.fullName}`,
     description:
-      "Hire a full-stack web & mobile engineer — React, Next.js, React Native, and Node.js. Open to roles across India and worldwide.",
+      "Hire a full-stack software engineer — Node.js, Express.js, TypeScript, Python, PostgreSQL, Redis, Docker, and AWS, with React, Next.js, and React Native on the client. Open to roles across India and worldwide.",
     type: "ContactPage",
     mainEntityId: `${siteConfig.url}/#person`,
   }),

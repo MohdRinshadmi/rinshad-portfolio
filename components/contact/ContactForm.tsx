@@ -23,7 +23,9 @@ type FormData = z.infer<typeof schema>;
 type FieldStatus = "idle" | "loading" | "success" | "error";
 
 const fieldBase =
-  "w-full rounded-md border bg-surface px-4 py-3 text-sm text-text placeholder:text-text-muted " +
+  // Placeholders use `tertiary`, not `muted` — placeholder copy is readable
+  // text and is contrast-audited, and `muted` (1.93:1) fails it.
+  "w-full rounded-md border bg-surface px-4 py-3 text-sm text-text placeholder:text-text-tertiary " +
   "outline-none transition-[border-color,box-shadow,background-color] duration-200 ease-out " +
   "focus:border-accent/50 focus:bg-surface-raised focus:ring-1 focus:ring-accent/30";
 

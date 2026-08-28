@@ -19,9 +19,16 @@
   --color-surface-raised: #ffffff;
   --color-border: rgba(10, 10, 10, 0.1);
   --color-border-strong: rgba(10, 10, 10, 0.16);
+  /* Ramp is WCAG-spaced against the DARKER of the two canvases (bg-subtle
+     #efece7), so every step clears 4.5:1 wherever it lands. Ratios on
+     bg-subtle: text 16.8:1 · secondary 6.99:1 · tertiary 4.62:1.
+     Darkening these is a contrast fix — don't lighten them back without
+     re-checking both canvases. `muted` is 1.93:1 and fails as body text by
+     design: it is the DECORATIVE tier only — aria-hidden separators, icons,
+     and the ScrubText reveal underlay. Never put readable copy on it. */
   --color-text: #0a0a0a;
-  --color-text-secondary: #6b6b66;
-  --color-text-tertiary: #8e8e88;
+  --color-text-secondary: #4f4f4a;
+  --color-text-tertiary: #6a6a64;
   --color-text-muted: #adaca4;
 
   /* — dark "ink" cards on the light page (Formix's glossy panels) — */

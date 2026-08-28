@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { DURATION, EASE } from "@/lib/animation";
+import { motion, useReducedMotion } from "framer-motion";
+import { DURATION, EASE, VIEWPORT } from "@/lib/animation";
 import { cn } from "@/lib/utils";
 
 interface RevealProps {
@@ -16,16 +16,26 @@ interface RevealProps {
 /**
  * Scroll-reveal primitive: opacity/y fade-up that enters once when scrolled
  * into view. Animates transform + opacity only.
+ *
+ * Reduced motion renders the content at rest with no animation at all. The
+ * global `prefers-reduced-motion` rule in globals.css can't cover this — it
+ * clamps CSS `animation-duration` and `transition-duration`, and Framer drives
+ * these from JS, so the opt-out has to be explicit here.
  */
 export function Reveal({
   children,
   className,
   delay = 0,
-  y = 24,
+  y = 18,
   as = "div",
   once = true,
 }: RevealProps) {
   const MotionTag = motion[as];
+  const reduceMotion = useReducedMotion();
+
+  if (reduceMotion) {
+    return <MotionTag className={cn(className)}>{children}</MotionTag>;
+  }
 
   return (
     <MotionTag
@@ -36,7 +46,7 @@ export function Reveal({
         y: 0,
         transition: { duration: DURATION.reveal, ease: EASE.out, delay },
       }}
-      viewport={{ once, margin: "-80px" }}
+      viewport={{ ...VIEWPORT, once }}
     >
       {children}
     </MotionTag>

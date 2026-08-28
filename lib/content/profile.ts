@@ -7,18 +7,19 @@ import type {
 } from "../types";
 
 /* ============================================================================
-   PROOF STRIP — count-up facts (all résumé-backed)
+   PROOF STRIP — count-up facts (all résumé-backed).
+   Backend-first ordering: endpoints and latency lead, delivery follows.
    ========================================================================== */
 export const proofStats: ProofStat[] = [
-  { to: 35, suffix: "%", label: "Lower API latency" },
-  { to: 20, suffix: "+", label: "Production features shipped" },
+  { to: 40, suffix: "+", label: "REST endpoints designed" },
+  { to: 35, suffix: "%", label: "Lower API response time" },
   { to: 2000, suffix: "+", label: "Monthly transactions processed" },
-  { to: 89, prefix: "62→", label: "Lighthouse performance score" },
-  { to: 3, suffix: "+", label: "Years shipping" },
+  { to: 60, suffix: "%+", label: "Faster front-end builds" },
+  { to: 3, suffix: "+", label: "Years shipping production" },
 ];
 
 /* ============================================================================
-   EXPERIENCE & EDUCATION
+   EXPERIENCE & EDUCATION — mirrors the résumé bullet-for-bullet.
    ========================================================================== */
 export const experience: Experience[] = [
   {
@@ -29,18 +30,28 @@ export const experience: Experience[] = [
     period: "Nov 2023 — Present",
     current: true,
     description:
-      "Building and scaling production web and mobile apps — eCommerce, LMS, and AI-powered platforms — with React, Next.js, and React Native front-ends wired to Node.js/Express APIs, and owning Docker, CI/CD, and Linux/VPS deployments.",
+      "Building and running the production backend — REST APIs, relational schemas, caching, and payment lifecycles in Node.js, Express.js, and TypeScript on MySQL and Redis — containerized with Docker and deployed to Linux/VPS and AWS behind Nginx and PM2, and hands-on with the React, Next.js, and React Native clients those APIs serve.",
     achievements: [
-      "Migrated the entire codebase from JavaScript to TypeScript across both web (React) and mobile (React Native) apps — full type safety that caught bugs early and eliminated an entire class of runtime errors.",
-      "Built a shared TypeScript component and API-contract library used across React, Next.js, and React Native projects — cutting duplicated code and speeding up feature delivery on 20+ production features.",
-      "Integrated Stripe, PayPal, and Razorpay payment gateways with webhook-driven order lifecycle management for a production eCommerce platform processing 2,000+ monthly transactions.",
-      "Architected 40+ RESTful API endpoints with Express.js and Sequelize ORM — middleware-based validation, JWT authentication, structured error handling, and SQL query optimization cutting average API response time 35%.",
-      "Led the frontend migration from Create React App to Vite, cutting build times from ~90s to ~35s (60%+ reduction) across a 4-person frontend team.",
-      "Optimized React rendering, code-splitting, and CDN-based asset delivery — lifting the Lighthouse performance score from 62 to 89 and cutting initial page load from 3.8s to 2.1s.",
-      "Deployed and published React Native apps to the Google Play Store and Apple App Store — release builds, signing, and store-review compliance, with production releases monitored through crash reporting and performance tracking.",
-      "Built an offline-first geolocation tracking system with React Native and SQLite — background location capture, local buffering, and retry-based recovery kept workforce tracking reliable through prolonged network outages.",
+      "Designed and built 40+ RESTful API endpoints with Express.js and Sequelize ORM — middleware validation, JWT authentication, and SQL query and index optimization cut average API response time by 35%.",
+      "Designed relational schemas in MySQL — normalized models, foreign-key constraints, indexed access paths, and versioned migrations shipped without downtime.",
+      "Integrated Stripe, PayPal, and Razorpay payments — webhook-driven order lifecycles, signature verification, and safe retries for an eCommerce platform handling 2,000+ monthly transactions.",
+      "Added Redis caching for read-heavy endpoints and session data, cutting repeated database round-trips under peak load.",
+      "Built the sync backend for an offline-first geolocation tracking system — batched uploads, duplicate-safe writes, and retry-based recovery through prolonged network outages.",
+      "Containerized services with Docker and deployed to Linux/VPS and AWS behind Nginx and PM2, with GitHub Actions CI/CD, structured logging, and production monitoring.",
+      "Migrated the codebase from JavaScript to TypeScript and built a shared API-contract and component library for React, Next.js, and React Native clients.",
+      "Moved the React build from Create React App to Vite, cutting build times 60%+ (~90s to ~35s); code-splitting and CDN assets lifted Lighthouse 62 to 89 and page load 3.8s to 2.1s.",
+      "Shipped React Native apps to the Google Play Store and Apple App Store, with background location capture and local buffering for offline use.",
     ],
-    technologies: ["React", "Next.js", "React Native", "Node.js · Express", "TypeScript", "MySQL · Sequelize", "Redis", "Docker"],
+    technologies: [
+      "Node.js · Express",
+      "TypeScript",
+      "MySQL · Sequelize",
+      "Redis",
+      "REST APIs",
+      "Docker",
+      "Nginx · Linux/VPS",
+      "React · React Native",
+    ],
   },
 ];
 
@@ -56,50 +67,116 @@ export const education: Education[] = [
 ];
 
 /* ============================================================================
-   FULL SKILL INVENTORY (for /about) — résumé-backed, plus the day-to-day
-   tooling the résumé doesn't have room to list.
+   FULL SKILL INVENTORY (for /about) — the résumé's eight groups, verbatim
+   and in résumé order. Backend and data lead; frontend and mobile follow.
+   Adding anything here means adding it to the PDF first.
    ========================================================================== */
 export const skillGroups: SkillGroup[] = [
-  { label: "Languages", items: ["TypeScript", "JavaScript (ES6+)", "Golang", "Python", "SQL", "HTML5 · CSS3"] },
   {
-    label: "Computer Science",
-    items: ["Data Structures & Algorithms", "Object-Oriented Programming", "Operating Systems", "Database Management Systems", "Computer Networks"],
+    label: "Languages",
+    items: ["TypeScript", "JavaScript", "Python", "Golang", "SQL"],
   },
   {
-    label: "Frameworks & Libraries",
-    items: ["React", "React Native", "Next.js (App Router · RSC · Server Actions)", "Remix (familiar)"],
+    label: "Backend & APIs",
+    items: [
+      "Node.js",
+      "Express.js",
+      "FastAPI",
+      "Gin",
+      "REST API Design",
+      "WebSockets",
+      "JWT / OAuth",
+      "RBAC",
+      "Middleware Architecture",
+      "Webhooks",
+      "Background Jobs",
+      "API Versioning",
+      "Rate Limiting",
+      "Redis Pub/Sub",
+    ],
   },
   {
-    label: "Backend & Data",
-    items: ["Node.js · Express", "Golang · Gin · GORM", "Sequelize ORM", "REST · WebSockets", "Redis Pub/Sub", "JWT · OAuth", "PostgreSQL · pgvector (HNSW)", "Redis", "MongoDB · MySQL", "Event-driven microservices"],
+    label: "Databases",
+    items: [
+      "PostgreSQL",
+      "MySQL",
+      "MongoDB",
+      "Redis",
+      "SQLite",
+      "pgvector",
+      "Sequelize ORM",
+      "GORM",
+      "Schema Design",
+      "Indexing",
+      "Query Optimization",
+      "Transactions",
+      "Migrations",
+    ],
   },
   {
-    label: "Architecture",
-    items: ["Clean Architecture", "Repository & service-layer patterns", "Dependency injection", "Monorepo", "CRDT (Yjs)", "Real-time systems"],
+    label: "Cloud & DevOps",
+    items: [
+      "AWS (EC2 · S3 · IAM · CloudWatch)",
+      "Docker",
+      "Docker Compose",
+      "GitHub Actions (CI/CD)",
+      "Nginx (reverse proxy · SSL)",
+      "PM2",
+      "Linux/VPS Administration",
+    ],
   },
   {
-    label: "Payments",
-    items: ["Stripe", "PayPal", "Razorpay", "Webhook-driven order lifecycle"],
+    label: "Architecture & System Design",
+    items: [
+      "Clean Architecture",
+      "Repository & Service-Layer Patterns",
+      "Dependency Injection",
+      "Modular Monolith",
+      "Caching Strategies",
+      "Event-Driven & Real-Time Systems",
+      "Distributed Systems",
+    ],
   },
   {
-    label: "AI Engineering & SDKs",
-    items: ["Vercel AI SDK", "Gemini · Groq", "Ollama (local LLMs)", "LangChain", "Tool / function calling", "RAG · semantic search · embeddings", "Streaming LLM UIs"],
+    label: "Frontend & Mobile",
+    items: [
+      "React",
+      "Next.js (App Router · Server Components)",
+      "React Native",
+      "Redux Toolkit",
+      "Zustand",
+      "TanStack Query",
+      "Tailwind CSS",
+      "Vite",
+    ],
   },
   {
-    label: "Styling, State & Realtime",
-    items: ["Tailwind CSS", "shadcn/ui", "Radix UI", "Framer Motion", "Redux Toolkit", "Zustand", "React Query", "SWR", "WebSockets"],
+    label: "AI / Data Backend",
+    items: [
+      "Python Data-Ingestion Pipelines",
+      "RAG",
+      "Embeddings",
+      "Semantic Search (pgvector · HNSW)",
+      "LLM APIs (Gemini · Groq · Ollama)",
+      "LangChain",
+      "Streaming Responses",
+      "Tool / Function Calling",
+    ],
   },
   {
-    label: "Testing, Build & Tooling",
-    items: ["Jest", "Vitest", "React Testing Library", "Playwright", "Git", "ESLint", "Prettier", "Vite", "Webpack", "Turbopack", "Storybook", "GitHub Actions"],
-  },
-  {
-    label: "AI Workflow & Performance",
-    items: ["Claude Code", "Cursor", "GitHub Copilot", "v0", "MCP servers", "Core Web Vitals", "Lighthouse", "React Profiler", "Sentry"],
-  },
-  {
-    label: "Cloud & Deployment",
-    items: ["AWS (EC2 · S3 · IAM · CloudWatch)", "Docker · Docker Compose", "Nginx · PM2 · Linux/VPS", "Serverless", "Vercel", "Netlify", "GitHub Actions CI/CD"],
+    label: "Testing & Observability",
+    items: [
+      "Jest",
+      "Vitest",
+      "Playwright",
+      "Postman",
+      "Unit & Integration Testing",
+      "Structured Logging",
+      "Sentry",
+      "CloudWatch",
+      "Git / GitHub",
+      "Agile / Scrum",
+    ],
   },
 ];
 
@@ -109,37 +186,37 @@ export const skillGroups: SkillGroup[] = [
 export const workProcess: WorkProcess[] = [
   {
     step: 1,
-    title: "Discover",
+    title: "Model the data",
     description:
-      "Deep-dive into the problem space — user needs, business goals, technical constraints. No code until the problem is crystal clear.",
+      "Start at the schema, not the screen. Normalized models, foreign keys, the access paths the product will actually read by. Get this wrong and every layer above it pays rent forever.",
     icon: "Search",
   },
   {
     step: 2,
-    title: "Architect",
+    title: "Design the contract",
     description:
-      "Design the system before the UI. Define data models, API contracts, and component boundaries. Draw the map before building the roads.",
+      "Define the API before anyone builds against it. Resources, status codes, error shapes, versioning, and a typed contract the React, Next.js, and React Native clients all share.",
     icon: "Layout",
   },
   {
     step: 3,
-    title: "Build",
+    title: "Build the service",
     description:
-      "Iterative development with fast feedback loops. Ship small working increments. Tests first, performance by default.",
+      "Express handlers stay thin; validation lives in middleware, business rules in the service layer, queries in the repository. Tests on the paths that carry money or state.",
     icon: "Code2",
   },
   {
     step: 4,
-    title: "Polish",
+    title: "Make it fast",
     description:
-      "Micro-interactions, accessibility passes, and performance audits. The last 10% that separates good from exceptional.",
+      "Read the query plan before adding a server. Index the access path, cache the read-heavy endpoint in Redis, batch the chatty write. 35% of average response time came off this way.",
     icon: "Sparkles",
   },
   {
     step: 5,
-    title: "Ship",
+    title: "Ship and watch",
     description:
-      "Zero-downtime deployments, monitoring in place, runbooks written. Done doesn't mean deployed — it means production-ready.",
+      "Docker image, GitHub Actions pipeline, Nginx and PM2 in front, migrations versioned so releases go out without downtime — then structured logs and monitoring, because production is the only honest reviewer.",
     icon: "Rocket",
   },
 ];
@@ -149,12 +226,12 @@ export const workProcess: WorkProcess[] = [
    ========================================================================== */
 export const about = {
   intro:
-    "I'm Rinshad — a full-stack web & mobile engineer who builds production apps end-to-end, from React, Next.js, and React Native front-ends to Node.js and Go APIs and the data layer.",
+    "I'm Rinshad — a full-stack software engineer who lives closest to the backend: the REST APIs, the relational schemas, and the containerized services that everything else depends on.",
   paragraphs: [
-    "Over the last 3 years I've shipped 20+ production features across eCommerce, LMS, and AI platforms on React, Next.js, React Native, TypeScript, Node.js, Golang, and AWS — plus self-initiated systems built to explore production patterns: streaming AI copilots, real-time collaboration, and live telemetry dashboards. I build React and React Native front-ends — hooks, React Server Components, SSR, Redux Toolkit, and React Query — wired to Node.js and Go APIs running LLM applications, RAG, semantic search, and tool calling with LangChain and the Vercel AI SDK, backed by PostgreSQL + pgvector, Redis, and event-driven services.",
-    "I care about the parts users feel: sub-second streaming, conflict-free real-time editing, and transparent agents that show their work. I cut API latency 35% across 40+ Express REST endpoints, raised Lighthouse from 62 to 89 (3.8s → 2.1s initial load), processed 2,000+ monthly Stripe, PayPal, and Razorpay transactions with webhook-driven order lifecycles, led a live JS→TypeScript migration across web and mobile that erased a recurring class of runtime errors, and cut team build times 60% by migrating CRA to Vite.",
-    "AI isn't a bolt-on for me — I design for it: streaming states, cancellation, tool-call traces, and latency budgets, treated as first-class UI in production.",
+    "For the last three years I've built and run production systems in Node.js, Express.js, and TypeScript on MySQL, Redis, Docker, and AWS. Forty-plus REST endpoints with middleware validation and JWT auth. Relational schemas with normalized models, foreign-key constraints, and versioned migrations that ship without downtime. Payment lifecycles driven by webhooks — Stripe, PayPal, Razorpay — with signature verification and safe retries behind 2,000+ transactions a month. A sync backend for offline-first geolocation tracking that survives prolonged network outages through batched, duplicate-safe writes.",
+    "Backend-heavy, but not backend-only: I'm hands-on with the clients those APIs serve. I migrated a codebase from JavaScript to TypeScript and built the shared API-contract and component library that React, Next.js, and React Native all consume. I moved the React build from Create React App to Vite — 60%+ off build times — and code-splitting plus CDN assets took Lighthouse from 62 to 89 and page load from 3.8s to 2.1s. The React Native apps went to both stores, with background location capture and local buffering for offline use.",
+    "Outside work I go further down the same road. Golang with Gin and GORM on Clean Architecture. Python data-ingestion pipelines feeding pgvector with HNSW-indexed semantic search. A stateless WebSocket fan-out server on Redis Pub/Sub that scales horizontally without sticky sessions. These are self-directed projects on self-hosted, open-source infrastructure — no commercial users, and I don't claim otherwise.",
   ],
   closing:
-    "Based in Kerala, India — open to full-stack web & mobile engineering roles, remote or relocation.",
+    "Based in Kerala, India — open to backend and full-stack engineering roles, remote or relocation.",
 };

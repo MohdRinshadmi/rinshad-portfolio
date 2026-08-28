@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useTransform } from "framer-motion";
+import { useScrubProgress } from "@/lib/hooks/use-scrub-progress";
 import { ChapterMark } from "@/components/story/ChapterMark";
 import { Reveal } from "@/components/motion/Reveal";
 import { chapterInterfaces } from "@/lib/content/story";
 import { cn } from "@/lib/utils";
 
 /**
- * Chapter 02 — Behind the Interfaces. One real product (the streaming copilot)
+ * Chapter 02 — Behind the Interfaces. One real system (the offline-first sync backend)
  * told as a horizontal sequence: Problem → Thinking → Architecture → Execution
  * → Impact. On large screens the chapter pins and the columns travel sideways,
  * scrubbed by the scrollbar; on small screens and under reduced motion it
@@ -20,10 +21,10 @@ export function BehindTheInterfaces() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [shift, setShift] = useState(0);
 
-  const { scrollYProgress } = useScroll({
-    target: railRef,
-    offset: ["start start", "end end"],
-  });
+  // Spring-smoothed: a wide track translating on a raw scroll offset shows
+  // every notch of a mouse wheel. The spring is what makes the sideways
+  // travel read as momentum rather than as stepping.
+  const progress = useScrubProgress(railRef, ["start start", "end end"]);
 
   // Travel exactly (track width − viewport). The track carries rail-aligned
   // lead-in/tail padding (`pl-rail`/`pr-rail`), so the chapter starts AND ends
@@ -36,7 +37,7 @@ export function BehindTheInterfaces() {
     return () => window.removeEventListener("resize", measure);
   }, []);
 
-  const x = useTransform(scrollYProgress, [0, 1], [0, -shift]);
+  const x = useTransform(progress, [0, 1], [0, -shift]);
 
   const stages = chapterInterfaces.stages;
 
@@ -47,7 +48,7 @@ export function BehindTheInterfaces() {
         <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
           <motion.div
             ref={trackRef}
-            style={{ x }}
+            style={{ x, willChange: "transform" }}
             className="flex w-max items-stretch gap-[5vw] pl-rail pr-rail"
           >
             <div className="flex w-[34vw] flex-col justify-center">
@@ -69,7 +70,7 @@ export function BehindTheInterfaces() {
               <span>{stages[stages.length - 1].step}</span>
             </div>
             <div className="h-px bg-border-strong">
-              <motion.div style={{ scaleX: scrollYProgress }} className="h-px origin-left bg-accent" />
+              <motion.div style={{ scaleX: progress }} className="h-px origin-left bg-accent" />
             </div>
           </div>
         </div>

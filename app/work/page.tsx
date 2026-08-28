@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { projects } from "@/lib/content/projects";
+import { projects, workDisclaimer } from "@/lib/content/projects";
 import { siteConfig } from "@/lib/config/site";
 import { buildMetadata, graph, webPage, breadcrumb } from "@/lib/seo";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -10,16 +10,16 @@ import { JsonLd } from "@/components/seo/JsonLd";
 export const metadata: Metadata = buildMetadata({
   title: "Work",
   description:
-    "Selected full-stack work across web and mobile — React, Next.js, React Native, and Node.js apps spanning AI products, real-time systems, and cloud-native platforms.",
+    "Selected backend and full-stack work — Node.js, TypeScript, and Golang services spanning REST APIs, RAG pipelines, and distributed real-time systems, each self-hosted on PostgreSQL, Redis, and Docker.",
   path: "/work",
 });
 
 const workGraph = graph(
   webPage({
     path: "/work",
-    title: "Selected Work — Full-Stack Web, Mobile & AI Projects",
+    title: "Selected Work — Backend, Distributed Systems & AI Projects",
     description:
-      "Case studies of production-grade systems built by Mohammed Rinshad — streaming AI copilots, real-time collaboration, and cloud-native platforms.",
+      "Case studies of backend systems built by Mohammed Rinshad — a Golang Clean-Architecture telemetry platform, a streaming Node.js AI API with pgvector RAG, and a stateless WebSocket fan-out server on Redis Pub/Sub.",
     type: "CollectionPage",
   }),
   breadcrumb(
@@ -60,13 +60,20 @@ export default function WorkPage() {
           <Eyebrow dot>Selected Work</Eyebrow>
 
           <h1 className="mt-5 font-display text-display-xl text-text text-balance">
-            Full-stack work — web, mobile, real-time, and AI.
+            Backend systems, built end to end.
           </h1>
 
           <p className="mt-6 max-w-[58ch] text-body-lg text-text-secondary">
-            Self-initiated systems built to explore production patterns — streaming
-            AI copilots, conflict-free real-time collaboration, and cloud-native
-            telemetry — each owned end-to-end, from architecture to deployment.
+            Three self-directed services, each taken from schema to deployment: a
+            Golang telemetry backend on Clean Architecture, a streaming Node.js API
+            with Python ingestion and pgvector retrieval, and a stateless WebSocket
+            tier that scales without sticky sessions.
+          </p>
+
+          {/* The résumé's own disclaimer, kept visible — it is what makes every
+              claim on these case studies credible. */}
+          <p className="mt-6 max-w-[58ch] border-l border-border pl-4 font-mono text-xs leading-relaxed text-text-tertiary">
+            {workDisclaimer}
           </p>
         </header>
 

@@ -1,10 +1,14 @@
 /* ============================================================================
    THE DOCUMENTARY — homepage narrative content.
 
-   The homepage reads as the opening chapter of a documentary about a product
+   The homepage reads as the opening chapter of a documentary about a backend
    engineer: a prologue, five chapters, an epilogue. Voice rules: first person,
    concrete, no buzzwords, every claim résumé-backed. Components render this
    verbatim — copy edits happen here, not in JSX.
+
+   Positioning (from the résumé): Full-Stack Software Engineer, backend-heavy.
+   APIs, schemas, and containerized services lead; the React / Next.js /
+   React Native clients follow as the surfaces those APIs serve.
    ========================================================================== */
 
 export const prologue = {
@@ -14,58 +18,54 @@ export const prologue = {
     index: "01",
     edition: "Ed. 2026",
     name: "Mohammed Rinshad",
-    role: "Full-stack web & mobile engineering",
+    role: "Full-stack software engineering",
     location: "Palakkad, IN",
     coords: "10.79°N",
     status: "Available",
   },
-  /** Masthead introduction. Reads "I am Rinshad, full-stack engineer." —
-      a light greeting line (name in serif italic), then two heavy lines. */
+  /** Masthead introduction. Reads "I am Rinshad, full-stack software engineer."
+      — a light greeting line (name in serif italic), then two heavy lines. */
   headline: {
     intro: "I am",
     name: "Rinshad",
-    lines: ["full-stack web", "& mobile engineer"],
+    lines: ["full-stack", "software engineer"],
   },
   byline:
-    "Mohammed Rinshad — full-stack web & mobile engineer. Three years, twenty-plus production features shipped. This is how the work actually happens.",
-  availability: "Open to AI & full-stack engineering roles",
+    "Mohammed Rinshad — full-stack software engineer, backend-heavy. Three years of production REST APIs, relational schemas, and containerized services. This is how the work actually happens.",
+  availability: "Open to backend & full-stack engineering roles",
   scrollCue: "Scroll to begin",
   /** The cover portrait — right column on desktop, above the masthead on phones. */
   portrait: {
     src: "/images/rinshad-portrait-v2.jpg",
-    alt: "Portrait of Mohammed Rinshad, full-stack web & mobile engineer",
+    alt: "Portrait of Mohammed Rinshad, full-stack software engineer",
     width: 1200,
     height: 1277,
   },
-  /** Vertical project reel — the cover photograph, in motion. Placeholder art
-      (picsum seeds keep the same photo every build) until real shots exist. */
+  /** Vertical project reel — the cover photograph, in motion. One still per
+      featured project, all served from /public. Keep it that way: remote
+      placeholders cost a third-party DNS + TLS hop on the homepage's critical
+      path and force a `remotePatterns` entry in next.config. */
   reel: {
     cta: "View all projects",
     href: "/work",
     items: [
       {
+        src: "/images/projects/analytics-dashboard.svg",
+        width: 1280,
+        height: 800,
+        label: "IoT telemetry — Golang on Clean Architecture",
+      },
+      {
         src: "/images/projects/ai-life-assistant.png",
         width: 1911,
         height: 836,
-        label: "AI Life Assistant — streaming copilot",
+        label: "AI Life Assistant — streaming Node.js API",
       },
       {
-        src: "https://picsum.photos/seed/rinshad-collab/720/620?grayscale",
-        width: 720,
-        height: 620,
-        label: "Real-time collaboration — CRDT editor",
-      },
-      {
-        src: "https://picsum.photos/seed/rinshad-telemetry/720/460?grayscale",
-        width: 720,
-        height: 460,
-        label: "IoT analytics — React + Go platform",
-      },
-      {
-        src: "https://picsum.photos/seed/rinshad-systems/720/560?grayscale",
-        width: 720,
-        height: 560,
-        label: "Systems & architecture",
+        src: "/images/projects/collab-editor.svg",
+        width: 1280,
+        height: 800,
+        label: "Real-time collaboration — stateless WebSocket tier",
       },
     ],
   },
@@ -77,26 +77,26 @@ export const chapterBuilder = {
   title: "The Builder",
   /** Large scrubbed paragraphs — the narrative spine. */
   paragraphs: [
-    "Some engineers collect technologies. I collect shipped systems — twenty-some of them over the last three years, across web and mobile: streaming AI copilots, conflict-free collaborative editors, React Native apps, and a cloud-native analytics platform engineered on Clean Architecture to scale.",
-    "Each one started messy. A vague brief, an impossible latency budget, a codebase mid-migration. The work is the same every time: understand the problem until it stops being scary, draw the system before writing the code, then ship, watch it break, and stay until it doesn't.",
+    "Most of what I've built is invisible. Forty-plus REST endpoints. Relational schemas with foreign keys that actually hold. Payment webhooks that survive a retry. Containers behind Nginx that come back up on their own. Users never see any of it — they only feel it when it isn't there.",
+    "Every one of those systems started messy: a vague brief, a query plan nobody had read, a schema mid-migration. The work is the same every time — understand the data until it stops being scary, draw the contract before writing the handler, then ship, watch it break, and stay until it doesn't.",
   ],
-  quote: "The fastest way to understand a system is to ship it — and stay until it stops breaking.",
+  quote: "Nobody thanks you for the index. They just stop complaining about the page.",
   /** Editorial footnotes — quiet, annotated facts instead of counters. */
   footnotes: [
     {
       mark: "1",
-      fact: "20+ production features",
-      gloss: "across eCommerce, LMS, and AI platforms — React, React Native, and Node.js",
+      fact: "40+ REST endpoints",
+      gloss: "Express.js and Sequelize — middleware validation, JWT auth, SQL query and index optimization",
     },
     {
       mark: "2",
-      fact: "35% lower API latency",
-      gloss: "40+ Express endpoints — SQL query optimization, JWT auth, structured error handling",
+      fact: "35% lower response time",
+      gloss: "average across the API, from reading query plans rather than adding servers",
     },
     {
       mark: "3",
       fact: "2,000+ monthly transactions",
-      gloss: "Stripe, PayPal, and Razorpay with webhook-driven order lifecycle management",
+      gloss: "Stripe, PayPal, and Razorpay — webhook-driven lifecycles, signature verification, safe retries",
     },
   ],
 } as const;
@@ -106,37 +106,37 @@ export const chapterInterfaces = {
   number: "02",
   title: "Behind the Interfaces",
   intro:
-    "Every polished interface hides an argument about how it should work. Here is one product — a streaming AI copilot — from first complaint to shipped system.",
+    "Every working product hides an argument about how it should fail. Here is one system — the sync backend for an offline-first geolocation tracker — from first bug report to something that survives a dead network.",
   stages: [
     {
       step: "Problem",
-      title: "The assistant froze.",
-      body: "Users asked the copilot hard questions, and the UI answered with a spinner. Long, tool-heavy runs locked the screen for thirty seconds. People didn't distrust the answers — they distrusted the silence.",
-      detail: "“Is it doing anything?” appeared in feedback eleven times in one week.",
+      title: "The field has no signal.",
+      body: "Workforce tracking assumes a connection. The field doesn't have one. Devices went underground, into warehouses, out past coverage — and came back hours later with a backlog of location points and no safe way to hand them over.",
+      detail: "A truck offline for four hours is not an edge case. It is Tuesday.",
     },
     {
       step: "Thinking",
-      title: "Streaming isn't a feature.",
-      body: "It's the architecture. If tokens arrive over seconds, then partial messages, cancellation, and tool-call traces aren't edge cases — they are the primary states of the interface. Design for them first and the spinner problem disappears by construction.",
-      detail: "The decision: treat every in-flight state as first-class UI.",
+      title: "Assume the network is already gone.",
+      body: "If the client buffers locally and uploads later, then every write arrives twice eventually — once from the retry that timed out, once from the retry that worked. Idempotency isn't a nice-to-have here; it's the whole design. Make the write safe to repeat and the outage stops being a data-integrity problem.",
+      detail: "The decision: no upload is ever assumed to have happened once.",
     },
     {
       step: "Architecture",
-      title: "Draw the system before the screens.",
-      body: "A streaming gateway fans requests out to Gemini and to tool endpoints. Tokens and tool events flow back through React Server Components; a small agent-state store owns retries, cancellation, and partial-message hydration.",
-      detail: "Client ⇄ AI gateway ⇄ models + tools, with state that survives interruption.",
+      title: "Batch, deduplicate, retry.",
+      body: "The device buffers points locally and uploads them in batches rather than one chatty request per fix. The sync endpoint treats every batch as replayable — duplicate-safe writes keyed so a repeat lands as a no-op instead of a second row. Failed batches back off and come around again.",
+      detail: "Device buffer → batched upload → duplicate-safe write → acknowledged.",
     },
     {
       step: "Execution",
-      title: "Make the partial states beautiful.",
-      body: "Tokens hydrate into the message without layout shift. A run cancelled mid-stream reconciles cleanly instead of leaving half a sentence. Tool calls render inline as they happen — the agent visibly doing its work.",
-      detail: "The hardest bug: reconciling a half-rendered message after cancel.",
+      title: "Make the recovery boring.",
+      body: "React Native captures location in the background and buffers locally when there's nothing to talk to. The backend absorbs whatever arrives whenever it arrives, in any order, more than once. Both stores end up agreeing, and nobody has to reconcile anything by hand on Monday morning.",
+      detail: "The hardest part: proving the same batch twice changes nothing.",
     },
     {
       step: "Impact",
-      title: "The silence disappeared.",
-      body: "First token in under a second. Three input modes in one composer. And the agent-state primitives built for this copilot now power every conversation surface in the product.",
-      detail: "Perceived latency: 30s of spinner → sub-second first token.",
+      title: "Outages stopped being incidents.",
+      body: "Tracking now survives prolonged network outages instead of losing the window. The apps went to the Play Store and the App Store with background capture and local buffering, and the recovery path is the same one that runs on a good day — because it always runs.",
+      detail: "Prolonged outage → complete history, reconstructed on reconnect.",
     },
   ],
 } as const;
@@ -146,45 +146,46 @@ export const chapterSystems = {
   number: "03",
   title: "Systems Thinking",
   paragraphs: [
-    "A screen is the last mile of a much longer system. Behind every interface I ship there are APIs holding contracts, sockets carrying live state, queues absorbing failure, and — increasingly — models reasoning in the loop.",
-    "I engineer that whole path. Not because full-stack is a job title, but because latency, trust, and reliability are decided everywhere except the screen.",
+    "A screen is the last mile of a much longer system. Behind every interface there is a schema deciding what is even expressible, an API holding a contract, a cache absorbing load, a container that has to come back up on its own — and increasingly, a model reasoning in the loop.",
+    "I work closest to that middle. Not because backend is a job title, but because latency, correctness, and reliability are decided long before anything reaches a screen.",
   ],
   /** The canvas chain — drawn top to bottom as the reader scrolls. */
   nodes: [
-    { id: "users", label: "People", sub: "the only metric that matters" },
-    { id: "apps", label: "Interfaces", sub: "React · Next.js · React Native" },
-    { id: "apis", label: "APIs", sub: "Node.js · typed contracts" },
-    { id: "realtime", label: "Real-time", sub: "WebSockets · CRDTs · presence" },
-    { id: "cloud", label: "Cloud", sub: "AWS · Docker · event-driven workers" },
-    { id: "ai", label: "AI", sub: "Gemini · RAG · tool calling" },
+    { id: "clients", label: "Clients", sub: "React · Next.js · React Native" },
+    { id: "apis", label: "REST APIs", sub: "Express · typed contracts · JWT" },
+    { id: "services", label: "Services", sub: "Clean Architecture · DI" },
+    { id: "data", label: "Data", sub: "MySQL · PostgreSQL · schema design" },
+    { id: "cache", label: "Cache & events", sub: "Redis · Pub/Sub · background jobs" },
+    { id: "infra", label: "Infrastructure", sub: "Docker · Nginx · PM2 · AWS" },
   ],
-  closing: "Ecosystems, not screens.",
+  closing: "Systems, not screens.",
 } as const;
 
 /* ── Chapter 04 — Selected Work ─────────────────────────────────────────── */
 export const chapterWork = {
   number: "04",
   title: "Selected Work",
-  intro: "Three self-initiated systems built to explore production patterns — the problem, the difficulty, and what changed.",
+  intro:
+    "Three self-directed backends on self-hosted, open-source infrastructure — the problem, the difficulty, and what changed. No commercial users, and no claim of any.",
   /** Editorial framing per featured project, keyed by slug. */
   features: {
+    "iot-analytics-dashboard": {
+      kicker: "Feature · Golang & Clean Architecture",
+      hook: "A Go backend where the ORM never leaks upward and the index matches the query.",
+      difficulty: "High-frequency telemetry has to stay queryable as tables grow, inside a structure that separates transport, domain, and storage well enough to survive changing requirements.",
+      outcome: "Gin over a Clean-Architecture service layer with DI, GORM repositories on indexed time-series tables, and the whole stack one Docker Compose command away.",
+    },
     "ai-life-assistant": {
-      kicker: "Feature · Voice-first AI",
-      hook: "A voice-first assistant that streams its answers — grounded in thousands of embedded documents.",
-      difficulty: "Voice, streaming, and retrieval had to feel like one calm surface — and retrieval had to be fast enough to keep up with speech.",
-      outcome: "Sub-second first token, sub-second RAG retrieval via HNSW, and a voice-to-voice loop, running live.",
+      kicker: "Feature · Streaming API & RAG",
+      hook: "A Node.js API that starts answering before it has finished thinking.",
+      difficulty: "Holding a streaming response open through server-side tool calls, while retrieval keeps pace with speech and the edge stays closed to abuse.",
+      outcome: "Token-by-token streaming, server-side tool calling, Python ingestion into HNSW-indexed pgvector, and JWT rotation with Redis rate limiting at the door.",
     },
     "realtime-collab-platform": {
-      kicker: "Feature · Real-time collaboration",
-      hook: "Many hands in one document, no conflicts — with AI waiting quietly inline.",
-      difficulty: "Broadcasting CRDT updates across multiple stateless server instances, conflict-free, with many clients editing at once.",
-      outcome: "Conflict-free editing with live presence, fanned out via Redis Pub/Sub and verified end-to-end with Playwright — and AI that never interrupts typing.",
-    },
-    "iot-analytics-dashboard": {
-      kicker: "Feature · Cloud-native platform",
-      hook: "A React-over-Go platform built architecture-first — Clean Architecture, 15+ REST APIs, ready to scale.",
-      difficulty: "The system had to stay extensible — a clean split between transport, domain, and data that could grow into real-time and microservices without a rewrite.",
-      outcome: "15+ Go REST APIs and 25+ reusable React components behind a type-safe contract; six services one Docker Compose up away.",
+      kicker: "Feature · Distributed real-time",
+      hook: "A WebSocket tier with no memory of its own — so you can just add another one.",
+      difficulty: "Fanning updates across interchangeable instances without sticky sessions, while concurrent edits converge instead of overwriting each other.",
+      outcome: "Stateless sockets over Redis Pub/Sub, Yjs CRDT convergence, and Playwright driving real browsers through reconnection and conflict.",
     },
   } as Record<string, { kicker: string; hook: string; difficulty: string; outcome: string }>,
   readCta: "Read the story",
@@ -197,30 +198,30 @@ export const chapterPrinciples = {
   intro: "Five rules the work keeps teaching me.",
   items: [
     {
-      statement: "Build for people.",
-      gloss: "Latency budgets and error states are empathy, written in code.",
+      statement: "Start at the schema.",
+      gloss: "Every shortcut in the data model is a bill the whole system pays, monthly, forever.",
     },
     {
-      statement: "Design for reliability.",
-      gloss: "The system you draw before coding is the one that survives production.",
+      statement: "Read the query plan first.",
+      gloss: "35% of average response time came off an API without anyone provisioning a bigger box.",
     },
     {
-      statement: "Obsess over details.",
-      gloss: "The last 10% — the reconciled cancel, the unshifted layout — is the product.",
+      statement: "Design for the retry.",
+      gloss: "Assume every request arrives twice and none of them are in order. Then it doesn't matter.",
     },
     {
-      statement: "Optimize before scaling.",
-      gloss: "A 40% render cut bought more headroom than any bigger server would have.",
+      statement: "Keep the boundaries honest.",
+      gloss: "Handlers know nothing about the ORM. Services know nothing about HTTP. That is the whole trick.",
     },
     {
-      statement: "Ship and learn.",
-      gloss: "Production is the only honest reviewer. Get there early, listen hard.",
+      statement: "Ship it and watch it.",
+      gloss: "Production is the only honest reviewer. Get there early, log structurally, listen hard.",
     },
   ],
 } as const;
 
 /* ── Epilogue ───────────────────────────────────────────────────────────── */
 export const epilogue = {
-  statement: "Every product starts as an unfinished idea.",
+  statement: "Every system starts as an unfinished idea.",
   invitation: "If you're building something ambitious, I'd love to hear about it.",
 } as const;

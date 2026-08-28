@@ -74,7 +74,7 @@ export default function AboutPage() {
           <Reveal as="div" delay={0.06} className="mt-6">
             <h1 className="max-w-[18ch] font-display text-display-xl text-balance text-text">
               Engineer behind the{" "}
-              <span className="font-serif italic text-text">streaming</span>.
+              <span className="font-serif italic text-text">API</span>.
             </h1>
           </Reveal>
         </div>
@@ -101,7 +101,7 @@ export default function AboutPage() {
                 <div className="rounded-3xl bg-linear-to-br from-accent/50 via-border to-border p-px shadow-card transition-[transform,box-shadow] duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-raised">
                   <Image
                     src="/images/rinshad-portrait-v2.jpg"
-                    alt="Mohammed Rinshad, full-stack web and mobile engineer, photographed outdoors in Kerala"
+                    alt="Mohammed Rinshad, full-stack software engineer, photographed outdoors in Kerala"
                     width={1200}
                     height={1277}
                     priority
@@ -153,7 +153,7 @@ export default function AboutPage() {
                 <span className="font-serif italic text-text">inventory</span>.
               </>
             }
-            description="Every tool I reach for — languages, frameworks, AI SDKs, real-time, testing, and delivery. Verbatim from the résumé, no padding."
+            description="Every tool I reach for — languages, APIs, databases, cloud and DevOps, architecture, clients, AI data pipelines, and testing. The résumé's eight groups, verbatim, no padding."
           />
 
           <Stagger gap="fast" className="mt-14 flex flex-col sm:mt-16">
@@ -191,7 +191,7 @@ export default function AboutPage() {
                 <span className="font-serif italic text-text">work</span>.
               </>
             }
-            description="A repeatable path from a fuzzy problem to something running in production — five steps, no skipped corners."
+            description="A repeatable path from a fuzzy problem to something running in production — schema, contract, service, speed, ship. Five steps, no skipped corners."
           />
 
           <Stagger

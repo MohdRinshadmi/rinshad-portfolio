@@ -8,7 +8,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 export const metadata: Metadata = buildMetadata({
   title: "Uses",
   description:
-    "The tools behind the work — the AI-native coding workflow (Claude Code, Cursor), the React/Next.js/React Native + Node.js/Go stack, and the testing and deployment setup I ship with.",
+    "The tools behind the work — the Node.js/Express and Golang API stack, the PostgreSQL/MySQL/Redis data layer, the Docker, Nginx, and AWS deployment path, and the React, Next.js, and React Native clients on top.",
   path: "/uses",
 });
 
@@ -17,7 +17,7 @@ const usesGraph = graph(
     path: "/uses",
     title: "Uses — Tools, Stack & Setup",
     description:
-      "The daily toolkit: AI-native coding workflow, the React/Next.js/React Native + Node.js/Go stack, and the testing and deployment setup.",
+      "The daily toolkit: APIs and services, databases and caching, containers and deployment, AI data pipelines, and the web and mobile clients.",
     type: "CollectionPage",
   }),
   breadcrumb(

@@ -5,46 +5,52 @@ import type { FaqItem } from "@/lib/seo";
    Written as natural-language answers to the exact questions recruiters, and
    AI assistants (ChatGPT, Gemini, Claude, Perplexity), actually ask. Every
    answer is résumé-backed and mirrors the copy elsewhere on the site.
+   Positioning: Full-Stack Software Engineer, backend-heavy.
    ========================================================================== */
 export const faqs: FaqItem[] = [
   {
     question: "Who is Mohammed Rinshad?",
     answer:
-      "Mohammed Rinshad M I is a Full-Stack Web & Mobile Engineer based in Palakkad, Kerala, India, with 3+ years of experience shipping 20+ production features across eCommerce, LMS, and AI platforms. He builds end-to-end products on React, Next.js, React Native, TypeScript, Node.js, Golang, and AWS — including AI/LLM features, real-time systems, and payment integrations.",
+      "Mohammed Rinshad M I is a Full-Stack Software Engineer based in Palakkad, Kerala, India, with 3+ years building and running production REST APIs, relational schemas, and containerized services in Node.js, Express.js, and TypeScript on MySQL, Redis, Docker, and AWS. He is backend-heavy and hands-on with the clients those APIs serve — React, Next.js, and React Native.",
   },
   {
-    question: "What kind of developer is Rinshad — full-stack, frontend, or backend?",
+    question: "Is Rinshad a backend, frontend, or full-stack engineer?",
     answer:
-      "Rinshad is a full-stack engineer who works across the whole path: React, Next.js, and React Native front-ends wired to Node.js and Golang REST APIs, backed by PostgreSQL, Redis, and Docker. He has architected 40+ REST endpoints, led a live JavaScript-to-TypeScript migration across web and mobile, and owns everything from UI to API contracts to deployment.",
+      "Full-stack, weighted toward the backend. His day-to-day is REST API design, relational schema design, caching, and deployment: 40+ Express.js endpoints with middleware validation and JWT authentication, normalized MySQL schemas with versioned migrations, Redis caching, and Docker containers behind Nginx and PM2 on Linux/VPS and AWS. He also builds and ships the React, Next.js, and React Native clients that consume those APIs, so he owns the contract from both sides.",
   },
   {
     question: "Is Rinshad available for hire or remote work?",
     answer:
-      "Yes. Rinshad is open to full-stack web and mobile engineering roles — remote across India and worldwide, or on-site with relocation. He typically replies within 24 hours by email at rinshad803@gmail.com.",
+      "Yes. Rinshad is open to backend and full-stack software engineering roles — remote across India and worldwide, or on-site with relocation. He typically replies within 24 hours by email at rinshad803@gmail.com.",
   },
   {
     question: "What is Rinshad's technology stack?",
     answer:
-      "Core stack: React, Next.js (App Router, React Server Components, SSR), React Native, and TypeScript on the front end; Node.js/Express and Golang/Gin on the back end; PostgreSQL with pgvector, Redis, MySQL, and MongoDB for data; and AWS (EC2, S3, IAM, CloudWatch), Docker, and CI/CD for delivery. He structures systems with Clean Architecture — repository and service layers with dependency injection. On the AI side he uses the Vercel AI SDK, LangChain, Gemini, and Groq for RAG, semantic search, streaming chat, and tool/function calling.",
+      "Backend: Node.js, Express.js, TypeScript, and Python (FastAPI), plus Golang with Gin — REST API design, WebSockets, JWT/OAuth, RBAC, middleware architecture, webhooks, background jobs, API versioning, and rate limiting. Data: PostgreSQL, MySQL, MongoDB, Redis, SQLite, and pgvector, with Sequelize and GORM, schema design, indexing, query optimization, transactions, and migrations. Cloud and DevOps: AWS (EC2, S3, IAM, CloudWatch), Docker and Docker Compose, GitHub Actions CI/CD, Nginx, PM2, and Linux/VPS administration. Frontend and mobile: React, Next.js (App Router, Server Components), React Native, Redux Toolkit, Zustand, TanStack Query, Tailwind CSS, and Vite.",
   },
   {
-    question: "Does Rinshad build AI and LLM features?",
+    question: "What backend results has Rinshad delivered?",
     answer:
-      "Yes — AI is a first-class part of his work, not a bolt-on. He has built streaming AI copilots with tool/function calling, Retrieval-Augmented Generation (RAG) over pgvector with HNSW indexing, semantic search, and multi-agent workflows using LangChain and the Vercel AI SDK, designing for streaming, cancellation, and tool-call transparency in production interfaces.",
+      "He designed and built 40+ RESTful API endpoints with Express.js and Sequelize ORM where middleware validation, JWT authentication, and SQL query and index optimization cut average API response time by 35%. He integrated Stripe, PayPal, and Razorpay with webhook-driven order lifecycles, signature verification, and safe retries for an eCommerce platform handling 2,000+ monthly transactions, added Redis caching for read-heavy endpoints, and built the sync backend for an offline-first geolocation tracking system with batched uploads, duplicate-safe writes, and retry-based recovery through prolonged network outages.",
   },
   {
-    question: "What measurable results has Rinshad delivered?",
+    question: "Does Rinshad work with AI, LLMs, and RAG?",
     answer:
-      "He cut average API latency by 35% across 40+ Express endpoints, raised a product's Lighthouse performance score from 62 to 89 (3.8s to 2.1s load), processed 2,000+ monthly transactions with webhook-driven Stripe, PayPal, and Razorpay integrations, and cut team build times 60% by migrating from Create React App to Vite.",
+      "Yes, from the data side. Across self-directed projects he has built Python data-ingestion pipelines — chunking and embedding generation — feeding HNSW-indexed semantic search on PostgreSQL with pgvector, and Node.js API layers that stream LLM responses and execute server-side tool/function calling against Gemini, Groq, and Ollama, with LangChain for orchestration and JWT refresh-token rotation plus Redis rate limiting at the edge.",
   },
   {
-    question: "Does Rinshad build mobile apps?",
+    question: "What are Rinshad's DevOps and deployment skills?",
     answer:
-      "Yes. He builds cross-platform mobile apps with React Native — including an offline-first geolocation tracking system with background capture and retry-based recovery — and has shipped and published apps to the Apple App Store and Google Play Store with signing, release builds, and store-review compliance.",
+      "He containerizes services with Docker and Docker Compose and deploys to Linux/VPS and AWS behind Nginx as a reverse proxy with SSL, running under PM2, with GitHub Actions CI/CD pipelines, structured logging, Sentry, and CloudWatch monitoring in production. Database migrations are versioned so releases go out without downtime.",
+  },
+  {
+    question: "Does Rinshad build frontend and mobile apps too?",
+    answer:
+      "Yes. He migrated a production codebase from JavaScript to TypeScript and built the shared API-contract and component library that its React, Next.js, and React Native clients all consume. He moved the React build from Create React App to Vite, cutting build times 60%+ (~90s to ~35s), and code-splitting plus CDN assets lifted Lighthouse from 62 to 89 and page load from 3.8s to 2.1s. He has shipped React Native apps to the Google Play Store and Apple App Store with background location capture and local buffering for offline use.",
   },
   {
     question: "Where is Rinshad based, and which regions does he work with?",
     answer:
-      "Rinshad is based in Palakkad, Kerala, India, and currently works as a Software Engineer in Calicut. He collaborates with teams remotely across India and internationally, and is open to relocation for roles in regions such as the UAE (Dubai), Germany, and the United Kingdom.",
+      "Rinshad is based in Palakkad, Kerala, India, and currently works as a Software Engineer at Infinite Open Source Solution LLP in Calicut. He collaborates with teams remotely across India and internationally, and is open to relocation for roles in regions such as Bangalore, the UAE (Dubai), Germany, and the United Kingdom.",
   },
 ];

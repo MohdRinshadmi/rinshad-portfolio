@@ -93,7 +93,7 @@ export function Footer() {
           <p className="font-mono text-xs text-text-tertiary">
             Designed &amp; built in Kerala. Next.js · Tailwind · Framer Motion.
           </p>
-          <p className="font-mono text-xs text-text-muted">
+          <p className="font-mono text-xs text-text-tertiary">
             © {year} {siteConfig.fullName}
           </p>
         </div>

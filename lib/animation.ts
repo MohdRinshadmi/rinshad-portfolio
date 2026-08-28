@@ -25,8 +25,8 @@ export const EASE = {
 export const DURATION = {
   micro: 0.15, // hover, taps, chips
   base: 0.3, // most UI transitions
-  reveal: 0.65, // scroll reveals
-  hero: 0.95, // hero entrance, big statements
+  reveal: 0.78, // scroll reveals — long enough to read as a settle, not a pop
+  hero: 1.05, // hero entrance, big statements
   slow: 1.2, // background drifts, marquee step
   // legacy aliases:
   fast: 0.2,
@@ -37,7 +37,7 @@ export const DURATION = {
    Reveal variants
    -------------------------------------------------------------------------- */
 export const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 18 },
   visible: {
     opacity: 1,
     y: 0,
@@ -95,7 +95,7 @@ export const lineMask: Variants = {
 export const staggerContainer: Variants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.1, delayChildren: 0.1 },
+    transition: { staggerChildren: 0.08, delayChildren: 0.08 },
   },
 };
 
@@ -152,4 +152,25 @@ export const pageTransition: Variants = {
 };
 
 /** Shared viewport config for whileInView reveals (enter once). */
-export const VIEWPORT = { once: true, margin: "-80px" } as const;
+export const VIEWPORT = { once: true, margin: "-64px" } as const;
+
+/* ----------------------------------------------------------------------------
+   Scroll-linked motion
+   -------------------------------------------------------------------------- */
+/**
+ * Spring applied on top of a `useScroll` progress value before it drives a
+ * transform. Lenis already smooths the scroll *position*; this smooths the
+ * discontinuities it can't — a spacebar page-jump, an anchor link, a
+ * momentum-less mouse wheel clicking through in fixed steps.
+ *
+ * Stiff and heavily damped on purpose: high enough to track the scroll without
+ * visible lag, damped past 1.0 so a scrub never overshoots and bounces back.
+ * Tune `stiffness` for responsiveness; leave `damping` alone unless you want
+ * the wobble.
+ */
+export const SCRUB_SPRING = {
+  stiffness: 260,
+  damping: 44,
+  mass: 0.35,
+  restDelta: 0.0005,
+} as const;

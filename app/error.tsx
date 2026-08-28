@@ -47,7 +47,7 @@ export default function ErrorBoundary({
           </Link>
         </div>
         {error.digest ? (
-          <p className="mt-8 font-mono text-xs text-text-muted">Ref: {error.digest}</p>
+          <p className="mt-8 font-mono text-xs text-text-tertiary">Ref: {error.digest}</p>
         ) : null}
       </div>
     </section>

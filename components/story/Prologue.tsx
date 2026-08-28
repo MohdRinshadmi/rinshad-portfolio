@@ -4,8 +4,9 @@ import { useRef, type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useTransform } from "framer-motion";
 import { useHydrated } from "@/lib/hooks/use-hydrated";
+import { useScrubProgress } from "@/lib/hooks/use-scrub-progress";
 import { LineMask } from "@/components/motion/LineMask";
 import { MagneticButton } from "@/components/motion/MagneticButton";
 import { prologue } from "@/lib/content/story";
@@ -27,12 +28,11 @@ export function Prologue() {
   const hydrated = useHydrated();
   const sectionRef = useRef<HTMLElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const departY = useTransform(scrollYProgress, [0, 1], [0, 80]);
-  const departOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0.3]);
+  const scrollYProgress = useScrubProgress(sectionRef, ["start start", "end start"]);
+  // The cover doesn't slide away at a constant rate — it holds for the first
+  // beat, then accelerates out, the way a title card gives up the screen.
+  const departY = useTransform(scrollYProgress, [0, 0.5, 1], [0, 22, 80]);
+  const departOpacity = useTransform(scrollYProgress, [0, 0.45, 0.85], [1, 0.86, 0.3]);
 
   return (
     <section ref={sectionRef} id="prologue" className="relative overflow-hidden">
@@ -41,7 +41,11 @@ export function Prologue() {
 
       <motion.div
         className="container-wide flex min-h-svh flex-col pb-28 pt-28"
-        style={hydrated && !reduceMotion ? { y: departY, opacity: departOpacity } : undefined}
+        style={
+          hydrated && !reduceMotion
+            ? { y: departY, opacity: departOpacity, willChange: "transform, opacity" }
+            : undefined
+        }
       >
         {/* ── Colophon plate — serif index, faint warm plate, drawn rule ──── */}
         <div className="relative pb-5 xl:px-12">

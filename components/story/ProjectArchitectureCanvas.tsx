@@ -7,11 +7,11 @@ import { ArrowUpRight } from "lucide-react";
 import {
   motion,
   useReducedMotion,
-  useScroll,
   useTransform,
   type MotionValue,
 } from "framer-motion";
 import { useHydrated } from "@/lib/hooks/use-hydrated";
+import { useScrubProgress } from "@/lib/hooks/use-scrub-progress";
 import { DeviceFrame } from "@/components/work/DeviceFrame";
 import type { ArchNode, Project } from "@/lib/types";
 import { chapterWork } from "@/lib/content/story";
@@ -120,10 +120,7 @@ export function ProjectArchitectureCanvas({ project }: { project: Project; index
   // One scroll signal for both orientations; the off one is display:none.
   // The window completes EARLY (while the card is still rising) so the diagram
   // is fully drawn by the time the card settles + pins in the stacking deck.
-  const { scrollYProgress } = useScroll({
-    target: figureRef,
-    offset: ["start 0.9", "start 0.45"],
-  });
+  const scrollYProgress = useScrubProgress(figureRef, ["start 0.9", "start 0.45"]);
 
   const animate = hydrated && !reduceMotion;
   const view = VIEW[project.slug] ?? { captions: [], edgeLabels: {} };

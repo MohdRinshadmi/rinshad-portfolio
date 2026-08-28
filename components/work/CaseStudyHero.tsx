@@ -4,7 +4,6 @@ import { useRef } from "react";
 import Image from "next/image";
 import {
   motion,
-  useScroll,
   useTransform,
   useReducedMotion,
 } from "framer-motion";
@@ -16,6 +15,7 @@ import { Button } from "@/components/ui/Button";
 import { GithubIcon } from "@/components/ui/SocialIcons";
 import { DeviceFrame } from "@/components/work/DeviceFrame";
 import { useHydrated } from "@/lib/hooks/use-hydrated";
+import { useScrubProgress } from "@/lib/hooks/use-scrub-progress";
 
 /**
  * CaseStudyHero — the <h1> of a `/work/[slug]` page.
@@ -35,10 +35,7 @@ export function CaseStudyHero({ project }: { project: Project }) {
 
   // Track the media element entering the viewport from the bottom and leaving
   // off the top, then map progress to a small, clamped vertical translate.
-  const { scrollYProgress } = useScroll({
-    target: mediaRef,
-    offset: ["start end", "end start"],
-  });
+  const scrollYProgress = useScrubProgress(mediaRef, ["start end", "end start"]);
   const y = useTransform(scrollYProgress, [0, 1], [48, -48]);
 
   return (

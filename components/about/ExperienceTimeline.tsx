@@ -5,7 +5,6 @@ import {
   motion,
   useInView,
   useReducedMotion,
-  useScroll,
   useTransform,
 } from "framer-motion";
 
@@ -14,6 +13,7 @@ import { Chip } from "@/components/ui/Chip";
 import { education, experience } from "@/lib/content/profile";
 import { DURATION, EASE, fadeUp, VIEWPORT } from "@/lib/animation";
 import { useHydrated } from "@/lib/hooks/use-hydrated";
+import { useScrubProgress } from "@/lib/hooks/use-scrub-progress";
 import { cn } from "@/lib/utils";
 import type { Experience } from "@/lib/types";
 
@@ -99,7 +99,7 @@ function ExperienceRow({ item }: { item: Experience }) {
 
       {/* location + technologies */}
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <span className="font-mono text-[0.6875rem] uppercase tracking-wider text-text-muted">
+        <span className="font-mono text-[0.6875rem] uppercase tracking-wider text-text-tertiary">
           {item.location}
         </span>
         <span aria-hidden className="text-text-muted">
@@ -140,10 +140,7 @@ export function ExperienceTimeline() {
   const listRef = useRef<HTMLOListElement>(null);
 
   // Draw the connector as the list scrolls through the viewport.
-  const { scrollYProgress } = useScroll({
-    target: listRef,
-    offset: ["start 80%", "end 60%"],
-  });
+  const scrollYProgress = useScrubProgress(listRef, ["start 80%", "end 60%"]);
   const lineScaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
@@ -158,7 +155,7 @@ export function ExperienceTimeline() {
               <span className="font-serif italic text-text">production</span>.
             </>
           }
-          description="Where the streaming AI products, real-time systems, and store releases actually got built."
+          description="Where the REST APIs, relational schemas, payment lifecycles, and store releases actually got built."
         />
 
         <ol ref={listRef} className="relative mt-14 sm:mt-16">

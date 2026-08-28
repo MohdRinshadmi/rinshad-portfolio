@@ -16,15 +16,10 @@ const nextConfig: NextConfig = {
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    // Only the Prologue reel's placeholder stills are remote. Keep this list
-    // exact — a "**" hostname lets anyone proxy arbitrary images through the
-    // optimizer on this domain's dime.
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "picsum.photos",
-      },
-    ],
+    // No remote images: every still is served from /public. If you ever add
+    // one, list the exact hostname — a "**" pattern lets anyone proxy
+    // arbitrary images through the optimizer on this domain's dime.
+    remotePatterns: [],
   },
 };
 
