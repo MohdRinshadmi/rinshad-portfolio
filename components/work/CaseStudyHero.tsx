@@ -126,7 +126,8 @@ export function CaseStudyHero({ project }: { project: Project }) {
                 // the displayed width so the crop stays sharp.
                 sizes="(min-width: 1024px) 135rem, 170vw"
                 className="object-cover"
-                priority
+                preload
+                fetchPriority="high"
               />
             ) : undefined}
           </DeviceFrame>

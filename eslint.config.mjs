@@ -5,17 +5,6 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  {
-    // React Three Fiber scenes animate by mutating three.js objects inside
-    // useFrame (the render loop) — going through setState at 60fps is exactly
-    // what the performance budget forbids. The compiler-era hooks rules can't
-    // model that escape hatch, so they're scoped off for scene files only.
-    files: ["components/experience/**/*Scene.tsx"],
-    rules: {
-      "react-hooks/immutability": "off",
-      "react-hooks/refs": "off",
-    },
-  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
@@ -23,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Parked 3D journey — kept on disk, out of the build graph, and its
+    // three.js / gsap deps are uninstalled, so it can no longer be linted.
+    // See tsconfig.json's matching exclude and docs/3D-EXPERIENCE.md.
+    "components/experience/**",
   ]),
 ]);
 

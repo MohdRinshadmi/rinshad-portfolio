@@ -104,7 +104,8 @@ export default function AboutPage() {
                     alt="Mohammed Rinshad, full-stack software engineer, photographed outdoors in Kerala"
                     width={1200}
                     height={1277}
-                    priority
+                    preload
+                    fetchPriority="high"
                     sizes="(min-width: 1024px) 32rem, (min-width: 640px) 22rem, 88vw"
                     className="h-auto w-full rounded-[calc(1.5rem-1px)] object-cover"
                   />

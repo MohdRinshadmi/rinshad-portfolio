@@ -30,5 +30,10 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  // components/experience/ is the parked 3D journey (see docs/3D-EXPERIENCE.md).
+  // Nothing imports it, and its three.js / gsap dependencies are no longer
+  // installed, so it is excluded from the program rather than deleted.
+  // Reinstall three, @types/three, gsap and @react-three/{fiber,drei,
+  // postprocessing} and drop this entry to work on it again.
+  "exclude": ["node_modules", "components/experience"]
 }

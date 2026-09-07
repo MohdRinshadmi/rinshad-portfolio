@@ -167,10 +167,16 @@ export function Prologue() {
               Above the masthead on phones (order-first), right column on lg+.
               A terracotta gradient ring frames the shot; hover lifts it with a
               soft glow + gentle zoom. aspect-[3/4] reserves the box, so the
-              priority-loaded image paints with zero layout shift. */}
+              preloaded LCP image paints with zero layout shift. */}
+          {/* Transform-only entrance, deliberately. This frame holds the LCP
+              element, and an `opacity: 0` start renders into the SSR HTML —
+              so the portrait stayed invisible until hydration finished and the
+              0.5s-delayed tween ran, pushing LCP element render delay to
+              ~1.65s. Translate + scale animate the frame in without ever
+              hiding it, so the image paints at FCP. Keep opacity out of here. */}
           <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 28, scale: 0.985 }}
-            animate={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+            initial={reduceMotion ? false : { y: 28, scale: 0.985 }}
+            animate={reduceMotion ? undefined : { y: 0, scale: 1 }}
             transition={{ duration: DURATION.hero, ease: EASE.emphasis, delay: 0.5 }}
             className="relative order-first w-full max-w-72 justify-self-center sm:max-w-88 lg:order-none lg:max-w-none lg:justify-self-auto lg:self-center lg:before:absolute lg:before:inset-y-0 lg:before:-left-10 lg:before:border-l lg:before:border-dashed lg:before:border-border lg:before:content-['']"
           >
@@ -199,7 +205,8 @@ export function Prologue() {
                     src={prologue.portrait.src}
                     alt={prologue.portrait.alt}
                     fill
-                    priority
+                    preload
+                    fetchPriority="high"
                     sizes="(min-width: 1280px) 30rem, (min-width: 1024px) 28rem, (min-width: 640px) 22rem, 18rem"
                     className="object-cover transition-[transform,opacity] duration-500 ease-out group-hover:scale-[1.06] group-hover:opacity-0"
                   />

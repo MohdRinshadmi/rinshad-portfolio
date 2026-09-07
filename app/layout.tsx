@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo_Black, Geist, Geist_Mono, Inter, Instrument_Serif, Space_Grotesk } from "next/font/google";
+import { Archivo_Black, Geist, Geist_Mono, Inter, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -12,11 +12,6 @@ import { JsonLd } from "@/components/seo/JsonLd";
 const geist = Geist({ subsets: ["latin"], display: "swap", variable: "--font-geist" });
 const geistMono = Geist_Mono({ subsets: ["latin"], display: "swap", variable: "--font-geist-mono" });
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-space-grotesk",
-});
 const instrument = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
@@ -98,7 +93,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${geist.variable} ${geistMono.variable} ${inter.variable} ${instrument.variable} ${spaceGrotesk.variable} ${archivoBlack.variable}`}
+      className={`${geist.variable} ${geistMono.variable} ${inter.variable} ${instrument.variable} ${archivoBlack.variable}`}
       suppressHydrationWarning
     >
       <body
