@@ -23,6 +23,25 @@ const schema = z.object({
   hp_field: z.string().max(200).optional(),
 });
 
+/* Nodemailer opens a raw TCP+TLS socket to the SMTP server, which the Edge
+   runtime has no API for. 'nodejs' is already the default, but it is pinned
+   explicitly so that adding an Edge-defaulting config (or a future default
+   change) can't silently move this route and break mail at runtime. */
+export const runtime = "nodejs";
+
+/* Function budget must outlast the SMTP budget, or the platform kills the
+   invocation before the catch block can log the failure and answer the browser.
+   Nodemailer's worst case here is connectionTimeout (10s) + greetingTimeout
+   (10s) + one stalled socketTimeout phase (15s) = ~35s, so 60s leaves headroom
+   for nodemailer to raise its own error and for this handler to return 500.
+   It is also deliberately well BELOW Vercel's 300s default: a wedged SMTP
+   connection should fail in a minute, not bill five. */
+export const maxDuration = 60;
+
+/* Note: `preferredRegion` is NOT set here. Vercel only honours it for
+   `runtime = 'edge'` and throws on an unsupported value, so the execution
+   region for this Node function is a project-level setting instead. */
+
 const limiter = createRateLimiter({
   windowMs: 60 * 60 * 1000, // 1 hour
   // Generous enough that an office behind one NAT address — or the owner

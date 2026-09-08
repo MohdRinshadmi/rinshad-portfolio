@@ -23,6 +23,20 @@ import type { NextConfig } from "next";
    element stays invisible and most of the page renders blank. */
 const isDev = process.env.NODE_ENV !== "production";
 
+/* Preview deployments must never compete with production in search results.
+   app/robots.ts allows every crawler unconditionally — correct for production,
+   and exactly wrong for a preview URL serving the same pages, which Google
+   would happily index as duplicates of the real site.
+
+   VERCEL_ENV is "production" | "preview" | "development" and is set by the
+   platform at BUILD time, so each deployment bakes in the right answer. The
+   check is deliberately "set AND not production" rather than "not production":
+   off Vercel the variable is undefined, and a self-hosted production build must
+   NOT silently pick up a noindex. X-Robots-Tag is used rather than robots.ts
+   because it also covers non-HTML responses (sitemap.xml, feed.xml). */
+const vercelEnv = process.env.VERCEL_ENV;
+const isNonProdDeployment = Boolean(vercelEnv) && vercelEnv !== "production";
+
 const csp = [
   "default-src 'self'",
   // See note above — Next's streaming hydration payload is inline.
@@ -79,6 +93,11 @@ const securityHeaders = [
     key: "Permissions-Policy",
     value: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), interest-cohort=(), browsing-topics=()",
   },
+  // Preview/branch deployments only — see isNonProdDeployment above. Production
+  // must never carry this, or the site drops out of the index entirely.
+  ...(isNonProdDeployment
+    ? [{ key: "X-Robots-Tag", value: "noindex, nofollow" }]
+    : []),
 ];
 
 const nextConfig: NextConfig = {

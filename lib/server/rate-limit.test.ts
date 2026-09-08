@@ -104,6 +104,30 @@ describe("clientKey", () => {
     expect(clientKey(h({ "x-forwarded-for": "203.0.113.7" }))).toBe("203.0.113.7");
   });
 
+  it("prefers x-vercel-forwarded-for — the one header a proxy can't overwrite", () => {
+    expect(
+      clientKey(
+        h({
+          "x-vercel-forwarded-for": "203.0.113.7",
+          "x-forwarded-for": "198.51.100.4",
+          "x-real-ip": "192.0.2.9",
+        }),
+      ),
+    ).toBe("203.0.113.7");
+  });
+
+  it("takes the first entry of x-vercel-forwarded-for too", () => {
+    expect(clientKey(h({ "x-vercel-forwarded-for": "203.0.113.7, 70.41.3.18" }))).toBe(
+      "203.0.113.7",
+    );
+  });
+
+  it("falls through a blank x-vercel-forwarded-for to x-forwarded-for", () => {
+    expect(
+      clientKey(h({ "x-vercel-forwarded-for": "   ", "x-forwarded-for": "198.51.100.4" })),
+    ).toBe("198.51.100.4");
+  });
+
   it("falls back to x-real-ip", () => {
     expect(clientKey(h({ "x-real-ip": "198.51.100.4" }))).toBe("198.51.100.4");
   });

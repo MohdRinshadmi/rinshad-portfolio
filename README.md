@@ -59,7 +59,21 @@ npm run lint
 ### Contact form
 
 Copy `.env.local.example` → `.env.local` and set SMTP credentials (`SMTP_HOST`, `SMTP_PORT`,
-`SMTP_USER`, `SMTP_PASS`, `CONTACT_EMAIL`). Falls back to Ethereal for local testing.
+`SMTP_USER`, `SMTP_PASS`, `CONTACT_EMAIL`). There is **no fallback transport**: a missing
+variable throws with the name of what is missing, and `smtp.ethereal.email` — which delivers
+to nobody — is refused outright when `NODE_ENV=production`. Verify with `npm run mail:verify`.
+
+### Site URL
+
+Every absolute URL the site emits (canonicals, OG, sitemap, robots, RSS, JSON-LD, `/llms.txt`)
+derives from one origin, resolved in this order:
+
+1. `NEXT_PUBLIC_SITE_URL` — set this in production
+2. `VERCEL_PROJECT_PRODUCTION_URL` — Vercel's own hostname, a safety net
+3. `http://localhost:3000` — local dev and tests
+
+Set `NEXT_PUBLIC_SITE_URL` on the host. It is the only one of the three inlined into the client
+bundle, and moving to a custom domain later is then a one-variable change.
 
 ## Conventions
 

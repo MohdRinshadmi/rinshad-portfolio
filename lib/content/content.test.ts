@@ -6,7 +6,7 @@ import { projects, getProject, workDisclaimer } from "./projects";
 import { experience, education, proofStats, skillGroups, workProcess, about } from "./profile";
 import { chapterWork, chapterBuilder, chapterSystems, chapterPrinciples, prologue } from "./story";
 import { faqs } from "./faq";
-import { siteConfig, navLinks, footerLinks } from "../config/site";
+import { siteConfig, navLinks, footerLinks, resolveSiteUrl } from "../config/site";
 
 /* ============================================================================
    CONTENT INTEGRITY
@@ -259,10 +259,19 @@ describe("profile", () => {
 });
 
 describe("site config", () => {
-  it("has an absolute https site url with no trailing slash", () => {
+  /* The url is environment-resolved now, so under `vitest` (no NEXT_PUBLIC_SITE_URL,
+     no VERCEL_PROJECT_PRODUCTION_URL) it is deliberately the http://localhost
+     dev fallback. What must hold in EVERY environment is that it parses and
+     carries no trailing slash; the https guarantee is asserted against the
+     resolver's configured paths in resolveSiteUrl's own tests below. */
+  it("has an absolute site url with no trailing slash", () => {
     expect(() => new URL(siteConfig.url)).not.toThrow();
-    expect(siteConfig.url.startsWith("https://")).toBe(true);
+    expect(siteConfig.url).toMatch(/^https?:\/\//);
     expect(siteConfig.url.endsWith("/")).toBe(false);
+  });
+
+  it("falls back to localhost only when nothing is configured", () => {
+    expect(siteConfig.url).toBe(resolveSiteUrl({}));
   });
 
   it("has absolute https social links", () => {
@@ -356,5 +365,68 @@ describe("positioning consistency", () => {
 
   it("keeps the availability line pointed at backend/full-stack roles", () => {
     expect(siteConfig.availability).toMatch(/backend/i);
+  });
+});
+
+/* ============================================================================
+   The canonical origin behind every absolute URL the site emits — canonicals,
+   OG urls, sitemap, robots, RSS and every JSON-LD @id. Worth pinning precisely:
+   a wrong value here is invisible in the UI and poisons the whole index.
+   ========================================================================== */
+describe("resolveSiteUrl", () => {
+  it("prefers NEXT_PUBLIC_SITE_URL over everything else", () => {
+    expect(
+      resolveSiteUrl({
+        NEXT_PUBLIC_SITE_URL: "https://rinshad.dev",
+        VERCEL_PROJECT_PRODUCTION_URL: "ignored.vercel.app",
+      }),
+    ).toBe("https://rinshad.dev");
+  });
+
+  it("adds https:// to Vercel's bare production hostname", () => {
+    expect(resolveSiteUrl({ VERCEL_PROJECT_PRODUCTION_URL: "foo.vercel.app" })).toBe(
+      "https://foo.vercel.app",
+    );
+  });
+
+  it("does not double the scheme when one is already present", () => {
+    expect(resolveSiteUrl({ VERCEL_PROJECT_PRODUCTION_URL: "https://foo.vercel.app" })).toBe(
+      "https://foo.vercel.app",
+    );
+  });
+
+  it("strips a trailing slash and any path", () => {
+    expect(resolveSiteUrl({ NEXT_PUBLIC_SITE_URL: "https://rinshad.dev/" })).toBe(
+      "https://rinshad.dev",
+    );
+    expect(resolveSiteUrl({ NEXT_PUBLIC_SITE_URL: "https://rinshad.dev/blog?x=1" })).toBe(
+      "https://rinshad.dev",
+    );
+  });
+
+  it("keeps the port for a local override", () => {
+    expect(resolveSiteUrl({ NEXT_PUBLIC_SITE_URL: "http://localhost:4000" })).toBe(
+      "http://localhost:4000",
+    );
+  });
+
+  it("ignores blank values and falls through to the next source", () => {
+    expect(
+      resolveSiteUrl({
+        NEXT_PUBLIC_SITE_URL: "   ",
+        VERCEL_PROJECT_PRODUCTION_URL: "foo.vercel.app",
+      }),
+    ).toBe("https://foo.vercel.app");
+  });
+
+  it("falls back to localhost when nothing is set", () => {
+    expect(resolveSiteUrl({})).toBe("http://localhost:3000");
+  });
+
+  /* Failing loudly beats emitting a sitemap full of localhost URLs. */
+  it("throws on a configured-but-unparseable value rather than falling back", () => {
+    expect(() => resolveSiteUrl({ NEXT_PUBLIC_SITE_URL: "https://" })).toThrow(
+      /NEXT_PUBLIC_SITE_URL is not a usable URL/,
+    );
   });
 });

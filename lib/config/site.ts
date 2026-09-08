@@ -8,6 +8,66 @@
    Location note: the site targets Palakkad, Kerala by deliberate SEO decision —
    the PDF header says Bangalore. That divergence is intentional; don't "fix" it.
    ========================================================================== */
+
+/** Used only when nothing is configured — i.e. local dev and the test run. */
+const DEV_FALLBACK = "http://localhost:3000";
+
+/** Reduce any accepted form to a bare origin: scheme + host + port, no path,
+    no trailing slash. `URL.origin` does all three, which is why the value is
+    round-tripped through it rather than string-concatenated. */
+function toOrigin(value: string): string | null {
+  // VERCEL_PROJECT_PRODUCTION_URL is a BARE hostname ("foo.vercel.app"), while
+  // NEXT_PUBLIC_SITE_URL is normally a full URL. Only add the scheme when one
+  // is absent, so a configured "https://..." can't become "https://https://...".
+  const withScheme = /^https?:\/\//i.test(value) ? value : `https://${value}`;
+  try {
+    return new URL(withScheme).origin;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The canonical origin every absolute URL on this site is built from —
+ * canonical tags, OG urls, sitemap, robots, RSS, and every JSON-LD @id.
+ *
+ * Priority:
+ *   1. NEXT_PUBLIC_SITE_URL          — explicit, wins everywhere
+ *   2. VERCEL_PROJECT_PRODUCTION_URL — Vercel's own production hostname
+ *   3. http://localhost:3000         — local dev / tests only
+ *
+ * (2) is a SAFETY NET, not the intended production path. Vercel sets it to the
+ * project's production domain even inside preview builds, so a deploy where
+ * someone forgot (1) still emits real production canonicals instead of pointing
+ * the whole sitemap at localhost. Set NEXT_PUBLIC_SITE_URL in the project
+ * anyway: it is the only one of the three that is also inlined into the CLIENT
+ * bundle, so it is what keeps server and browser agreeing if any client
+ * component ever renders `siteConfig.url`. Nothing renders it today.
+ *
+ * A configured-but-unparseable value throws rather than falling back. Failing
+ * the build is the cheap outcome; the expensive one is silently publishing a
+ * sitemap full of http://localhost:3000.
+ */
+export function resolveSiteUrl(
+  env: Record<string, string | undefined> = process.env,
+): string {
+  for (const key of ["NEXT_PUBLIC_SITE_URL", "VERCEL_PROJECT_PRODUCTION_URL"] as const) {
+    const raw = env[key]?.trim();
+    if (!raw) continue;
+
+    const origin = toOrigin(raw);
+    if (!origin) {
+      throw new Error(
+        `${key} is not a usable URL or hostname (got "${raw}"). ` +
+          `Expected something like "https://example.com" or "example.vercel.app".`,
+      );
+    }
+    return origin;
+  }
+
+  return DEV_FALLBACK;
+}
+
 export const siteConfig = {
   name: "Rinshad",
   fullName: "Mohammed Rinshad M I",
@@ -22,7 +82,10 @@ export const siteConfig = {
   availability: "Open to backend & full-stack engineering roles",
   responsePromise: "Usually replies within 24h",
   resumeUrl: "/MohammedRinshadMI_FullStack.pdf",
-  url: "https://rinshad.dev",
+  /** Environment-resolved — see resolveSiteUrl above. Deliberately NOT a
+      hard-coded domain: rinshad.dev is not registered, and shipping canonicals
+      to a domain that does not resolve is worse than having none. */
+  url: resolveSiteUrl(),
   /** Real headshot — used for Person schema image (knowledge-panel eligible). */
   portrait: { src: "/images/rinshad-portrait-v2.jpg", width: 1200, height: 1277 },
   /** Geo (Palakkad, Kerala) — powers geo meta + PostalAddress/GeoCoordinates. */

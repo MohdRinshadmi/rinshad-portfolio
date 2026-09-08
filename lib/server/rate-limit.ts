@@ -8,6 +8,14 @@
    If this ever runs multi-instance, swap the Map for a Redis INCR + EXPIRE and
    keep this signature.
 
+   On Vercel specifically: the route is a serverless function that scales out,
+   so "10 per hour" is enforced PER WARM INSTANCE, not globally. A burst spread
+   across cold starts gets a fresh counter each time, and an idle instance
+   forgets everything it had counted. That is accepted for a portfolio contact
+   form — the honeypot catches the naive bots and this caps the damage any one
+   warm instance can do — but it is not a distributed rate limiter, and nothing
+   here should be relied on as one.
+
    `now` is injected rather than read from Date.now() inside, so window
    expiry is testable without sleeping through a real hour.
    ========================================================================== */
@@ -83,12 +91,19 @@ export function createRateLimiter({
 }
 
 /** `NextRequest.ip` was removed in Next 15, so identity comes from the proxy
-    headers. Take the FIRST entry of x-forwarded-for — the client — not the
-    last, which is the nearest proxy. */
+    headers. Take the FIRST entry — the client — not the last, which is the
+    nearest proxy.
+
+    Order matters. `x-vercel-forwarded-for` is Vercel's own header and is the
+    one value a proxy stacked in front of Vercel cannot overwrite, so it is
+    preferred where present. Plain `x-forwarded-for` is safe on Vercel too —
+    the platform documents that it OVERWRITES the header and does not forward
+    externally supplied IPs, precisely to stop spoofing — so it stays as the
+    fallback for local dev and any non-Vercel host. Both are ahead of
+    `x-real-ip`, which Vercel documents as identical to `x-forwarded-for`. */
 export function clientKey(headers: Headers): string {
-  const forwarded = headers.get("x-forwarded-for");
-  if (forwarded) {
-    const first = forwarded.split(",")[0]?.trim();
+  for (const header of ["x-vercel-forwarded-for", "x-forwarded-for"]) {
+    const first = headers.get(header)?.split(",")[0]?.trim();
     if (first) return first;
   }
   return headers.get("x-real-ip")?.trim() || "unknown";
