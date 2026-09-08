@@ -18,7 +18,7 @@ const FADE_Y = "linear-gradient(to bottom, transparent, #000 9%, #000 91%, trans
 /**
  * Prologue — the documentary's cover, typeset like a magazine front. A hairline
  * meta row, then the introduction: "I am Rinshad," in a light greeting (name in
- * terracotta serif italic) over two heavy caps lines — FULL-STACK WEB / & MOBILE ENGINEER.
+ * terracotta serif italic) over two heavy caps lines — FULL-STACK / SOFTWARE ENGINEER.
  * Beside it, a vertical reel of project stills drifts top → bottom with the
  * work CTA floating over it. Scrolling away recedes the whole frame like a
  * title card giving way to chapter one.
@@ -236,12 +236,11 @@ export function Prologue() {
                                 alt=""
                                 fill
                                 quality={90}
-                                // The 4:5 card center-crops very wide app
-                                // screenshots — the browser needs ~2.9× the
-                                // card's width from the source to render the
-                                // crop sharp, so hint big and let the
-                                // optimizer cap at the original.
-                                sizes="(min-width: 1024px) 75rem, 55rem"
+                                // The 4:5 card center-crops these 4:3 shots,
+                                // so the browser needs ~1.67× the card's width
+                                // (1.25 × 4/3) — down from 2.9× back when this
+                                // reel carried a 2.29:1 screenshot.
+                                sizes="(min-width: 1024px) 43rem, 32rem"
                                 className="object-cover"
                               />
                               <span className="absolute bottom-2.5 left-2.5 rounded-full bg-surface/85 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.14em] text-text-secondary backdrop-blur-sm">

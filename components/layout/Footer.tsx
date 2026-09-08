@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/SocialIcons";
 import { footerLinks, siteConfig } from "@/lib/config/site";
@@ -67,6 +68,23 @@ export function Footer() {
                   className="inline-flex w-fit font-mono text-sm text-text-secondary underline-offset-4 transition-colors duration-200 hover:text-accent hover:underline"
                 >
                   {siteConfig.email}
+                </a>
+                {/* The résumé used to be reachable only from the mobile menu and
+                    the foot of the homepage — i.e. never, on desktop. It is the
+                    single action recruiters come here to take, so it lives in
+                    the footer of every page. */}
+                <a
+                  href={siteConfig.resumeUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group inline-flex w-fit items-center gap-2 font-mono text-sm text-text-secondary underline-offset-4 transition-colors duration-200 hover:text-accent hover:underline"
+                >
+                  Résumé
+                  <ArrowUpRight
+                    aria-hidden="true"
+                    className="size-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  />
+                  <span className="sr-only">(PDF, opens in a new tab)</span>
                 </a>
                 <ul className="flex items-center gap-2">
                   {socials.map(({ name, href, Icon }) => (

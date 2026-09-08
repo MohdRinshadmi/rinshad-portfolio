@@ -46,7 +46,7 @@ export function WorkStories() {
               style={{ top: `calc(5.5rem + ${i * 1.25}rem)` }}
             >
               <ScrollScale from={0.97} y={48}>
-                <ProjectArchitectureCanvas project={project} index={i} />
+                <ProjectArchitectureCanvas project={project} />
               </ScrollScale>
             </div>
           ))}

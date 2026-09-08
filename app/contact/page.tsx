@@ -42,9 +42,10 @@ export default function ContactPage() {
               <span className="font-serif italic text-text-secondary">something</span>.
             </h1>
             <p className="max-w-[52ch] text-body-lg text-text-secondary">
-              Open to full-stack web &amp; mobile engineering roles — React, Next.js,
-              React Native, and Node.js. Tell me what you&apos;re building and
-              I&apos;ll get back to you.
+              Open to backend and full-stack engineering roles — Node.js,
+              Express.js, and TypeScript on MySQL, PostgreSQL, Redis, Docker and
+              AWS, with React, Next.js and React Native on the client. Tell me
+              what you&apos;re building and I&apos;ll get back to you.
             </p>
           </div>
         </div>

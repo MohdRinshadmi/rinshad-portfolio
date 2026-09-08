@@ -40,10 +40,19 @@
   --color-ink-text-tertiary: #71717a;
 
   /* — accent: muted terracotta (the only chromatic note) — */
+  /* `accent` is the BRAND fill: rules, dots, borders, tinted plates, and
+     display-size type (>=24px, where WCAG's 3:1 large-text threshold applies).
+     It measures 3.85:1 on bg and 3.55:1 on bg-subtle, so it FAILS 4.5:1 as
+     small copy — use `accent-text` for anything under 24px on a light canvas.
+     On the dark ink cards `accent` is 4.6:1 and stays correct at any size. */
   --color-accent: #c75c37;
   --color-accent-hover: #d4693f;
   --color-accent-press: #b04e2c;
   --color-accent-fg: #ffffff;
+  /* Same hue, darkened until small text clears AA on BOTH light canvases:
+     5.32:1 on bg (#f7f5f2) · 4.91:1 on bg-subtle (#efece7). Any eyebrow,
+     mono label, chip or inline metric token in accent belongs on this. */
+  --color-accent-text: #a8482a;
 
   /* — semantic / state — */
   --color-positive: #16a34a;
@@ -216,6 +225,9 @@ body {
   }
   .section-pt {
     padding-top: clamp(4rem, 7vw, 6.5rem);
+  }
+  .section-pb {
+    padding-bottom: clamp(4rem, 7vw, 6.5rem);
   }
 
   /* Signature background motifs */

@@ -6,6 +6,9 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    // scripts/*.ts run directly on Node's type stripping, which requires the
+    // explicit ".ts" specifier on relative imports. Safe under noEmit.
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -30,10 +33,12 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  // components/experience/ is the parked 3D journey (see docs/3D-EXPERIENCE.md).
+  // components/experience/ + lib/experience/ are the parked 3D journey
+  // (see docs/3D-EXPERIENCE.md). Both halves are excluded together — leaving
+  // lib/experience in the program type-checked data nothing renders.
   // Nothing imports it, and its three.js / gsap dependencies are no longer
   // installed, so it is excluded from the program rather than deleted.
   // Reinstall three, @types/three, gsap and @react-three/{fiber,drei,
   // postprocessing} and drop this entry to work on it again.
-  "exclude": ["node_modules", "components/experience"]
+  "exclude": ["node_modules", "components/experience", "lib/experience"]
 }

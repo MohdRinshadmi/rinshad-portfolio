@@ -22,7 +22,7 @@ export function Principles() {
           {chapterPrinciples.items.map((principle, i) => (
             <Reveal as="li" key={principle.statement} delay={0.05}>
               <div className="grid gap-2 border-t border-border-strong py-10 sm:grid-cols-[6rem_1fr] sm:gap-8 sm:py-12 lg:py-14">
-                <span className="font-mono text-sm text-accent">0{i + 1}</span>
+                <span className="font-mono text-sm text-accent-text">0{i + 1}</span>
                 <div>
                   <LineMask>
                     <h3 className="font-serif text-display-lg text-text">{principle.statement}</h3>

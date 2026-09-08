@@ -36,8 +36,11 @@ export interface Project {
   tagline: string;
   /** card body / index summary */
   description: string;
-  /** card/preview shot rendered inside the DeviceFrame screen (placeholder
-      art until real screenshots exist) */
+  /** Card/preview shot rendered inside the DeviceFrame screen's 16:12 frame.
+      Crop the source to 4:3 before adding it: object-cover then neither crops
+      nor wastes bytes, and the `sizes` hints request exactly the displayed
+      width. Enforced by lib/content/content.test.ts. All three are real
+      Playwright captures of the running stacks — no mockups. */
   image?: string;
   /** mono eyebrow, e.g. "WEB · REAL-TIME" */
   platform: string;

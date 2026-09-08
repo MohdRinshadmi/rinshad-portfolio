@@ -122,9 +122,9 @@ export function CaseStudyHero({ project }: { project: Project }) {
                 alt={`${project.title} interface preview`}
                 fill
                 quality={90}
-                // 16:12 screen cover-crops wide screenshots — request ~1.7×
-                // the displayed width so the crop stays sharp.
-                sizes="(min-width: 1024px) 135rem, 170vw"
+                // Sources are pre-cropped to the frame's 4:3, so the browser
+                // needs exactly the displayed width — no crop, no over-fetch.
+                sizes="(min-width: 1024px) 79rem, 100vw"
                 className="object-cover"
                 preload
                 fetchPriority="high"

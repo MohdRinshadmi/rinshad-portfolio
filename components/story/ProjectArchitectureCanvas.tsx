@@ -112,7 +112,7 @@ function geometry(orient: Orient, n: number): Geometry {
 }
 
 /* ── Component ─────────────────────────────────────────────────────────────── */
-export function ProjectArchitectureCanvas({ project }: { project: Project; index?: number }) {
+export function ProjectArchitectureCanvas({ project }: { project: Project }) {
   const reduceMotion = useReducedMotion();
   const hydrated = useHydrated();
   const figureRef = useRef<HTMLElement>(null);
@@ -162,9 +162,9 @@ export function ProjectArchitectureCanvas({ project }: { project: Project; index
                 alt=""
                 fill
                 quality={90}
-                // 16:12 screen cover-crops wide screenshots — request ~1.7×
-                // the displayed width so the crop stays sharp.
-                sizes="(min-width: 1024px) 45rem, 155vw"
+                // Sources are pre-cropped to the frame's 4:3, so the browser
+                // needs exactly the displayed width — no crop, no over-fetch.
+                sizes="(min-width: 1024px) 27rem, 92vw"
                 className="object-cover"
               />
             ) : undefined}

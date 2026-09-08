@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { frame, cancelFrame } from "framer-motion";
 import Lenis from "lenis";
 
@@ -21,6 +22,9 @@ import Lenis from "lenis";
  * `syncTouch` fights iOS momentum and makes phones feel worse, not better.
  */
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
+  const lenisRef = useRef<Lenis | null>(null);
+  const pathname = usePathname();
+
   useEffect(() => {
     // Native scroll for reduced-motion users — also skips the always-running loop.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -35,6 +39,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       // We drive the loop; Lenis must not start its own.
       autoRaf: false,
     });
+    lenisRef.current = lenis;
 
     const update = (data: { timestamp: number }) => lenis.raf(data.timestamp);
     // keepAlive = true — a persistent per-frame process, not a one-shot.
@@ -43,8 +48,41 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     return () => {
       cancelFrame(update);
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, []);
+
+  /**
+   * Adopt the router's scroll position on navigation.
+   *
+   * The App Router sets scroll itself — top for a push, the remembered offset
+   * for back/forward. Lenis only picks that up through its native-scroll
+   * listener, and that listener is gated on `isScrolling` being `false` or
+   * `"native"`. Click a nav link while a smooth scroll is still settling — i.e.
+   * scroll, then immediately click, which is the normal way people browse — and
+   * `isScrolling` is `"smooth"`, the sync is skipped, and Lenis keeps animating
+   * toward the OLD target. The new page then slides away from the top on its
+   * own. Re-anchoring to the real scroll position makes it deterministic
+   * instead of a race.
+   *
+   * Reading `window.scrollY` rather than hard-coding 0 is what preserves
+   * back/forward restoration: whatever the router decided, Lenis agrees with it.
+   */
+  useEffect(() => {
+    const lenis = lenisRef.current;
+    if (!lenis) return;
+
+    // The router writes scroll during its own commit, so wait a frame to read
+    // the settled value rather than the pre-navigation one.
+    const id = requestAnimationFrame(() => {
+      // The new route is a different height; recompute the scroll limit before
+      // anchoring so Lenis doesn't clamp against the previous page's bounds.
+      lenis.resize();
+      lenis.scrollTo(window.scrollY, { immediate: true, force: true });
+    });
+
+    return () => cancelAnimationFrame(id);
+  }, [pathname]);
 
   return <>{children}</>;
 }

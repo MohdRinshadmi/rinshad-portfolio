@@ -21,7 +21,7 @@ export function ChapterMark({ number, title, intro, className }: ChapterMarkProp
           Chapter
         </span>
         <span aria-hidden="true" className="h-px flex-1 bg-border-strong" />
-        <span className="font-mono text-eyebrow text-accent">{number}</span>
+        <span className="font-mono text-eyebrow text-accent-text">{number}</span>
       </div>
       <h2 className="mt-7 font-serif text-display-xl text-text">{title}</h2>
       {intro ? (

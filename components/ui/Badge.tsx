@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 type BadgeTone = "accent" | "positive" | "neutral";
 
 const toneText: Record<BadgeTone, string> = {
-  accent: "text-accent",
+  accent: "text-accent-text",
   positive: "text-positive",
   neutral: "text-text-secondary",
 };

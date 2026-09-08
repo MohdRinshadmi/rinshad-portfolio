@@ -20,7 +20,7 @@ export const projects: Project[] = [
     tagline: "A Golang backend on Clean Architecture, ingesting high-frequency telemetry.",
     description:
       "A Go/Gin backend structured on Clean Architecture — repository and service-layer separation with dependency injection — ingesting high-frequency device telemetry into indexed PostgreSQL time-series tables, with a type-safe React dashboard on top.",
-    image: "/images/projects/analytics-dashboard.svg",
+    image: "/images/projects/iot-analytics-dashboard.png",
     platform: "BACKEND · GOLANG · CLOUD-NATIVE",
     year: "2023",
     role: "Solo developer",
@@ -160,7 +160,7 @@ export const projects: Project[] = [
     tagline: "A stateless WebSocket fan-out server that scales without sticky sessions.",
     description:
       "A stateless WebSocket server with channel-based routing over Redis Pub/Sub — scaling horizontally without sticky sessions — carrying Yjs CRDT document sync, presence signals, and streaming LLM summarization behind JWT/OAuth.",
-    image: "/images/projects/collab-editor.svg",
+    image: "/images/projects/realtime-collab-platform.png",
     platform: "BACKEND · REAL-TIME · DISTRIBUTED",
     year: "2024",
     role: "Solo developer",

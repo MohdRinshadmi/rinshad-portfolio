@@ -116,7 +116,7 @@ function StageCard({
         {String(index + 1).padStart(2, "0")}
       </span>
 
-      <p className="font-grotesk text-eyebrow font-medium uppercase text-accent">
+      <p className="font-grotesk text-eyebrow font-medium uppercase text-accent-text">
         {String(index + 1).padStart(2, "0")} — {stage.step}
       </p>
       <h3 className="mt-5 max-w-[18ch] font-serif text-display-lg text-text">{stage.title}</h3>

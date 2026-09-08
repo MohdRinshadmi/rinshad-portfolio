@@ -16,6 +16,15 @@ const schema = z.object({
   email: z.email("Please enter a valid email"),
   subject: z.string().min(4, "Subject must be at least 4 characters"),
   message: z.string().min(20, "Message must be at least 20 characters"),
+  /** Honeypot — see the matching check in /api/contact. Never validated:
+      a human leaves it empty, a bot fills it, and the server silently drops
+      anything that arrives with it set.
+
+      NOT named "company"/"organization"/"address" and friends. Chrome and
+      Safari map those to the saved address profile and fill them regardless of
+      autocomplete="off", which silently binned real submissions. The name has
+      to be meaningless to autofill heuristics. */
+  hp_field: z.string().optional(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -52,6 +61,7 @@ function FieldError({ id, children }: { id: string; children: React.ReactNode })
 export function ContactForm({ className }: { className?: string }) {
   const reduceMotion = useReducedMotion();
   const [status, setStatus] = useState<FieldStatus>("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const {
     register,
@@ -62,16 +72,28 @@ export function ContactForm({ className }: { className?: string }) {
 
   const onSubmit = async (data: FormData) => {
     setStatus("loading");
+    setErrorMessage(null);
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error();
+      if (!res.ok) {
+        // 429 is the one failure a sender can actually act on, so say so
+        // rather than hiding it behind the generic message.
+        setErrorMessage(
+          res.status === 429
+            ? "That's a few messages in a short window. Please try again later, or email me directly."
+            : "Something went wrong. Please try emailing me directly.",
+        );
+        setStatus("error");
+        return;
+      }
       setStatus("success");
       reset();
     } catch {
+      setErrorMessage("Something went wrong. Please try emailing me directly.");
       setStatus("error");
     }
   };
@@ -123,6 +145,26 @@ export function ContactForm({ className }: { className?: string }) {
             noValidate
             className="flex flex-col gap-5"
           >
+            {/* Honeypot. Off-screen rather than display:none (some bots skip
+                hidden inputs), out of the a11y tree and the tab order. The
+                field name is deliberately meaningless: a real-sounding one
+                ("company") got autofilled by Chrome from the saved address
+                profile, and the server then dropped the message as spam.
+                data-lpignore / data-1p-ignore keep LastPass and 1Password out. */}
+            <div aria-hidden="true" className="absolute left-[-9999px] top-0 h-0 w-0 overflow-hidden">
+              <label htmlFor="contact-hp">Leave this field empty</label>
+              <input
+                id="contact-hp"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                data-lpignore="true"
+                data-1p-ignore=""
+                data-form-type="other"
+                {...register("hp_field")}
+              />
+            </div>
+
             <div className="grid gap-5 sm:grid-cols-2">
               <div className="flex flex-col gap-1.5">
                 <FieldLabel htmlFor="contact-name">Name</FieldLabel>
@@ -191,9 +233,9 @@ export function ContactForm({ className }: { className?: string }) {
               )}
             </div>
 
-            {status === "error" && (
+            {status === "error" && errorMessage && (
               <p role="alert" className="text-sm text-danger">
-                Something went wrong. Please try emailing me directly.
+                {errorMessage}
               </p>
             )}
 

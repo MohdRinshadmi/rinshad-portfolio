@@ -1,11 +1,21 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Search, Layout, Code2, Sparkles, Rocket, type LucideIcon } from "lucide-react";
+import {
+  Search,
+  Layout,
+  Code2,
+  Sparkles,
+  Rocket,
+  Download,
+  ArrowUpRight,
+  type LucideIcon,
+} from "lucide-react";
 
 import { buildMetadata, graph, webPage, breadcrumb } from "@/lib/seo";
 import { siteConfig } from "@/lib/config/site";
 import { about, skillGroups, workProcess } from "@/lib/content/profile";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { Button } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Chip } from "@/components/ui/Chip";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -235,6 +245,49 @@ export default function AboutPage() {
           EXPERIENCE — owns the vertical timeline + education coda
           ================================================================== */}
       <ExperienceTimeline />
+
+      {/* ====================================================================
+          NEXT STEP — /about used to dead-end on the education row, leaving a
+          recruiter who had just read the whole history with nothing to do.
+          The two actions they actually want: take the PDF, or start a
+          conversation.
+          ================================================================== */}
+      <section className="section-pb">
+        <div className="container-page">
+          <Reveal>
+            <div className="flex flex-col gap-7 border-t border-border-strong pt-12 sm:pt-14 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
+              <div>
+                <h2 className="max-w-[20ch] font-display text-display-lg text-balance text-text">
+                  Read the short version{" "}
+                  <span className="font-serif italic text-text-secondary">instead</span>?
+                </h2>
+                <p className="mt-4 max-w-[52ch] text-body-lg text-text-secondary">
+                  {siteConfig.availability} · {siteConfig.responsePromise}
+                </p>
+              </div>
+              <div className="flex shrink-0 flex-wrap items-center gap-3">
+                <Button
+                  href={siteConfig.resumeUrl}
+                  variant="primary"
+                  size="lg"
+                  iconRight={<Download size={17} strokeWidth={2} />}
+                  ariaLabel="Download résumé (PDF, opens in a new tab)"
+                >
+                  Résumé
+                </Button>
+                <Button
+                  href="/contact"
+                  variant="ghost"
+                  size="lg"
+                  iconRight={<ArrowUpRight size={17} strokeWidth={2} />}
+                >
+                  Get in touch
+                </Button>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
     </div>
   );
 }

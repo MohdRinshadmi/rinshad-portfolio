@@ -89,9 +89,11 @@ export function ProjectCard({ project, variant = "grid", index = 0, className }:
               alt=""
               fill
               quality={90}
-              // The 16:12 screen cover-crops wide app screenshots (~2.3:1), so
-              // the source must be ~1.7× the displayed width to stay sharp.
-              sizes="(min-width: 1024px) 62rem, 155vw"
+              // Every project shot is pre-cropped to the frame's own 4:3, so
+              // object-cover scales without cropping and the browser needs
+              // exactly the displayed width (see the aspect guard in
+              // lib/content/content.test.ts).
+              sizes="(min-width: 1024px) 37rem, 92vw"
               className="object-cover"
             />
           ) : undefined}

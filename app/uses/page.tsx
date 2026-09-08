@@ -92,7 +92,7 @@ export default function UsesPage() {
         {/* Colophon */}
         <Reveal delay={0.1}>
           <p className="mt-12 max-w-[68ch] font-mono text-xs leading-relaxed text-text-tertiary">
-            <span className="text-accent">{colophon.title}:</span> {colophon.note}
+            <span className="text-accent-text">{colophon.title}:</span> {colophon.note}
           </p>
         </Reveal>
       </div>

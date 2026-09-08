@@ -11,6 +11,7 @@ import {
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Chip } from "@/components/ui/Chip";
 import { education, experience } from "@/lib/content/profile";
+import { splitMetrics } from "@/lib/content/metrics";
 import { DURATION, EASE, fadeUp, VIEWPORT } from "@/lib/animation";
 import { useHydrated } from "@/lib/hooks/use-hydrated";
 import { useScrubProgress } from "@/lib/hooks/use-scrub-progress";
@@ -19,30 +20,23 @@ import type { Experience } from "@/lib/types";
 
 /* ----------------------------------------------------------------------------
    Metric highlighting — wrap résumé "proof" tokens in an accent inline chip so
-   the numbers read at a glance. Matches percentages (30%), counts (20+),
-   latency phrases (sub-second / sub-16ms), and the literal word "zero".
+   the numbers read at a glance. The splitting itself is pure string work and
+   lives (tested) in lib/content/metrics.ts; this only maps segments to JSX.
    -------------------------------------------------------------------------- */
-// Capturing group → split keeps the matches. `i` only; no global flag so a
-// per-part `test()` stays stateless and deterministic.
-const METRIC_PATTERN =
-  /(\d+(?:\.\d+)?\s?%|\d+\+|sub-second|sub-\d+ms|\bzero\b)/i;
-
 function MetricToken({ children }: { children: React.ReactNode }) {
   return (
-    <span className="mx-0.5 inline-flex items-center rounded-md border border-accent/20 bg-accent/10 px-1.5 py-px font-mono text-[0.8em] leading-none whitespace-nowrap text-accent align-baseline">
+    <span className="mx-0.5 inline-flex items-center rounded-md border border-accent/20 bg-accent/10 px-1.5 py-px font-mono text-[0.8em] leading-none whitespace-nowrap text-accent-text align-baseline">
       {children}
     </span>
   );
 }
 
 function highlightMetrics(text: string): React.ReactNode {
-  // Split on the same pattern; the capturing group preserves the metric tokens.
-  const parts = text.split(METRIC_PATTERN);
-  return parts.map((part, i) =>
-    part && METRIC_PATTERN.test(part) ? (
-      <MetricToken key={i}>{part}</MetricToken>
+  return splitMetrics(text).map((segment, i) =>
+    segment.isMetric ? (
+      <MetricToken key={i}>{segment.text}</MetricToken>
     ) : (
-      <Fragment key={i}>{part}</Fragment>
+      <Fragment key={i}>{segment.text}</Fragment>
     ),
   );
 }
