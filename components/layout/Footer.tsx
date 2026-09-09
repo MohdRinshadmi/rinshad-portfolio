@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/SocialIcons";
+import { SiteLink } from "./SiteLink";
 import { footerLinks, siteConfig } from "@/lib/config/site";
 
 const socials = [
@@ -18,7 +18,7 @@ export function Footer() {
         {/* Top: wordmark + availability ── nav + connect */}
         <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex flex-col gap-5">
-            <Link
+            <SiteLink
               href="/"
               aria-label="Rinshad — home"
               className="group inline-flex w-fit items-end gap-1.5"
@@ -30,7 +30,7 @@ export function Footer() {
                 aria-hidden="true"
                 className="mb-1.5 size-2.5 rounded-full bg-accent transition-transform duration-300 group-hover:scale-125"
               />
-            </Link>
+            </SiteLink>
             <p className="max-w-[42ch] text-body-lg text-text-secondary">
               {siteConfig.tagline}
             </p>
@@ -47,12 +47,12 @@ export function Footer() {
               <ul className="flex flex-col gap-3">
                 {footerLinks.map((link) => (
                   <li key={link.href}>
-                    <Link
+                    <SiteLink
                       href={link.href}
                       className="inline-flex min-h-11 items-center text-text-secondary transition-colors duration-200 hover:text-text"
                     >
                       {link.label}
-                    </Link>
+                    </SiteLink>
                   </li>
                 ))}
               </ul>

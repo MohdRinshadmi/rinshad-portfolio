@@ -9,6 +9,7 @@ import { Menu, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { siteConfig, navLinks } from "@/lib/config/site";
 import { EASE, DURATION } from "@/lib/animation";
+import { useNavClick } from "@/lib/hooks/use-nav-click";
 
 /* Lazy chunk: the overlay + its framer exit choreography only download on the
    first tap of the hamburger, not with every page's shell. */
@@ -36,6 +37,8 @@ export function Navbar() {
   const [hovered, setHovered] = useState<string | null>(null);
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
+  // A tab always means "start of this page" — including the tab you're on.
+  const onNavClick = useNavClick();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -78,6 +81,7 @@ export function Navbar() {
           <motion.div variants={reduceMotion ? undefined : barItem}>
             <Link
               href="/"
+              onClick={(event) => onNavClick(event, "/")}
               className="group/word -ml-1 flex items-center rounded-md px-1 py-1 font-display text-lg font-semibold tracking-tight text-text"
               aria-label={`${siteConfig.name} — home`}
             >
@@ -104,6 +108,7 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
+                  onClick={(event) => onNavClick(event, link.href)}
                   onMouseEnter={() => setHovered(link.href)}
                   onFocus={() => setHovered(link.href)}
                   onBlur={() => setHovered(null)}
@@ -140,6 +145,7 @@ export function Navbar() {
             {/* Let's talk pill (primary CTA) */}
             <Link
               href="/contact"
+              onClick={(event) => onNavClick(event, "/contact")}
               className={cn(
                 "group/cta hidden items-center gap-1.5 rounded-full bg-text py-2 pl-5 pr-4 text-sm font-medium text-bg shadow-card md:inline-flex",
                 "transition-[transform,background-color] duration-200 ease-out hover:-translate-y-0.5 hover:bg-accent",

@@ -360,3 +360,42 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* ============================================================================
+   HERO PORTRAIT — the masked reveal.
+
+   The cover photograph is wiped upward into its frame and settles out of a
+   slight overscale, replacing the 3D swing this card used to arrive on.
+
+   WHY THIS IS CSS AND NOT FRAMER. The portrait is this page's LCP element and
+   it paints at FCP (measured: 136ms median, LCP == FCP). A JS-driven reveal
+   renders its `from` state into the SSR HTML and then holds it there until
+   hydration runs the tween — which is the ~1.65s of LCP render delay the
+   Prologue's own comment warns about. A CSS animation starts as soon as the
+   stylesheet is parsed, so the wipe is already running while React is still
+   booting and the image is never waiting on JS to become visible.
+
+   `backwards` fill, and NO clip-path in the base rule, is the whole trick:
+   the `from` state covers the delay, and when the animation ends the property
+   falls back to `none` rather than sticking at `inset(0)`. That matters —
+   a permanent `clip-path` would keep clipping the card's own `shadow-card`
+   and its `group-hover:shadow-glow`, which are painted outside the border box.
+
+   Reduced motion needs no special case: the global rule above clamps
+   `animation-duration` to 0.01ms, which lands the portrait at rest instantly.
+   ========================================================================== */
+@keyframes hero-portrait-reveal {
+  from {
+    clip-path: inset(100% 0 0 0);
+    transform: scale(1.06);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: scale(1);
+  }
+}
+
+.hero-portrait-reveal {
+  /* expo-out (EASE.emphasis) — the site's large-entrance curve. */
+  animation: hero-portrait-reveal 1.15s cubic-bezier(0.22, 1, 0.36, 1) 0.15s backwards;
+}

@@ -20,6 +20,7 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Chip } from "@/components/ui/Chip";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/motion/Reveal";
+import { ClipReveal } from "@/components/motion/ClipReveal";
 import { Stagger, StaggerItem } from "@/components/motion/Stagger";
 import { ExperienceTimeline } from "@/components/about/ExperienceTimeline";
 
@@ -98,7 +99,12 @@ export default function AboutPage() {
           {/* Story left · photo right on lg+ (photo keeps first place in the
               DOM so it stacks centered on top below lg). items-center keeps
               the near-square portrait balanced against the text block. */}
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,6fr)] lg:items-center lg:gap-20">
+          {/* `overflow-x-clip`, not `hidden`: the portrait's aurora wash below
+              is `-inset-8`, which on a 390px phone reaches ~8px past the page
+              gutter and gave the whole document a horizontal scroll. `clip`
+              cuts that bleed without creating a scroll container, so the wash
+              keeps spilling vertically the way it is meant to. */}
+          <div className="grid gap-12 overflow-x-clip lg:grid-cols-[minmax(0,7fr)_minmax(0,6fr)] lg:items-center lg:gap-20">
             {/* ── Portrait — larger and calmer than the hero's: hairline
                 gradient edge, soft shadow, and a gentle lift on hover. */}
             <Reveal className="mx-auto w-full max-w-88 lg:order-last lg:mx-0 lg:max-w-none">
@@ -109,16 +115,27 @@ export default function AboutPage() {
                   className="absolute -inset-8 -z-10 bg-[radial-gradient(55%_50%_at_45%_35%,rgba(199,92,55,0.10),transparent_72%)] blur-2xl"
                 />
                 <div className="rounded-3xl bg-linear-to-br from-accent/50 via-border to-border p-px shadow-card transition-[transform,box-shadow] duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-raised">
-                  <Image
-                    src="/images/rinshad-portrait-v2.jpg"
-                    alt="Mohammed Rinshad, full-stack software engineer, photographed outdoors in Kerala"
-                    width={1200}
-                    height={1277}
-                    preload
-                    fetchPriority="high"
-                    sizes="(min-width: 1024px) 32rem, (min-width: 640px) 22rem, 88vw"
-                    className="h-auto w-full rounded-[calc(1.5rem-1px)] object-cover"
-                  />
+                  {/* The frame arrives with the plate; the photograph is wiped
+                      in afterwards, so the hairline edge is never covered by
+                      the overscale settling inside it. `overflow-hidden` (not a
+                      `round` on the clip-path) is what keeps the corners round
+                      through the wipe — the visible area is the rounded box
+                      intersected with the travelling clip rect. */}
+                  <ClipReveal
+                    delay={0.12}
+                    className="overflow-hidden rounded-[calc(1.5rem-1px)]"
+                  >
+                    <Image
+                      src="/images/rinshad-portrait-v2.jpg"
+                      alt="Mohammed Rinshad, full-stack software engineer, photographed outdoors in Kerala"
+                      width={1200}
+                      height={1277}
+                      preload
+                      fetchPriority="high"
+                      sizes="(min-width: 1024px) 32rem, (min-width: 640px) 22rem, 88vw"
+                      className="h-auto w-full object-cover"
+                    />
+                  </ClipReveal>
                 </div>
               </div>
             </Reveal>
@@ -176,10 +193,18 @@ export default function AboutPage() {
                 <h3 className="font-mono text-eyebrow uppercase tracking-wider text-text-tertiary">
                   {group.label}
                 </h3>
+                {/* The inventory is the one place chips are worth touching:
+                    a 3px lift and a whisper of accent as the cursor passes,
+                    transform + color only so it composites. Deliberately NOT
+                    folded into `Chip` itself — the same component labels
+                    project tech and metadata, where a hover response would be
+                    a promise of interaction that isn't there. */}
                 <ul className="flex flex-wrap gap-2">
                   {group.items.map((item) => (
                     <li key={item}>
-                      <Chip>{item}</Chip>
+                      <Chip className="inline-block transition-[transform,background-color,border-color,color] duration-300 ease-out hover:-translate-y-[3px] hover:scale-[1.04] hover:border-accent/25 hover:bg-accent/8 hover:text-accent-text">
+                        {item}
+                      </Chip>
                     </li>
                   ))}
                 </ul>

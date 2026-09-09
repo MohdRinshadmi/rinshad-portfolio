@@ -13,6 +13,7 @@ import { X, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { siteConfig, navLinks } from "@/lib/config/site";
 import { EASE, DURATION } from "@/lib/animation";
+import { useNavClick } from "@/lib/hooks/use-nav-click";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/SocialIcons";
 
 interface MobileMenuProps {
@@ -44,6 +45,14 @@ const footerItem: Variants = {
 export function MobileMenu({ open, onClose }: MobileMenuProps) {
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
+  const navClick = useNavClick();
+
+  /* Close first, then let the shared handler decide: a different route
+     navigates as usual, the current one glides to the top and replays. */
+  const onNavClick = (event: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    onClose();
+    navClick(event, href);
+  };
 
   // Close on Escape + lock body scroll while open.
   useEffect(() => {
@@ -97,7 +106,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
           <div className="container-page flex h-16 shrink-0 items-center justify-between">
             <Link
               href="/"
-              onClick={onClose}
+              onClick={(event) => onNavClick(event, "/")}
               className="-ml-1 flex items-center rounded-md px-1 py-1 font-display text-lg font-semibold tracking-tight text-text"
               aria-label={`${siteConfig.name} — home`}
             >
@@ -127,7 +136,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
                     <motion.div variants={reduceMotion ? reduced : linkItem}>
                       <Link
                         href={link.href}
-                        onClick={onClose}
+                        onClick={(event) => onNavClick(event, link.href)}
                         aria-current={active ? "page" : undefined}
                         className={cn(
                           "group flex items-baseline gap-3 py-1 font-display text-display-lg leading-none tracking-tight transition-colors",
@@ -156,7 +165,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
           >
             <Link
               href="/contact"
-              onClick={onClose}
+              onClick={(event) => onNavClick(event, "/contact")}
               className="flex h-12 w-full items-center justify-center rounded-full bg-accent px-5 text-sm font-medium text-accent-fg shadow-glow transition-colors hover:bg-accent-hover"
             >
               Let&apos;s talk

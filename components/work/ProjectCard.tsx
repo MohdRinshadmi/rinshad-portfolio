@@ -1,12 +1,15 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { motion, useReducedMotion, useTransform, type Variants } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 
 import type { Project } from "@/lib/types";
 import { EASE } from "@/lib/animation";
+import { useHydrated } from "@/lib/hooks/use-hydrated";
+import { useScrubProgress } from "@/lib/hooks/use-scrub-progress";
 import { cn } from "@/lib/utils";
 
 import { DeviceFrame } from "@/components/work/DeviceFrame";
@@ -35,6 +38,11 @@ const arrowVariants: Variants = {
 const MAX_CHIPS = 4;
 const MAX_TICKS = 3;
 
+/* How far the framed media lags its card, in px at each end of the pass. Kept
+   small: the media sits in a flex column with real copy under it, so anything
+   larger stops reading as depth and starts reading as a misaligned card. */
+const PARALLAX_Y = 16;
+
 /* — light-on-dark meta, scoped to the ink card — */
 function InkChip({ children }: { children: React.ReactNode }) {
   return (
@@ -53,8 +61,19 @@ function InkChip({ children }: { children: React.ReactNode }) {
  */
 export function ProjectCard({ project, variant = "grid", index = 0, className }: ProjectCardProps) {
   const reduceMotion = useReducedMotion();
+  const hydrated = useHydrated();
   const isFeatured = variant === "featured";
   const flip = isFeatured && index % 2 === 1;
+
+  /* Parallax is for the compact grid only. The featured card is what the
+     homepage pins in its sticky chapter scroll, and a pinned element's box
+     stops moving relative to the viewport — the progress would flatten to a
+     constant and the drift would simply freeze mid-travel. That layout gets
+     its depth from `ScrollScale` at the section level instead. */
+  const cardRef = useRef<HTMLElement>(null);
+  const cardProgress = useScrubProgress(cardRef, ["start end", "end start"]);
+  const mediaY = useTransform(cardProgress, [0, 1], [PARALLAX_Y, -PARALLAX_Y]);
+  const parallax = !isFeatured && hydrated && !reduceMotion;
 
   const visibleTags = project.tags.slice(0, MAX_CHIPS);
   const overflowCount = project.tags.length - visibleTags.length;
@@ -80,24 +99,32 @@ export function ProjectCard({ project, variant = "grid", index = 0, className }:
 
   const media = (
     <div className="overflow-hidden rounded-xl sm:rounded-2xl">
-      <motion.div variants={mediaVariants} className="will-change-transform">
-        <DeviceFrame variant="browser" label={project.title}>
-          {project.image ? (
-            // decorative inside the card link — its aria-label already names the project
-            <Image
-              src={project.image}
-              alt=""
-              fill
-              quality={90}
-              // Every project shot is pre-cropped to the frame's own 4:3, so
-              // object-cover scales without cropping and the browser needs
-              // exactly the displayed width (see the aspect guard in
-              // lib/content/content.test.ts).
-              sizes="(min-width: 1024px) 37rem, 92vw"
-              className="object-cover"
-            />
-          ) : undefined}
-        </DeviceFrame>
+      {/* Scroll parallax sits OUTSIDE the hover scale, on its own element.
+          Sharing one node would mean a scrubbed motion value and a variant
+          both writing `transform` — last write wins, and the hover would
+          stutter against the scroll. Two nodes compose instead of fight. */}
+      <motion.div
+        style={parallax ? { y: mediaY, willChange: "transform" } : undefined}
+      >
+        <motion.div variants={mediaVariants} className="will-change-transform">
+          <DeviceFrame variant="browser" label={project.title}>
+            {project.image ? (
+              // decorative inside the card link — its aria-label already names the project
+              <Image
+                src={project.image}
+                alt=""
+                fill
+                quality={90}
+                // Every project shot is pre-cropped to the frame's own 4:3, so
+                // object-cover scales without cropping and the browser needs
+                // exactly the displayed width (see the aspect guard in
+                // lib/content/content.test.ts).
+                sizes="(min-width: 1024px) 37rem, 92vw"
+                className="object-cover"
+              />
+            ) : undefined}
+          </DeviceFrame>
+        </motion.div>
       </motion.div>
     </div>
   );
@@ -169,6 +196,7 @@ export function ProjectCard({ project, variant = "grid", index = 0, className }:
   /* ── grid: compact card ────────────────────────────────────────────────── */
   return (
     <motion.article
+      ref={cardRef}
       variants={cardVariants}
       initial={initial}
       whileHover={hover}

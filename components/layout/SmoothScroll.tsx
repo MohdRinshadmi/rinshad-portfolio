@@ -1,9 +1,15 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { frame, cancelFrame } from "framer-motion";
 import Lenis from "lenis";
+import { registerLenis } from "@/lib/scroll-controller";
+
+/* This component is server-rendered but only ever *acts* on the client; the
+   layout effect is what keeps the post-navigation scroll reset off-screen. */
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 /**
  * Smooth scrolling, driven from Framer Motion's frame loop rather than its own
@@ -24,6 +30,12 @@ import Lenis from "lenis";
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
   const pathname = usePathname();
+  // Distinguishes a forward navigation (pin to the top) from back/forward
+  // (restore what the reader was looking at). `popstate` fires with the URL
+  // already updated and before React commits the new route, so the path it
+  // records is always there to compare against by the time we read it.
+  const poppedPathRef = useRef<string | null>(null);
+  const firstRenderRef = useRef(true);
 
   useEffect(() => {
     // Native scroll for reduced-motion users — also skips the always-running loop.
@@ -40,6 +52,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       autoRaf: false,
     });
     lenisRef.current = lenis;
+    registerLenis(lenis);
 
     const update = (data: { timestamp: number }) => lenis.raf(data.timestamp);
     // keepAlive = true — a persistent per-frame process, not a one-shot.
@@ -49,32 +62,65 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       cancelFrame(update);
       lenis.destroy();
       lenisRef.current = null;
+      registerLenis(null);
     };
   }, []);
 
+  useEffect(() => {
+    // Stored as the path rather than a flag: a hash-only pop changes the URL
+    // without changing the route, so nothing would consume a bare flag and the
+    // next forward navigation would inherit it.
+    const onPopState = () => {
+      poppedPathRef.current = window.location.pathname;
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
   /**
-   * Adopt the router's scroll position on navigation.
+   * Land every navigation where the reader expects, then hand the position to
+   * Lenis.
    *
-   * The App Router sets scroll itself — top for a push, the remembered offset
-   * for back/forward. Lenis only picks that up through its native-scroll
+   * TOP-PINNING. Next's default is to *keep* the scroll position whenever the
+   * new Page element is still inside the viewport — which, on pages this long,
+   * is most of the time. Click a header tab from the bottom of one page and you
+   * arrive at the bottom of the next. A tab has to mean "start here", so a
+   * forward navigation is pinned to 0. Back/forward is left alone (that is the
+   * one case where the old offset is the right answer), and so is a URL that
+   * carries a hash, since the fragment is the reader's explicit target.
+   *
+   * Running this in a LAYOUT effect matters: it writes the scroll position in
+   * the same commit that swaps the markup, so the wrong offset never paints.
+   *
+   * LENIS SYNC. Lenis only picks up an external scroll through its native
    * listener, and that listener is gated on `isScrolling` being `false` or
    * `"native"`. Click a nav link while a smooth scroll is still settling — i.e.
    * scroll, then immediately click, which is the normal way people browse — and
    * `isScrolling` is `"smooth"`, the sync is skipped, and Lenis keeps animating
-   * toward the OLD target. The new page then slides away from the top on its
-   * own. Re-anchoring to the real scroll position makes it deterministic
-   * instead of a race.
-   *
-   * Reading `window.scrollY` rather than hard-coding 0 is what preserves
-   * back/forward restoration: whatever the router decided, Lenis agrees with it.
+   * toward the OLD target. Re-anchoring to the real scroll position makes it
+   * deterministic instead of a race.
    */
-  useEffect(() => {
-    const lenis = lenisRef.current;
-    if (!lenis) return;
+  useIsomorphicLayoutEffect(() => {
+    // The first paint of a session is the browser's to place (it may be
+    // restoring a reload); only route *changes* are ours.
+    const isNavigation = !firstRenderRef.current;
+    firstRenderRef.current = false;
 
-    // The router writes scroll during its own commit, so wait a frame to read
-    // the settled value rather than the pre-navigation one.
+    const restoring = poppedPathRef.current === pathname;
+    poppedPathRef.current = null;
+
+    const pinToTop =
+      isNavigation && !restoring && window.location.hash.length <= 1;
+
+    if (pinToTop) window.scrollTo(0, 0);
+
+    // The router writes scroll during its own commit, which may land after this
+    // effect, so re-assert once a frame later and read the settled value.
     const id = requestAnimationFrame(() => {
+      if (pinToTop && window.scrollY !== 0) window.scrollTo(0, 0);
+
+      const lenis = lenisRef.current;
+      if (!lenis) return;
       // The new route is a different height; recompute the scroll limit before
       // anchoring so Lenis doesn't clamp against the previous page's bounds.
       lenis.resize();
