@@ -7,7 +7,8 @@ import { JsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = buildMetadata({
   title: "Contact",
-  description: "Let's build something — a full-stack software engineer open to backend and full-stack roles across Node.js, TypeScript, Python, PostgreSQL, Docker, and AWS.",
+  description:
+    "Contact Mohammed Rinshad, Full-Stack Software Engineer in India — open to backend and full-stack roles, remote or relocation. Email, LinkedIn, GitHub, résumé.",
   path: "/contact",
 });
 

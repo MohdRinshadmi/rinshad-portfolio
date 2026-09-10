@@ -206,13 +206,12 @@ describe("buildMetadata()", () => {
   });
 
   it("opts a title-less route out of the template", () => {
-    expect(buildMetadata({}).title).toEqual({
-      absolute: `${siteConfig.fullName} — ${siteConfig.role}`,
-    });
+    expect(buildMetadata({}).title).toEqual({ absolute: siteConfig.title });
   });
 
-  it("defaults the description to the site bio", () => {
-    expect(buildMetadata({ title: "X" }).description).toBe(siteConfig.bio);
+  it("defaults the description to the short, result-sized site description", () => {
+    // Not the bio: at ~700 characters it was truncated in every search result.
+    expect(buildMetadata({ title: "X" }).description).toBe(siteConfig.description);
   });
 
   it("carries article fields only for articles", () => {

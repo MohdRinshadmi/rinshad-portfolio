@@ -72,6 +72,9 @@ export const siteConfig = {
   name: "Rinshad",
   fullName: "Mohammed Rinshad M I",
   role: "Full-Stack Software Engineer",
+  /** The document title for the homepage and link previews — name, role, then
+      the three areas that separate this profile from a generic "full-stack". */
+  title: "Mohammed Rinshad — Full-Stack Software Engineer | Backend, Cloud & AI",
   /** One line: footer, manifest, WebSite schema. */
   tagline:
     "Full-stack software engineer building production backend, cloud, AI and real-time systems.",

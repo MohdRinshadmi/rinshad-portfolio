@@ -19,8 +19,8 @@ export async function GET() {
 > Mohammed Rinshad M I is a Full-Stack Software Engineer based in Palakkad, Kerala, India, with 3+ years building and running production REST APIs, relational schemas, and containerized services in Node.js, Express.js, and TypeScript on MySQL, Redis, Docker, and AWS. Backend-heavy, and hands-on with the clients those APIs serve: React, Next.js, and React Native. Additional backend work in Golang (Gin) and Python across self-directed projects on PostgreSQL, pgvector, and RAG pipelines.
 
 Key facts:
-- Role: Full-Stack Software Engineer (backend-heavy)
-- Location: Palakkad, Kerala, India (open to remote or relocation)
+- Role: Full-Stack Software Engineer — backend, cloud, AI/LLM and real-time systems
+- Location: Palakkad, Kerala, India — open to remote roles or relocation (Europe, UK, UAE)
 - Availability: Open to backend & full-stack engineering roles
 - Email: rinshad803@gmail.com
 - Languages: TypeScript, JavaScript, Python, Golang, SQL
@@ -38,6 +38,7 @@ Key facts:
 
 - [Home](${BASE}): Overview, positioning, and featured work
 - [Work](${BASE}/work): Case studies of backend systems
+- [Experience](${BASE}/about#experience): Current role, achievements, and education
 - [About](${BASE}/about): Long-form bio, skills, experience, and how he works
 - [Writing](${BASE}/blog): Engineering articles
 - [Contact](${BASE}/contact): Get in touch

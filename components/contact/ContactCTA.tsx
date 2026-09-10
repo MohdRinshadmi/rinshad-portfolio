@@ -69,7 +69,7 @@ export function ContactCTA() {
                     {href ? (
                       <a
                         href={href}
-                        className="text-sm font-medium text-text transition-colors hover:text-accent"
+                        className="inline-flex min-h-11 items-center text-sm font-medium text-text transition-colors hover:text-accent-text"
                       >
                         {value}
                       </a>

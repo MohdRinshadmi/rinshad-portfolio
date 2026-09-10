@@ -10,43 +10,24 @@ const BASE = siteConfig.url;
    ========================================================================== */
 export const SITE_KEYWORDS = [
   "Full-Stack Software Engineer",
-  "Full-Stack Developer",
-  "Backend Developer",
-  "Backend Engineer India",
-  "Node.js Developer",
-  "Node.js Developer India",
-  "Express.js Developer",
-  "REST API Developer",
-  "TypeScript Developer",
-  "Golang Developer",
-  "Python Developer",
+  "Backend Engineer",
   "Software Engineer India",
-  "SDE India",
-  "Hire Backend Developer India",
-  "Hire Full-Stack Developer India",
-  "API Design",
-  "Database Schema Design",
-  "PostgreSQL Developer",
-  "MySQL Developer",
-  "Redis caching",
-  "Docker",
-  "AWS Developer India",
-  "DevOps Engineer India",
-  "Microservices Developer",
-  "Distributed Systems Engineer",
-  "WebSockets",
-  "real-time systems developer",
-  "React Developer India",
-  "Next.js Developer",
-  "React Native Developer India",
-  "Full-Stack Developer Kerala",
-  "Backend Developer Kerala",
-  "Software Engineer Kerala",
-  "Full-Stack Developer Palakkad",
+  "Full-Stack Developer India",
+  "Node.js Developer",
+  "TypeScript Developer",
+  "Python FastAPI Developer",
+  "Golang Developer",
+  "React Native Developer",
   "AI Engineer",
-  "LLM application developer",
-  "RAG developer",
-  "pgvector semantic search",
+  "LLM Engineer",
+  "RAG pipelines",
+  "AWS",
+  "PostgreSQL",
+  "Redis",
+  "Docker",
+  "WebSockets",
+  "Real-time systems",
+  "Full-Stack Developer Kerala",
   siteConfig.fullName,
 ];
 
@@ -87,7 +68,7 @@ interface BuildMetaArgs {
  */
 export function buildMetadata({
   title,
-  description = siteConfig.bio,
+  description = siteConfig.description,
   path = "/",
   type = "website",
   publishedTime,
@@ -95,14 +76,14 @@ export function buildMetadata({
   tags,
 }: BuildMetaArgs = {}): Metadata {
   const url = abs(path);
-  const ogTitle = title ?? `${siteConfig.fullName} — ${siteConfig.role}`;
+  const ogTitle = title ?? siteConfig.title;
 
   return {
     // Pass the bare segment and let the root layout's `%s | Rinshad` template
     // add the brand — appending it here too produced "About | Rinshad | Rinshad"
     // on every sub-page. Routes with no title of their own opt out of the
     // template with `absolute`, so the full name isn't suffixed either.
-    title: title ?? { absolute: `${siteConfig.fullName} — ${siteConfig.role}` },
+    title: title ?? { absolute: siteConfig.title },
     description,
     alternates: { canonical: url },
     openGraph: {
@@ -194,7 +175,7 @@ function personNode() {
     },
     seeks: {
       "@type": "Demand",
-      name: "Backend & full-stack software engineering roles (remote or relocation)",
+      name: "Full-stack and backend software engineering roles — remote, or relocation to Europe, the UK or the UAE",
     },
     sameAs: [siteConfig.social.github, siteConfig.social.linkedin],
     knowsAbout: [
@@ -236,7 +217,6 @@ function personNode() {
       "Repository Pattern",
       "Dependency Injection",
       "Modular Monolith",
-      "Microservices",
       "Docker",
       "Docker Compose",
       "AWS",

@@ -26,7 +26,8 @@ import { ExperienceTimeline } from "@/components/about/ExperienceTimeline";
 
 export const metadata: Metadata = buildMetadata({
   title: "About",
-  description: siteConfig.bio,
+  description:
+    "Experience, skills and working method of Mohammed Rinshad, a Full-Stack Software Engineer with 3+ years of production Node.js, TypeScript, MySQL, Redis and AWS.",
   path: "/about",
   type: "profile",
 });

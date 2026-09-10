@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Archivo_Black, Geist, Geist_Mono, Inter, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
@@ -30,19 +30,20 @@ const archivoBlack = Archivo_Black({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.fullName} — ${siteConfig.role}`,
+    default: siteConfig.title,
     template: `%s | ${siteConfig.name}`,
   },
-  description: siteConfig.bio,
+  description: siteConfig.description,
   keywords: SITE_KEYWORDS,
   applicationName: siteConfig.name,
   authors: [{ name: siteConfig.fullName, url: siteConfig.url }],
   creator: siteConfig.fullName,
   publisher: siteConfig.fullName,
   category: "technology",
+  // No hreflang `languages`: every entry pointed at "/", which tells search
+  // engines nothing on a single-language site.
   alternates: {
     canonical: "/",
-    languages: { "en-IN": "/", "en": "/", "x-default": "/" },
     types: { "application/rss+xml": `${siteConfig.url}/feed.xml` },
   },
   // Apple home-screen / PWA presentation.
@@ -63,14 +64,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: siteConfig.url,
-    title: `${siteConfig.fullName} — ${siteConfig.role}`,
-    description: siteConfig.bio,
+    title: siteConfig.title,
+    description: siteConfig.description,
     siteName: siteConfig.name,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.fullName} — ${siteConfig.role}`,
-    description: siteConfig.bio,
+    title: siteConfig.title,
+    description: siteConfig.description,
   },
   robots: {
     index: true,
@@ -87,6 +88,12 @@ export const metadata: Metadata = {
   verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
     ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
     : undefined,
+};
+
+/* Mobile browser chrome matches the paper canvas; the site is light-only. */
+export const viewport: Viewport = {
+  themeColor: "#f7f5f2",
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

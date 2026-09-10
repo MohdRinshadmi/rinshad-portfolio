@@ -36,7 +36,9 @@ const fieldBase =
   // text and is contrast-audited, and `muted` (1.93:1) fails it.
   "w-full rounded-md border bg-surface px-4 py-3 text-sm text-text placeholder:text-text-tertiary " +
   "outline-none transition-[border-color,box-shadow,background-color] duration-200 ease-out " +
-  "focus:border-accent/50 focus:bg-surface-raised focus:ring-1 focus:ring-accent/30";
+  // A 2px ring at 60%: the old 1px ring at 30% was barely distinguishable from
+  // the resting border, which is the one cue a keyboard user has here.
+  "focus:border-accent-text focus:bg-surface-raised focus:ring-2 focus:ring-accent/60";
 
 function fieldClasses(hasError: boolean, extra?: string) {
   return cn(fieldBase, hasError ? "border-danger/50" : "border-border", extra);

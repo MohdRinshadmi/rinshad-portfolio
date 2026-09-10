@@ -123,7 +123,7 @@ export default async function Image() {
               maxWidth: 920,
             }}
           >
-            {siteConfig.role} · Node.js · TypeScript · Python · PostgreSQL · Docker · AWS
+            {siteConfig.role} · Backend · Cloud · AI/LLM · Real-time systems
           </div>
         </div>
 
@@ -155,7 +155,7 @@ export default async function Image() {
           <span style={{ margin: "0 16px", color: TERTIARY }}>·</span>
           <span style={{ color: SECONDARY }}>40+ REST endpoints</span>
           <span style={{ margin: "0 16px", color: TERTIARY }}>·</span>
-          <span style={{ color: SECONDARY }}>Palakkad, India · Remote</span>
+          <span style={{ color: SECONDARY }}>India · Remote or relocation</span>
         </div>
       </div>
     ),
