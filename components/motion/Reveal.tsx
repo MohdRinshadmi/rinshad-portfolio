@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { DURATION, EASE, VIEWPORT } from "@/lib/animation";
 import { cn } from "@/lib/utils";
 
@@ -17,10 +17,13 @@ interface RevealProps {
  * Scroll-reveal primitive: opacity/y fade-up that enters once when scrolled
  * into view. Animates transform + opacity only.
  *
- * Reduced motion renders the content at rest with no animation at all. The
- * global `prefers-reduced-motion` rule in globals.css can't cover this — it
- * clamps CSS `animation-duration` and `transition-duration`, and Framer drives
- * these from JS, so the opt-out has to be explicit here.
+ * Reduced motion is handled once, globally, by `<MotionConfig
+ * reducedMotion="user">` in SmoothScroll: the fade stays and the rise is
+ * dropped — simplified, not removed. This component renders ONE tree for
+ * everybody. It used to return a bare element when `useReducedMotion()` was
+ * true, but that hook is false on the server and true on a reduced-motion
+ * client's first render, so the two trees disagreed during hydration and React
+ * threw #418.
  */
 export function Reveal({
   children,
@@ -31,11 +34,6 @@ export function Reveal({
   once = true,
 }: RevealProps) {
   const MotionTag = motion[as];
-  const reduceMotion = useReducedMotion();
-
-  if (reduceMotion) {
-    return <MotionTag className={cn(className)}>{children}</MotionTag>;
-  }
 
   return (
     <MotionTag

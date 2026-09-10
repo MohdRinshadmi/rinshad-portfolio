@@ -140,7 +140,10 @@ export function ContactForm({ className }: { className?: string }) {
         ) : (
           <motion.form
             key="form"
-            initial={reduceMotion ? false : { opacity: 0 }}
+            // No entrance on first render: an `opacity: 0` start would ship in the
+            // server HTML and hide the form until hydration. Swaps back from the
+            // success state still cross-fade through AnimatePresence.
+            initial={false}
             animate={{ opacity: 1 }}
             transition={{ duration: DURATION.base, ease: EASE.out }}
             onSubmit={handleSubmit(onSubmit)}

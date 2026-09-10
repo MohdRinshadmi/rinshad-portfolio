@@ -60,8 +60,12 @@ export function Epilogue() {
 
           <Reveal className="mt-8 text-center" delay={0.1}>
             <p className="mx-auto max-w-[50ch] text-body-lg text-text-secondary">{epilogue.invitation}</p>
-            <p className="mt-7 inline-flex flex-wrap items-center justify-center gap-x-2.5 gap-y-2 font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary">
-              <span aria-hidden="true" className="size-1.5 rounded-full bg-positive animate-pulse-dot" />
+            <p className="mt-7 font-mono text-[11px] uppercase leading-relaxed tracking-[0.14em] text-text-tertiary">
+              {/* Inline, not a flex item, so a wrapped line never strands the dot on its own. */}
+              <span
+                aria-hidden="true"
+                className="mr-2.5 inline-block size-1.5 rounded-full bg-positive align-middle animate-pulse-dot"
+              />
               {siteConfig.availability} · {siteConfig.responsePromise}
             </p>
           </Reveal>

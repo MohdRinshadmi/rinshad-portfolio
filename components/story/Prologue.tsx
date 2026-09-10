@@ -12,7 +12,7 @@ import { siteConfig } from "@/lib/config/site";
 const at = (seconds: number) => ({ "--hero-delay": `${seconds}s` }) as CSSProperties;
 
 const MASTHEAD =
-  "font-(family-name:--font-archivo-black) text-[clamp(2.25rem,10.5vw,3.5rem)] font-normal uppercase leading-[0.98] tracking-[-0.02em] lg:text-[clamp(3.5rem,6.2vw,6rem)]";
+  "font-(family-name:--font-archivo-black) text-[clamp(2.25rem,10.5vw,3.5rem)] font-normal uppercase leading-[0.98] tracking-[-0.02em] lg:text-[clamp(3rem,5vw,5.5rem)]";
 
 /**
  * Prologue — the documentary's cover, and the five-second test.
@@ -35,7 +35,7 @@ export function Prologue() {
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-aurora" />
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-grain opacity-50" />
 
-      <HeroDeparture className="container-wide flex min-h-svh flex-col pb-20 pt-24 sm:pb-24 sm:pt-28">
+      <HeroDeparture className="container-wide flex min-h-svh flex-col pb-16 pt-22 sm:pb-24 sm:pt-24">
         {/* ── Colophon plate ─────────────────────────────────────────────── */}
         <div className="relative pb-5 xl:px-12">
           <div
@@ -83,7 +83,7 @@ export function Prologue() {
           />
         </div>
 
-        <div className="grid flex-1 items-center gap-14 pt-8 sm:pt-12 lg:grid-cols-[1fr_minmax(22rem,28rem)] lg:gap-20 lg:pt-0 xl:grid-cols-[1fr_minmax(24rem,30rem)] xl:px-12">
+        <div className="grid flex-1 items-center gap-14 pt-6 sm:pt-10 lg:grid-cols-[1fr_minmax(22rem,28rem)] lg:gap-20 lg:pt-0 xl:grid-cols-[1fr_minmax(24rem,30rem)] xl:px-12">
           {/* ── The introduction ───────────────────────────────────────── */}
           <div>
             <h1 className="font-display text-text">
@@ -104,14 +104,17 @@ export function Prologue() {
               </span>
             </h1>
 
-            <div className="hero-fade mt-8 max-w-[54ch] sm:mt-10" style={at(0.56)}>
+            <div className="hero-fade mt-7 max-w-[54ch] sm:mt-9" style={at(0.56)}>
               <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent-text">
                 {prologue.focus}
               </p>
               <p className="mt-4 font-display text-[clamp(1.25rem,1.9vw,1.625rem)] font-medium leading-snug tracking-[-0.015em] text-text">
                 {prologue.value}
               </p>
-              <p className="mt-3 text-body-lg text-text-secondary">{prologue.support}</p>
+              {/* Phones skip the evidence sentence — the proof strip directly
+                  below carries the same facts — so the first screen still
+                  reaches "View projects". */}
+              <p className="mt-3 hidden text-body-lg text-text-secondary sm:block">{prologue.support}</p>
               <ul aria-label="Core technologies" className="mt-5 flex flex-wrap gap-1.5">
                 {prologue.stack.map((tech) => (
                   <li key={tech}>
@@ -121,7 +124,7 @@ export function Prologue() {
               </ul>
             </div>
 
-            <div className="hero-fade mt-8 flex flex-wrap items-center gap-3" style={at(0.68)}>
+            <div className="hero-fade mt-7 flex flex-wrap items-center gap-3 sm:mt-8" style={at(0.68)}>
               <Button
                 href={prologue.cta.work.href}
                 size="lg"

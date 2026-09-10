@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { DURATION, EASE, lineMask, VIEWPORT } from "@/lib/animation";
 import { cn } from "@/lib/utils";
 
@@ -19,17 +19,13 @@ interface LineMaskProps {
  * never fires, because at y:110% it is fully clipped out of the observer's
  * intersection rect.
  *
- * Reduced motion drops the clip as well as the motion: an `overflow-hidden`
- * wrapper around a line of type will crop descenders on some fonts, and there
- * is nothing left for it to mask.
+ * One tree for everybody. Under reduced motion the global `MotionConfig`
+ * makes the rise instant, so the line simply appears as it enters the
+ * viewport. The old reduced-motion branch returned a single span instead of
+ * two — a structural difference between the server HTML and a reduced-motion
+ * client's first render, which is what threw React #418 on the homepage.
  */
 export function LineMask({ children, className, delay = 0 }: LineMaskProps) {
-  const reduceMotion = useReducedMotion();
-
-  if (reduceMotion) {
-    return <span className={cn("block", className)}>{children}</span>;
-  }
-
   return (
     <motion.span
       className={cn("block overflow-hidden", className)}

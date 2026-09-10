@@ -2,7 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { frame, cancelFrame } from "framer-motion";
+import { frame, cancelFrame, MotionConfig } from "framer-motion";
 import Lenis from "lenis";
 import { registerLenis } from "@/lib/scroll-controller";
 
@@ -130,5 +130,9 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     return () => cancelAnimationFrame(id);
   }, [pathname]);
 
-  return <>{children}</>;
+  /* Reduced motion for every Framer animation on the site, in one place:
+     transforms and layout moves become instant, opacity fades remain. The
+     reveal primitives therefore render identical markup for every visitor —
+     branching on `useReducedMotion` inside them broke hydration (#418). */
+  return <MotionConfig reducedMotion="user">{children}</MotionConfig>;
 }

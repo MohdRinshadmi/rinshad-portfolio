@@ -22,15 +22,14 @@ import type { Experience } from "@/lib/types";
    One experience row
    -------------------------------------------------------------------------- */
 function ExperienceRow({ item }: { item: Experience }) {
-  const reduceMotion = useReducedMotion();
   const rowRef = useRef<HTMLLIElement>(null);
   const inView = useInView(rowRef, { once: true, margin: "-120px" });
 
   return (
     <motion.li
       ref={rowRef}
-      variants={reduceMotion ? undefined : fadeUp}
-      initial={reduceMotion ? false : "hidden"}
+      variants={fadeUp}
+      initial="hidden"
       whileInView="visible"
       viewport={VIEWPORT}
       className="relative pl-12 sm:pl-16"
@@ -155,8 +154,8 @@ export function ExperienceTimeline() {
 
         {/* Education — compact coda row */}
         <motion.div
-          variants={reduceMotion ? undefined : fadeUp}
-          initial={reduceMotion ? false : "hidden"}
+          variants={fadeUp}
+          initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT}
           transition={{ duration: DURATION.reveal, ease: EASE.out, delay: 0.05 }}

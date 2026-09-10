@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   DURATION,
   EASE,
@@ -37,7 +37,8 @@ export function SectionHeading({
   size = "h2",
   className,
 }: SectionHeadingProps) {
-  const reduceMotion = useReducedMotion();
+  // No `useReducedMotion` branches: they changed the server/client markup.
+  // Reduced motion is applied globally by MotionConfig (see SmoothScroll).
   const isCentered = align === "center";
 
   return (
@@ -50,7 +51,7 @@ export function SectionHeading({
     >
       {eyebrow ? (
         <motion.span
-          initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+          initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VIEWPORT}
           transition={{ duration: DURATION.base, ease: EASE.out }}
@@ -75,8 +76,8 @@ export function SectionHeading({
         <span className="block overflow-hidden pb-[0.08em]">
           <motion.span
             className="block"
-            variants={reduceMotion ? undefined : lineMask}
-            initial={reduceMotion ? false : "hidden"}
+            variants={lineMask}
+            initial="hidden"
             whileInView="visible"
             viewport={VIEWPORT}
           >
@@ -87,8 +88,8 @@ export function SectionHeading({
 
       {description ? (
         <motion.p
-          variants={reduceMotion ? undefined : fadeUp}
-          initial={reduceMotion ? false : "hidden"}
+          variants={fadeUp}
+          initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT}
           transition={{

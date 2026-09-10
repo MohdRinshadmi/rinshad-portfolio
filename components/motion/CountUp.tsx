@@ -31,8 +31,12 @@ interface CountUpProps {
  * both happened, which is how production shipped "0+ REST endpoints" to every
  * reader that doesn't run the page's JS.
  *
- * No count when the number is already on screen at hydration (resetting it to
- * zero in front of the reader would flash) or under reduced motion.
+ * The reset to `from` happens only at the moment the count starts — a little
+ * BEFORE the number scrolls into view (positive bottom margin) — so the DOM
+ * holds the real value until then. A headless scraper that never scrolls reads
+ * "40+", not "0+". No count at all when the number is already on screen at
+ * hydration (resetting it in front of the reader would flash) or under reduced
+ * motion.
  */
 export function CountUp({
   to,
@@ -56,16 +60,18 @@ export function CountUp({
     const write = (value: number) => {
       el.textContent = formatCount(value, decimals, prefix, suffix);
     };
-    write(from);
 
     let controls: ReturnType<typeof animate> | undefined;
     const stopWatching = inView(
       el,
       () => {
+        write(from);
         controls = animate(from, to, { duration, ease: EASE.out, onUpdate: write });
         stopWatching();
       },
-      { margin: "0px 0px -80px 0px" },
+      // Fire ~a tenth of a screen early: the count is already under way when
+      // the number appears, and the reset to zero is never on screen.
+      { margin: "0px 0px 10% 0px" },
     );
 
     return () => {

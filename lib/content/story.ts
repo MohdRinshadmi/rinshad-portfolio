@@ -33,9 +33,9 @@ export const prologue = {
   /** WHAT — the four areas, in the order the work is weighted. */
   focus: "Backend · Cloud · AI/LLM · Real-time systems",
   /** VALUE — one sentence, then the evidence behind it. */
-  value: "Building production-grade backend, cloud, AI and real-time systems.",
+  value: "3+ years building production-grade backend, cloud, AI and real-time systems.",
   support:
-    "3+ years designing, shipping and operating REST APIs, relational schemas and containerized services on AWS — plus Go services, Python RAG pipelines and WebSocket systems.",
+    "Designing, shipping and operating REST APIs, relational schemas and containerized services on AWS — plus Go services, Python RAG pipelines and WebSocket systems.",
   /** TECHNOLOGY — the six a recruiter searches for first. */
   stack: ["TypeScript", "Node.js", "Python", "Go", "PostgreSQL", "AWS"],
   cta: {
