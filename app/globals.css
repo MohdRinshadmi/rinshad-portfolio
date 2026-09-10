@@ -428,9 +428,12 @@ html {
     transform: translateY(0);
   }
 }
+/* Starts faint, not invisible. Chrome does not count an opacity-0 element as
+   painted, so a fade from 0 made the hero's value line — the mobile LCP
+   element — wait out its whole stagger delay before LCP could be recorded. */
 @keyframes hero-fade {
   from {
-    opacity: 0;
+    opacity: 0.15;
     transform: translateY(14px);
   }
   to {

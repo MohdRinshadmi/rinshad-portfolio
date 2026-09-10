@@ -128,7 +128,10 @@ export function ExperienceTimeline() {
           description="Where the REST APIs, relational schemas, payment lifecycles, and store releases actually got built."
         />
 
-        <ol ref={listRef} className="relative mt-14 sm:mt-16">
+        {/* The rail sits beside the list, not inside it: an <ol> may only
+            contain <li>s, and the old spans + wrapper <div> broke the list
+            for screen readers (Lighthouse `list` / `listitem`). */}
+        <div className="relative mt-14 sm:mt-16">
           {/* static rail (track) */}
           <span
             aria-hidden
@@ -145,12 +148,12 @@ export function ExperienceTimeline() {
             className="absolute left-4.5 top-1.5 bottom-1.5 w-px -translate-x-1/2 origin-top bg-linear-to-b from-accent via-accent/60 to-transparent sm:left-6.5"
           />
 
-          <div className="flex flex-col gap-14 sm:gap-16">
+          <ol ref={listRef} className="flex flex-col gap-14 sm:gap-16">
             {experience.map((item) => (
               <ExperienceRow key={item.id} item={item} />
             ))}
-          </div>
-        </ol>
+          </ol>
+        </div>
 
         {/* Education — compact coda row */}
         <motion.div

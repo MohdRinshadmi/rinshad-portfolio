@@ -85,7 +85,10 @@ function Word({
 
   return (
     <span aria-hidden="true" className="relative mr-[0.32em] inline-block">
-      <span className={cn("text-text-muted")}>{children}</span>
+      {/* Unlit words sit on `tertiary` (4.6:1), not `muted` (1.9:1): before the
+          scrub reaches them they are still the text a reader — or a contrast
+          audit taken at the top of the page — actually sees. */}
+      <span className={cn("text-text-tertiary")}>{children}</span>
       <motion.span
         style={{ opacity, willChange: "opacity" }}
         className="absolute inset-0 text-text"

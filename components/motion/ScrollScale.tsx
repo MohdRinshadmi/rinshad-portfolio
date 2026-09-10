@@ -31,11 +31,13 @@ export function ScrollScale({ children, className, from = 0.96, y = 36 }: Scroll
   const progress = useScrubProgress(ref, ["start end", "start 0.45"]);
 
   // Extra midpoints shape the arrival: most of the distance is covered early,
-  // and the last few percent of scale and lift arrive slowly. Opacity leads
-  // the transform so the block is legible before it has finished settling.
+  // and the last few percent of scale and lift arrive slowly.
+  //
+  // Transform only — no opacity channel. The blocks this wraps are project
+  // cards and the contact form, i.e. text people read; fading them to 55% put
+  // every label below AA contrast until the reader had scrolled past.
   const scale = useTransform(progress, [0, 0.55, 1], [from, from + (1 - from) * 0.82, 1]);
   const translateY = useTransform(progress, [0, 0.55, 1], [y, y * 0.16, 0]);
-  const opacity = useTransform(progress, [0, 0.4, 1], [0.55, 0.94, 1]);
 
   return (
     <motion.div
@@ -43,7 +45,7 @@ export function ScrollScale({ children, className, from = 0.96, y = 36 }: Scroll
       className={className}
       style={
         hydrated && !reduceMotion
-          ? { scale, y: translateY, opacity, willChange: "transform, opacity" }
+          ? { scale, y: translateY, willChange: "transform" }
           : undefined
       }
     >

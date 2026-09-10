@@ -107,6 +107,14 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
+  experimental: {
+    // Ship the (Tailwind, ~16 KB) stylesheet inside the HTML instead of as a
+    // render-blocking <link>. Lighthouse mobile flagged that request as the
+    // main thing between the first byte and the hero text painting. The cost —
+    // no separate CSS cache for returning visitors — suits a portfolio, whose
+    // audience is overwhelmingly first-time. CSP already allows inline styles.
+    inlineCss: true,
+  },
   images: {
     // AVIF first, WebP fallback (Next's default is ["image/webp"] alone).
     // The optimizer content-negotiates, so non-AVIF browsers still get WebP.

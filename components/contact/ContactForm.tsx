@@ -10,6 +10,12 @@ import { Button } from "@/components/ui/Button";
 import { DURATION, EASE } from "@/lib/animation";
 import { cn } from "@/lib/utils";
 
+/* zod v4 probes `new Function` to decide whether to JIT its parsers. The site's
+   CSP has no 'unsafe-eval', so the probe — caught, but still reported — logged
+   a CSP issue on every page carrying this form. A four-field schema gains
+   nothing from the JIT. */
+z.config({ jitless: true });
+
 /* Schema kept identical to the original Contact.tsx (name/email/subject/message). */
 const schema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
