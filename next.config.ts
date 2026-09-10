@@ -132,6 +132,18 @@ const nextConfig: NextConfig = {
     // arbitrary images through the optimizer on this domain's dime.
     remotePatterns: [],
   },
+  async redirects() {
+    return [
+      // The résumé was renamed on 2026-09-10. The old URL is indexed and sits
+      // in earlier copies of the résumé and on job-board profiles, so it must
+      // keep resolving rather than 404.
+      {
+        source: "/MohammedRinshadMI_FullStack.pdf",
+        destination: "/MohdRinshad_FullStackEngineer_Resume.pdf",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       // Document-level policy. Deliberately NOT applied to /_next/static or

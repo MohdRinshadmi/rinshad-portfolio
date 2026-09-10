@@ -8,7 +8,7 @@ import type {
 
 /* ============================================================================
    PROOF STRIP — the band under the hero. Every number is on the résumé
-   (public/MohammedRinshadMI_FullStack.pdf); nothing here may be rounded up.
+   (public/MohdRinshad_FullStackEngineer_Resume.pdf); nothing here may be rounded up.
    ========================================================================== */
 export const proofStats: ProofStat[] = [
   { to: 3, suffix: "+", label: "Years shipping production software" },

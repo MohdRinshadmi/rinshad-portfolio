@@ -67,7 +67,7 @@ Self-initiated projects on self-hosted, open-source infrastructure (PostgreSQL, 
 
 ## Optional
 
-- [Résumé (PDF)](${BASE}/MohammedRinshadMI_FullStack.pdf): Full résumé
+- [Résumé (PDF)](${BASE}/MohdRinshad_FullStackEngineer_Resume.pdf): Full résumé
 - [Sitemap](${BASE}/sitemap.xml): All public URLs
 - [GitHub](https://github.com/MohdRinshadmi)
 - [LinkedIn](https://linkedin.com/in/mohd-rinshadmi)

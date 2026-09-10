@@ -4,7 +4,7 @@
    AI/LLM and real-time systems, hands-on with the clients those APIs serve
    (React, Next.js, React Native).
    Voice: confident, concrete, senior. Lead with verbs and numbers.
-   Every claim is evidence-backed by the résumé (public/MohammedRinshadMI_FullStack.pdf).
+   Every claim is evidence-backed by the résumé (public/MohdRinshad_FullStackEngineer_Resume.pdf).
    Location note: the site targets Palakkad, Kerala by deliberate SEO decision —
    the PDF header says Bangalore. That divergence is intentional; don't "fix" it.
    ========================================================================== */
@@ -91,9 +91,9 @@ export const siteConfig = {
   availability: "Open to full-stack & backend engineering roles",
   relocation: "Remote, or relocation to Europe, the UK or the UAE",
   responsePromise: "Usually replies within 24h",
-  resumeUrl: "/MohammedRinshadMI_FullStack.pdf",
+  resumeUrl: "/MohdRinshad_FullStackEngineer_Resume.pdf",
   /** Filename the browser saves the résumé under when a CTA downloads it. */
-  resumeFileName: "Mohammed-Rinshad-Full-Stack-Software-Engineer-Resume.pdf",
+  resumeFileName: "MohdRinshad_FullStackEngineer_Resume.pdf",
   /** Environment-resolved — see resolveSiteUrl above. Deliberately NOT a
       hard-coded domain: rinshad.dev is not registered, and shipping canonicals
       to a domain that does not resolve is worse than having none. */
