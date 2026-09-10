@@ -97,6 +97,12 @@ export interface ProofStat {
   label: string;
 }
 
+/** A résumé "Key Achievement": the bold lead clause, then the evidence behind it. */
+export interface KeyAchievement {
+  lead: string;
+  detail: string;
+}
+
 export interface SkillGroup {
   label: string;
   items: string[];

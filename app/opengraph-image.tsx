@@ -123,7 +123,7 @@ export default async function Image() {
               maxWidth: 920,
             }}
           >
-            {siteConfig.role} · Backend · Cloud · AI/LLM · Real-time systems
+            {siteConfig.role} · Node.js · TypeScript · Python · Go · AWS · Distributed systems
           </div>
         </div>
 
@@ -153,7 +153,7 @@ export default async function Image() {
           />
           <span style={{ color: SECONDARY }}>3+ yrs</span>
           <span style={{ margin: "0 16px", color: TERTIARY }}>·</span>
-          <span style={{ color: SECONDARY }}>40+ REST endpoints</span>
+          <span style={{ color: SECONDARY }}>35% faster APIs across 40+ endpoints</span>
           <span style={{ margin: "0 16px", color: TERTIARY }}>·</span>
           <span style={{ color: SECONDARY }}>India · Remote or relocation</span>
         </div>

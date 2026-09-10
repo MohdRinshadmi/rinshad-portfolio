@@ -89,7 +89,7 @@ export const usesCategories: UsesCategory[] = [
       { name: "TanStack Query · Redux Toolkit · Zustand", note: "server cache vs. client state, kept separate" },
       { name: "Tailwind CSS + shadcn/ui", note: "design tokens over one-off CSS" },
       { name: "Framer Motion", note: "scroll-scrubbed, transform-only motion" },
-      { name: "Vite", note: "moved a team off CRA — build times down 60%+ (~90s → ~35s)" },
+      { name: "Vite", note: "drove the CRA → Vite migration — frontend build times down 60%+" },
     ],
   },
   {

@@ -28,9 +28,13 @@ export function HowIBuild() {
               </div>
               <div>
                 <dt className="font-mono text-eyebrow uppercase text-text-tertiary">
-                  Testing &amp; observability
+                  Testing &amp; quality
                 </dt>
                 <dd className="mt-2 text-text-secondary">{chapterSystems.quality.join(" · ")}</dd>
+              </div>
+              <div>
+                <dt className="font-mono text-eyebrow uppercase text-text-tertiary">Practices</dt>
+                <dd className="mt-2 text-text-secondary">{chapterSystems.practices.join(" · ")}</dd>
               </div>
             </dl>
           </div>

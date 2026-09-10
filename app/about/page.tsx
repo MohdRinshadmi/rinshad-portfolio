@@ -182,7 +182,7 @@ export default function AboutPage() {
                 <span className="font-serif italic text-text">inventory</span>.
               </>
             }
-            description="Every tool I reach for — languages, APIs, databases, cloud and DevOps, architecture, clients, AI data pipelines, and testing. The résumé's eight groups, verbatim, no padding."
+            description="Every tool and practice I work with — languages, cloud and DevOps, APIs, databases, architecture, clients, AI data pipelines, testing, and how I lead. The résumé's nine groups, verbatim, no padding."
           />
 
           <Stagger gap="fast" className="mt-14 flex flex-col sm:mt-16">

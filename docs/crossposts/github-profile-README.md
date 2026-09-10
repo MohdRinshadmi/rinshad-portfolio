@@ -9,61 +9,55 @@
   2. Add a README.md at its root with the content below the marker.
   3. It renders at github.com/MohdRinshadmi automatically.
 
-  WHY THIS MATTERS FOR SEO
-  - github.com is DA ~96. Your profile is one of the highest-authority pages
-    you fully control, and it's frequently the #1 result for your own name.
-  - The rinshad.dev links here are the strongest single backlink you can
-    self-serve on day one.
-  - Also pin the three case-study repos and give each a description +
-    homepage URL pointing at its case study (see PINNED REPOS below).
+  WHY THIS MATTERS
+  - github.com is one of the highest-authority pages you fully control, and it
+    is frequently the #1 result for your own name.
+  - Every project card on the portfolio has a "Source" button, so recruiters
+    land here. Right now the profile shows ~70 tutorial repos and the three
+    flagships have no description — this README and the pinned repos fix that.
+  - Content mirrors the résumé (public/MohdRinshad_FullStackEngineer_Resume.pdf).
 -->
 
 --- PASTE FROM HERE ---
 
 # Mohammed Rinshad M I
 
-**Full-Stack Web & Mobile Engineer** — I build production apps end-to-end, from React, Next.js, and React Native front-ends to Node.js and Go APIs and the data layer.
+**Full-Stack Software Engineer** — I design, ship, and operate production systems end to end: REST APIs, relational schemas, and containerized services in Node.js, Express.js, and TypeScript on MySQL, Redis, Docker, and AWS, together with the React, Next.js, and React Native clients that consume them.
 
-📍 Palakkad, Kerala, India · Open to full-stack roles, remote or relocation
-🌐 **[rinshad.dev](https://rinshad.dev)** · [Case studies](https://rinshad.dev/work) · [Writing](https://rinshad.dev/blog) · [Contact](https://rinshad.dev/contact)
+📍 Palakkad, Kerala, India · Open to full-stack & backend roles, remote or relocation
+🌐 **[Portfolio](https://rinshad-dev-portfolio.vercel.app)** · [Case studies](https://rinshad-dev-portfolio.vercel.app/work) · [Résumé](https://rinshad-dev-portfolio.vercel.app/MohdRinshad_FullStackEngineer_Resume.pdf) · [Contact](https://rinshad-dev-portfolio.vercel.app/contact)
 
 ---
 
-### What I do
+### Key achievements
 
-3+ years shipping **20+ production features** across eCommerce, LMS, and AI platforms. I build React and React Native front-ends wired to Node.js and Go APIs, with AI/LLM features, real-time collaboration, and payment systems behind them.
-
-- ⚡ Cut API latency **35%** across 40+ Express REST endpoints
-- 📈 Raised Lighthouse **62 → 89** (3.8s → 2.1s initial load)
-- 💳 **2,000+ monthly transactions** via Stripe, PayPal, and Razorpay with webhook-driven order lifecycles
-- 🔁 Led a live **JS → TypeScript** migration across web *and* mobile
-- 🏗️ Cut team build times **60%** (CRA → Vite)
+- ⚡ Cut average API response time **35%** across **40+ production endpoints** through SQL query and index optimization and a Redis caching layer
+- 💳 Delivered payment infrastructure across **3 gateways** — Stripe, PayPal, and Razorpay — for an eCommerce platform processing **2,000+ transactions per month**
+- 🔁 Led a platform-wide **TypeScript migration** and set the shared API-contract standard adopted by **3 client applications**; cut frontend build times **60%+** and lifted Lighthouse **62 → 89**
 
 ### Stack
 
-**Languages** · TypeScript · JavaScript · Golang · Python · SQL
-**Frontend** · React · React Native · Next.js (App Router · RSC) · Tailwind CSS
-**Backend** · Node.js · Express · Golang · Gin · REST · WebSockets
-**Data** · PostgreSQL · pgvector · Redis · MongoDB · MySQL
-**AI** · Vercel AI SDK · LangChain · Gemini · Groq · RAG · semantic search · tool calling
-**Cloud** · AWS · Docker · Nginx · PM2 · GitHub Actions CI/CD
+**Languages** · TypeScript · JavaScript · Python · Golang · SQL
+**Backend** · Node.js · Express.js · FastAPI · Gin · REST · WebSockets · JWT / OAuth / RBAC · Redis Pub/Sub
+**Data** · PostgreSQL · MySQL · MongoDB · Redis · SQLite · pgvector · Sequelize · GORM
+**Cloud & DevOps** · AWS (EC2 · S3 · IAM · CloudWatch) · Docker · GitHub Actions CI/CD · Nginx · PM2 · Linux/VPS
+**Architecture** · Clean Architecture · Distributed & real-time systems · Horizontal scaling · Idempotency & fault tolerance
+**Frontend & mobile** · React · Next.js (App Router) · React Native · TanStack Query · Tailwind CSS · Vite
+**AI / data** · Python ingestion pipelines · RAG · Embeddings · pgvector (HNSW) · Gemini · Groq · Ollama · LangChain · Tool calling
 
-### Selected work
+### Systems & cloud projects
+
+Self-built systems, owned end to end — architecture, backend, infrastructure, and client. Personal projects, no commercial users.
 
 | Project | What it is | Stack |
 |---|---|---|
-| **[AI Life Assistant](https://rinshad.dev/work/ai-life-assistant)** | Voice-first streaming AI copilot with tool-calling and live agent traces; RAG with sub-second HNSW retrieval | Next.js · Node.js · Gemini · pgvector |
-| **[Real-Time Collaboration Platform](https://rinshad.dev/work/realtime-collab-platform)** | Yjs CRDT editor with live presence and inline AI, fanned out via Redis Pub/Sub | Next.js · Yjs · WebSockets · Redis |
-| **[Cloud-Native IoT Analytics](https://rinshad.dev/work/iot-analytics-dashboard)** | Type-safe React client over 15+ Go REST APIs on Clean Architecture | React · Go · Gin · PostgreSQL · Docker |
-
-### Writing
-
-- [Streaming Is a UI Architecture, Not a Feature](https://rinshad.dev/blog/streaming-rag-copilot-nextjs) — partial states, pgvector + HNSW, and the cancel bug that taught me the most
-- [Next.js Performance Patterns I Use in Every Production App](https://rinshad.dev/blog/nextjs-performance-patterns)
+| **[Cloud-Native IoT Analytics Platform](https://rinshad-dev-portfolio.vercel.app/work/iot-analytics-dashboard)** | Golang backend on Clean Architecture ingesting high-frequency telemetry into indexed PostgreSQL time-series tables | Go · Gin · GORM · PostgreSQL · Redis · Docker Compose |
+| **[AI Life Assistant Super App](https://rinshad-dev-portfolio.vercel.app/work/ai-life-assistant)** | Node.js API for a voice-first assistant — streaming LLM responses, server-side tool calling, HNSW-indexed pgvector RAG | Node.js · TypeScript · Python · pgvector · Redis · Gemini |
+| **[Real-Time Collaboration Platform](https://rinshad-dev-portfolio.vercel.app/work/realtime-collab-platform)** | Stateless WebSocket fan-out on Redis Pub/Sub with Yjs CRDT sync, scaling horizontally without sticky sessions | Node.js · WebSockets · Redis Pub/Sub · Yjs · Playwright |
 
 ---
 
-📫 **rinshad803@gmail.com** · [LinkedIn](https://linkedin.com/in/mohd-rinshadmi) · [Portfolio](https://rinshad.dev)
+📫 **rinshad803@gmail.com** · [LinkedIn](https://linkedin.com/in/mohd-rinshadmi) · [Portfolio](https://rinshad-dev-portfolio.vercel.app)
 
 <!--
   ============================================================
@@ -72,22 +66,22 @@
   Pin these three on your profile, and for EACH repo set:
     - Description: one line matching the case-study tagline
     - Website field: the case study URL (adds a real backlink)
-    - Topics: nextjs, react, typescript, ai, rag, golang, etc.
+    - Topics: golang, nodejs, typescript, postgresql, redis, docker, etc.
 
-  1. ai-life-assistant
-     Desc:    Voice-first streaming AI copilot — tool calling, live agent
-              traces, RAG over pgvector with sub-second HNSW retrieval.
-     Website: https://rinshad.dev/work/ai-life-assistant
+  1. cloud-native-iot-dashboard
+     Desc:    Golang backend on Clean Architecture ingesting high-frequency
+              IoT telemetry — Gin, GORM, PostgreSQL, Redis, Docker Compose.
+     Website: https://rinshad-dev-portfolio.vercel.app/work/iot-analytics-dashboard
 
-  2. ai-real-time-collaboration
-     Desc:    Yjs CRDT collaborative editor with live presence and inline AI,
-              scaled across stateless servers via Redis Pub/Sub.
-     Website: https://rinshad.dev/work/realtime-collab-platform
+  2. ai-life-assistant
+     Desc:    Node.js API for a voice-first AI assistant — streaming LLM
+              responses, server-side tool calling, pgvector RAG.
+     Website: https://rinshad-dev-portfolio.vercel.app/work/ai-life-assistant
 
-  3. cloud-native-iot-dashboard
-     Desc:    Cloud-native IoT analytics — type-safe React client over 15+
-              Go/Gin REST APIs on Clean Architecture.
-     Website: https://rinshad.dev/work/iot-analytics-dashboard
+  3. ai-real-time-collaboration
+     Desc:    Stateless WebSocket fan-out on Redis Pub/Sub with Yjs CRDT sync —
+              horizontal scaling without sticky sessions.
+     Website: https://rinshad-dev-portfolio.vercel.app/work/realtime-collab-platform
 
   Each repo's README should open with a link back to its case study.
 -->

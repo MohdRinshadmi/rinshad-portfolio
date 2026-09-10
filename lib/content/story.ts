@@ -3,12 +3,13 @@
 
    The homepage reads as a short documentary about a production engineer: a
    cover, five chapters, an ending. Voice rules: first person, concrete, no
-   buzzwords, every claim résumé-backed or checkable in a linked repository.
-   Components render this verbatim — copy edits happen here, not in JSX.
+   buzzwords, every claim backed by the résumé
+   (public/MohdRinshad_FullStackEngineer_Resume.pdf) or checkable in a linked
+   repository. Components render this verbatim — copy edits happen here.
 
-   Positioning: Full-Stack Software Engineer, backend-heavy — backend, cloud,
-   AI/LLM and real-time systems lead; the React / Next.js / React Native
-   clients follow as the surfaces those APIs serve.
+   Positioning: Full-Stack Software Engineer who designs, ships, and operates
+   production systems end to end — backend, cloud, distributed systems and
+   AI/LLM lead; the React / Next.js / React Native clients follow.
    ========================================================================== */
 
 export const prologue = {
@@ -30,14 +31,14 @@ export const prologue = {
     name: "Rinshad",
     lines: ["full-stack", "software engineer"],
   },
-  /** WHAT — the four areas, in the order the work is weighted. */
-  focus: "Backend · Cloud · AI/LLM · Real-time systems",
+  /** WHAT — the areas, in the order the résumé headline weights them. */
+  focus: "Backend · Cloud · Distributed systems · AI/LLM",
   /** VALUE — one sentence, then the evidence behind it. */
-  value: "3+ years building production-grade backend, cloud, AI and real-time systems.",
+  value: "3+ years designing, shipping and operating production systems end to end.",
   support:
-    "Designing, shipping and operating REST APIs, relational schemas and containerized services on AWS — plus Go services, Python RAG pipelines and WebSocket systems.",
-  /** TECHNOLOGY — the six a recruiter searches for first. */
-  stack: ["TypeScript", "Node.js", "Python", "Go", "PostgreSQL", "AWS"],
+    "REST APIs, MySQL data layers and payment infrastructure on AWS, the React and React Native clients that consume them — and self-built distributed systems in Go, Python and pgvector.",
+  /** TECHNOLOGY — the résumé headline's stack. */
+  stack: ["TypeScript", "Node.js", "Python", "Go", "React Native", "AWS", "Docker"],
   cta: {
     work: { label: "View projects", href: "/work" },
     resume: { label: "Download résumé" },
@@ -85,7 +86,9 @@ export const chapterProduction = {
   title: "In Production",
   /** Scrubbed word by word — the chapter's one long sentence. */
   intro:
-    "Most of what I've built is invisible: REST endpoints, schemas with foreign keys that hold, payment webhooks that survive a retry, containers that come back up on their own. People only notice it when it isn't there.",
+    "Most of what I own is invisible: endpoints, schemas with foreign keys that hold, payment webhooks that survive a retry, releases that go out with zero downtime. People only notice it when it isn't there.",
+  achievementsLabel: "Key achievements",
+  alsoLabel: "Also owned",
   quote: "Nobody thanks you for the index. They just stop complaining about the page.",
   more: { label: "Full experience & education", href: "/about#experience" },
 } as const;
@@ -111,9 +114,9 @@ export const chapterInterfaces = {
     },
     {
       step: "Architecture",
-      title: "Batch, deduplicate, retry.",
+      title: "Batch, write idempotently, retry.",
       body: "Devices buffer points locally and upload them in batches instead of one request per fix. The sync endpoint treats each batch as replayable, so a repeat lands as a no-op instead of a second row; failed batches back off and try again.",
-      detail: "Device buffer → batched upload → duplicate-safe write → acknowledged.",
+      detail: "Device buffer → batched upload → idempotent write → acknowledged.",
     },
     {
       step: "Implementation",
@@ -124,7 +127,7 @@ export const chapterInterfaces = {
     {
       step: "Result",
       title: "Outages stopped being incidents.",
-      body: "Tracking now survives prolonged network outages instead of losing the window, and the apps shipped to the Play Store and the App Store with background capture and local buffering.",
+      body: "Recovery now survives prolonged network outages instead of losing the window, and the React Native apps are shipped and maintained on Google Play and the App Store with background capture and local buffering.",
       detail: "Prolonged outage → complete history, rebuilt on reconnect.",
     },
   ],
@@ -135,7 +138,7 @@ export const chapterWork = {
   number: "03",
   title: "Selected Work",
   intro:
-    "Three self-initiated systems, each taken from schema to deployment — the problem, the architecture, the decision that mattered, and a result you can check in the code. Self-hosted on open-source infrastructure; no commercial users, and no claim of any.",
+    "Three self-built systems, each owned end to end — architecture, backend, infrastructure and client: the problem, the decision that mattered, and a result you can check in the code. Personal projects on self-hosted infrastructure, with no commercial users.",
 } as const;
 
 /* ── Chapter 04 — How I build production systems ───────────────────────── */
@@ -146,14 +149,15 @@ export const chapterSystems = {
     "A screen is the last mile of a much longer system. I work closest to the middle — the contracts, schemas, caches and containers where latency and reliability are decided long before anything renders.",
   closing: "Systems, not screens.",
   languages: ["TypeScript", "JavaScript", "Python", "Go", "SQL"],
-  quality: ["Jest", "Vitest", "Playwright", "Postman", "Sentry", "Structured logging"],
+  quality: ["Jest", "Vitest", "Playwright", "Postman", "End-to-end & API testing", "Sentry", "Debugging & profiling"],
+  practices: ["Technical ownership", "Architecture & design decisions", "Code review", "Technical documentation", "Agile/Scrum"],
   /** Client → AI, top to bottom. Every item is on the résumé's skills list. */
   layers: [
     {
       id: "client",
       label: "Client",
-      role: "Interfaces built against typed API contracts.",
-      tech: ["React", "Next.js", "React Native", "TanStack Query", "Tailwind CSS"],
+      role: "Interfaces built against a shared, typed API contract.",
+      tech: ["React", "Next.js", "React Native", "TanStack Query", "Tailwind CSS", "Web performance"],
     },
     {
       id: "api",
@@ -164,8 +168,8 @@ export const chapterSystems = {
     {
       id: "realtime",
       label: "Real-time & events",
-      role: "Messages that fan out across instances and survive a retry.",
-      tech: ["WebSockets", "Redis Pub/Sub", "Webhooks", "Background jobs"],
+      role: "Events that fan out across instances and survive a retry.",
+      tech: ["WebSockets", "Redis Pub/Sub", "Webhooks", "Background jobs", "Idempotency", "Horizontal scaling"],
     },
     {
       id: "data",
@@ -176,8 +180,16 @@ export const chapterSystems = {
     {
       id: "infra",
       label: "Cloud & infrastructure",
-      role: "Containers that deploy, restart and report on their own.",
-      tech: ["AWS (EC2 · S3 · IAM · CloudWatch)", "Docker", "GitHub Actions CI/CD", "Nginx", "PM2", "Linux"],
+      role: "Services that deploy with zero downtime, then restart and report on their own.",
+      tech: [
+        "AWS (EC2 · S3 · IAM · CloudWatch)",
+        "Docker",
+        "GitHub Actions CI/CD",
+        "Nginx (load balancing · SSL/TLS)",
+        "PM2",
+        "Linux/VPS",
+        "Observability & alerting",
+      ],
     },
     {
       id: "ai",
@@ -200,19 +212,19 @@ export const chapterPrinciples = {
     },
     {
       statement: "Read the query plan first.",
-      gloss: "35% of average response time came off an API without anyone provisioning a bigger box.",
+      gloss: "35% came off average response time across 40+ endpoints — from indexes and a cache, not a bigger box.",
     },
     {
       statement: "Design for the retry.",
-      gloss: "Assume every request arrives twice and none of them are in order. Then it doesn't matter.",
+      gloss: "Assume every request arrives twice and none of them are in order. Make the write idempotent and it doesn't matter.",
     },
     {
       statement: "Keep the boundaries honest.",
       gloss: "Handlers know nothing about the ORM. Services know nothing about HTTP. That is the whole trick.",
     },
     {
-      statement: "Ship it and watch it.",
-      gloss: "Production is the only honest reviewer. Get there early, log structurally, listen hard.",
+      statement: "Own it in production.",
+      gloss: "Production is the only honest reviewer. Ship with zero downtime, log structurally, watch the alerts.",
     },
   ],
 } as const;

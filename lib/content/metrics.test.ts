@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { splitMetrics } from "./metrics";
-import { experience } from "./profile";
+import { experience, keyAchievements } from "./profile";
 
 const metricsOf = (text: string) =>
   splitMetrics(text)
@@ -81,7 +81,12 @@ describe("splitMetrics", () => {
 });
 
 describe("the résumé lines it actually runs on", () => {
-  const achievements = experience.flatMap((role) => role.achievements);
+  // Since the upgraded résumé, the headline numbers live in the Key
+  // Achievements (lead + detail), which MetricText renders too.
+  const achievements = [
+    ...experience.flatMap((role) => role.achievements),
+    ...keyAchievements.flatMap((item) => [item.lead, item.detail]),
+  ];
 
   it("is lossless over every achievement on the site", () => {
     for (const line of achievements) {

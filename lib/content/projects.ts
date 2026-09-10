@@ -1,11 +1,11 @@
 import type { Project } from "../types";
 
 /* ============================================================================
-   PROJECTS — the résumé's three portfolio projects, in résumé order and with
-   its framing: backend first, client second. Honesty rule from the PDF:
-   "Self-initiated projects on self-hosted, open-source infrastructure
-   (PostgreSQL, Redis, Docker); no commercial users." Nothing here claims
-   traffic, revenue, or users.
+   PROJECTS — the résumé's three "Systems & Cloud Projects", in résumé order
+   and with its framing: self-built systems owned end to end — architecture,
+   backend, infrastructure, and client. The upgraded résumé no longer carries
+   the "no commercial users" line, but the site keeps saying it: these are
+   personal projects, and nothing here may claim traffic, revenue, or users.
 
    Beyond the résumé, a detail is allowed only if the linked repository's own
    manifests show it (go.mod, package.json, pyproject.toml, docker-compose).
@@ -17,10 +17,10 @@ import type { Project } from "../types";
    instances. Re-check before adding anything else.
    ========================================================================== */
 
-/** Rendered on /work and the homepage — the résumé's own disclaimer. Keep it
-    visible: it is what makes every claim below credible. */
+/** Rendered on /work. Keep it visible: it is what makes every claim below
+    credible. */
 export const workDisclaimer =
-  "Self-initiated projects on self-hosted, open-source infrastructure (PostgreSQL, Redis, Docker) — no commercial users. Source for all three is on GitHub.";
+  "Self-built systems, owned end to end on self-hosted, open-source infrastructure (PostgreSQL, Redis, Docker). Personal projects — no commercial users. Source for all three is on GitHub.";
 
 export const projects: Project[] = [
   {
@@ -42,7 +42,7 @@ export const projects: Project[] = [
     approach:
       "Lead with architecture. Clean Architecture on the Go side — handlers know nothing about GORM, services know nothing about HTTP, and dependencies are injected at the boundary. A monorepo splitting backend, frontend, and infrastructure so each can move independently.",
     solution:
-      "Built a Golang backend on Clean Architecture with repository and service-layer separation and dependency injection, in a monorepo splitting backend, frontend, and infrastructure. Developed REST APIs and device-management services ingesting high-frequency telemetry with Gin, GORM, PostgreSQL, and Redis over indexed time-series tables. Containerized backend, database, and broker with Docker Compose, and built the React dashboard on TanStack Query and Zustand with type-safe API clients.",
+      "Architected a Golang backend on Clean Architecture — repository and service-layer separation with dependency injection, in a monorepo splitting backend, frontend, and infrastructure. Built REST APIs and device-management services ingesting high-frequency telemetry with Gin, GORM, PostgreSQL, and Redis over indexed time-series tables. Containerized backend, database, and broker with Docker Compose, and built the React dashboard on TanStack Query and Zustand with type-safe API clients.",
     architecture: {
       summary:
         "Devices push telemetry into Gin HTTP handlers, which stay thin — validation and routing only. A Clean-Architecture service layer holds the domain rules and receives its dependencies by injection; a GORM repository is the only thing that knows about storage, writing to indexed time-series tables in PostgreSQL with Redis in front for hot reads. Backend, database, and broker come up together under Docker Compose. The React dashboard reads through a type-safe API client on TanStack Query and Zustand.",
@@ -122,7 +122,7 @@ export const projects: Project[] = [
     approach:
       "Treat streaming as an API design constraint, not a UI trick. Keep tool execution server-side where credentials live. Push chunking and embedding into Python pipelines that run offline, so the request path only ever does a vector lookup.",
     solution:
-      "Built the Node.js API layer for a voice-first AI assistant — streaming LLM responses, speech-to-text and TTS orchestration, and server-side tool/function calling. Built Python data-ingestion pipelines and pgvector retrieval: chunking, embedding generation, and HNSW-indexed semantic search over thousands of documents. Secured the API with JWT refresh-token rotation and Redis rate limiting, and built the Next.js App Router client on the streaming endpoints.",
+      "Architected the Node.js API layer for a voice-first AI assistant — streaming LLM responses, speech-to-text and TTS orchestration, and server-side tool/function calling. Built Python data-ingestion pipelines and pgvector retrieval — chunking, embedding generation, and HNSW-indexed semantic search over thousands of documents. Secured the API with JWT refresh-token rotation and Redis rate limiting, and built the Next.js App Router client on the streaming endpoints.",
     architecture: {
       summary:
         "Speech enters the Node.js API, which owns JWT refresh-token rotation and Redis rate limiting before anything reaches a model. The API streams Gemini completions back token by token and executes tool/function calls server-side. Grounding comes from a RAG path built offline by Python ingestion pipelines — chunk, embed, store — and read online as an HNSW-indexed pgvector lookup over thousands of documents. The answer returns as text and as TTS audio; the Next.js App Router client renders the stream.",
@@ -202,7 +202,7 @@ export const projects: Project[] = [
     approach:
       "Take state out of the socket layer entirely — route by channel, fan out through Redis Pub/Sub, and let every instance be interchangeable. Push correctness down into CRDTs so convergence is a property of the data type rather than a lock protocol to babysit.",
     solution:
-      "Built a stateless WebSocket fan-out server with channel-based routing and Redis Pub/Sub, scaling horizontally without sticky sessions. Implemented CRDT document sync with Yjs for conflict-free convergence, plus presence signals and streaming LLM summarization gated by JWT/OAuth. Wrote end-to-end Playwright tests for multi-user editing, reconnection, and conflict resolution.",
+      "Architected a stateless WebSocket fan-out server with channel-based routing and Redis Pub/Sub, scaling horizontally without sticky sessions. Implemented CRDT document sync with Yjs for conflict-free convergence, plus presence signals and streaming LLM summarization gated by JWT/OAuth. Wrote end-to-end Playwright tests covering multi-user editing, reconnection, and conflict resolution.",
     architecture: {
       summary:
         "Clients connect to any instance — no affinity required. Each socket subscribes to channels, and Redis Pub/Sub carries every message to every instance holding a subscriber, so horizontal scaling needs no sticky sessions. Yjs CRDT updates travel those channels and converge conflict-free wherever they land; presence signals ride alongside. Streaming LLM summarization sits behind JWT/OAuth. Playwright exercises multi-user editing, reconnection, and conflict resolution end to end.",

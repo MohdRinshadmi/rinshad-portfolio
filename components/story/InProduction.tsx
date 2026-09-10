@@ -6,14 +6,16 @@ import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { MetricText } from "@/components/ui/MetricText";
 import { chapterProduction } from "@/lib/content/story";
-import { experience, HIGHLIGHT_INDICES } from "@/lib/content/profile";
+import { experience, HIGHLIGHT_INDICES, keyAchievements } from "@/lib/content/profile";
 import { siteConfig } from "@/lib/config/site";
+
+const LIST_LABEL = "font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary";
 
 /**
  * Chapter 01 — In Production. Professional experience on the homepage, where
- * a reviewer actually looks for it: the current role, the five bullets that
- * carry scale, money, reliability, infrastructure and delivery speed, and a
- * path to the full timeline and the résumé.
+ * a reviewer actually looks for it: the current role, the résumé's three key
+ * achievements (bold lead, then evidence), the bullets those don't already
+ * cover, and a path to the full timeline and the résumé.
  *
  * Server component; the scrubbed sentence and the reveals are the only islands.
  */
@@ -58,12 +60,20 @@ export function InProduction() {
             </header>
 
             <div>
-              <ul className="flex flex-col divide-y divide-border">
+              <h4 className={LIST_LABEL}>{chapterProduction.achievementsLabel}</h4>
+              <ul className="mt-3 flex flex-col divide-y divide-border">
+                {keyAchievements.map((item) => (
+                  <li key={item.lead} className="py-4 text-body-lg leading-relaxed text-text-secondary">
+                    <strong className="font-semibold text-text">{item.lead}</strong>{" "}
+                    <MetricText text={item.detail} />
+                  </li>
+                ))}
+              </ul>
+
+              <h4 className={`${LIST_LABEL} mt-8`}>{chapterProduction.alsoLabel}</h4>
+              <ul className="mt-3 flex flex-col divide-y divide-border">
                 {highlights.map((text) => (
-                  <li
-                    key={text}
-                    className="py-4 text-body-lg leading-relaxed text-text-secondary first:pt-0"
-                  >
+                  <li key={text} className="py-4 leading-relaxed text-text-secondary">
                     <MetricText text={text} />
                   </li>
                 ))}
@@ -89,7 +99,7 @@ export function InProduction() {
           </article>
         </Reveal>
 
-        <Reveal className="mt-16 sm:mt-24 lg:ml-[17rem] lg:pl-16">
+        <Reveal className="mt-16 sm:mt-24 lg:ml-68 lg:pl-16">
           <figure className="border-l-2 border-accent pl-6 sm:pl-8">
             <blockquote className="max-w-[30ch] font-serif text-h2 italic text-text">
               “{chapterProduction.quote}”

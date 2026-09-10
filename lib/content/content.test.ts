@@ -11,6 +11,7 @@ import {
   workProcess,
   about,
   HIGHLIGHT_INDICES,
+  keyAchievements,
 } from "./profile";
 import {
   chapterProduction,
@@ -247,6 +248,19 @@ describe("profile", () => {
 
   it("marks exactly one role current", () => {
     expect(experience.filter((r) => r.current)).toHaveLength(1);
+  });
+
+  it("carries the résumé's three key achievements, each with its evidence", () => {
+    expect(keyAchievements).toHaveLength(3);
+    for (const item of keyAchievements) {
+      expect(item.lead, "lead").toBeTruthy();
+      expect(item.detail.length, item.lead).toBeGreaterThan(40);
+    }
+    // The headline numbers must appear in the achievements as well as the strip.
+    const text = keyAchievements.map((a) => `${a.lead} ${a.detail}`).join(" ");
+    for (const fact of ["35%", "40+", "3 gateways", "2,000+", "3 client applications", "60%+", "62 to 89"]) {
+      expect(text, fact).toContain(fact);
+    }
   });
 
   it("points every homepage highlight at a real, distinct achievement", () => {

@@ -77,12 +77,12 @@ export const siteConfig = {
   title: "Mohammed Rinshad — Full-Stack Software Engineer | Backend, Cloud & AI",
   /** One line: footer, manifest, WebSite schema. */
   tagline:
-    "Full-stack software engineer building production backend, cloud, AI and real-time systems.",
+    "Full-stack software engineer designing, shipping and operating production systems end to end.",
   /** Meta description — kept under ~160 characters so search results don't truncate it. */
   description:
-    "Full-Stack Software Engineer in India with 3+ years of production Node.js and TypeScript APIs, PostgreSQL, AWS, and AI/RAG systems. Open to remote or relocation.",
-  /** Long form: Person schema, /about. */
-  bio: "Full-Stack Software Engineer with 3+ years building and running production REST APIs, relational schemas, and containerized services in Node.js, Express.js, and TypeScript on MySQL, Redis, Docker, and AWS. Backend-heavy, and hands-on with the clients those APIs serve: React, Next.js, and React Native. I designed 40+ Express endpoints that cut average API response time 35%, shipped webhook-driven Stripe, PayPal, and Razorpay lifecycles for a platform handling 2,000+ monthly transactions, and deployed containerized services behind Nginx and PM2 with GitHub Actions CI/CD. Additional backend work in Golang (Gin) and Python across self-directed projects on PostgreSQL, pgvector, and RAG pipelines. Based in Palakkad, Kerala, India — open to remote roles or relocation.",
+    "Full-Stack Software Engineer in India with 3+ years shipping production Node.js, TypeScript and AWS systems, plus Go, Python and RAG. Open to remote or relocation.",
+  /** Long form: Person schema, /about. Adapted from the résumé summary. */
+  bio: "Full-Stack Software Engineer with 3+ years designing, shipping, and operating production systems end to end — REST APIs, relational schemas, and containerized services in Node.js, Express.js, and TypeScript on MySQL, Redis, Docker, and AWS, together with the React, Next.js, and React Native clients that consume them. I cut average API response time 35% across 40+ production endpoints, delivered payment infrastructure across Stripe, PayPal, and Razorpay for a platform processing 2,000+ transactions a month, and led a platform-wide TypeScript migration whose shared API-contract standard was adopted by three client applications. I extend into Golang (Gin), Python, PostgreSQL, pgvector, and RAG pipelines through self-built distributed and real-time systems. Based in Palakkad, Kerala, India — open to remote roles or relocation.",
   location: "Palakkad, Kerala, India",
   locationShort: "Palakkad, IN",
   timezone: "IST · UTC+5:30",
