@@ -23,6 +23,8 @@ export interface PerfPoint {
 /** One node in the case-study architecture flow (client → realtime → AI → …). */
 export interface ArchNode {
   id: string;
+  /** short layer caption above the label, e.g. "API", "Retrieval" */
+  layer?: string;
   label: string;
   sub?: string;
   /** marks the critical path — rendered in accent */
@@ -63,6 +65,16 @@ export interface Project {
   performance: PerfPoint[];
   results: string[];
   lessons: string[];
+
+  /** The scannable card on the homepage deck and /work — one sentence each,
+      in the order a reviewer reads a design doc. Every `result` must be
+      checkable in the linked repository. */
+  card: {
+    purpose: string;
+    challenge: string;
+    decision: string;
+    result: string;
+  };
 
   /* — chips & stack — */
   tags: string[]; // short tech chips on the card (cap to 4 in UI)

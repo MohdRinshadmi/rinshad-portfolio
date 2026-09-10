@@ -15,7 +15,7 @@ export function Footer() {
   return (
     <footer className="border-t border-border bg-bg">
       <div className="container-page py-16 lg:py-20">
-        {/* Top: wordmark + availability ── nav + connect */}
+        {/* Top: wordmark + role + availability ── nav + connect */}
         <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex flex-col gap-5">
             <SiteLink
@@ -31,9 +31,10 @@ export function Footer() {
                 className="mb-1.5 size-2.5 rounded-full bg-accent transition-transform duration-300 group-hover:scale-125"
               />
             </SiteLink>
-            <p className="max-w-[42ch] text-body-lg text-text-secondary">
-              {siteConfig.tagline}
+            <p className="font-mono text-xs uppercase tracking-[0.14em] text-text-tertiary">
+              {siteConfig.role} · {siteConfig.location}
             </p>
+            <p className="max-w-[42ch] text-body-lg text-text-secondary">{siteConfig.tagline}</p>
             <Badge live tone="positive" className="w-fit">
               {siteConfig.availability}
             </Badge>
@@ -41,10 +42,8 @@ export function Footer() {
 
           <div className="flex flex-col gap-10 sm:flex-row sm:gap-16 lg:gap-24">
             <nav aria-label="Footer">
-              <h2 className="mb-4 font-mono text-eyebrow uppercase text-text-tertiary">
-                Navigate
-              </h2>
-              <ul className="flex flex-col gap-3">
+              <h2 className="mb-4 font-mono text-eyebrow uppercase text-text-tertiary">Navigate</h2>
+              <ul className="grid grid-cols-2 gap-x-10 gap-y-1 sm:grid-cols-1">
                 {footerLinks.map((link) => (
                   <li key={link.href}>
                     <SiteLink
@@ -59,25 +58,21 @@ export function Footer() {
             </nav>
 
             <div>
-              <h2 className="mb-4 font-mono text-eyebrow uppercase text-text-tertiary">
-                Connect
-              </h2>
-              <div className="flex flex-col gap-5">
+              <h2 className="mb-4 font-mono text-eyebrow uppercase text-text-tertiary">Connect</h2>
+              <div className="flex flex-col gap-2">
                 <a
                   href={`mailto:${siteConfig.email}`}
-                  className="inline-flex w-fit font-mono text-sm text-text-secondary underline-offset-4 transition-colors duration-200 hover:text-accent hover:underline"
+                  className="inline-flex min-h-11 w-fit items-center font-mono text-sm text-text-secondary underline-offset-4 transition-colors duration-200 hover:text-accent-text hover:underline"
                 >
                   {siteConfig.email}
                 </a>
-                {/* The résumé used to be reachable only from the mobile menu and
-                    the foot of the homepage — i.e. never, on desktop. It is the
-                    single action recruiters come here to take, so it lives in
-                    the footer of every page. */}
+                {/* The résumé is the single action recruiters come here to
+                    take, so it lives in the footer of every page. */}
                 <a
                   href={siteConfig.resumeUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="group inline-flex w-fit items-center gap-2 font-mono text-sm text-text-secondary underline-offset-4 transition-colors duration-200 hover:text-accent hover:underline"
+                  className="group inline-flex min-h-11 w-fit items-center gap-2 font-mono text-sm text-text-secondary underline-offset-4 transition-colors duration-200 hover:text-accent-text hover:underline"
                 >
                   Résumé
                   <ArrowUpRight
@@ -86,14 +81,14 @@ export function Footer() {
                   />
                   <span className="sr-only">(PDF, opens in a new tab)</span>
                 </a>
-                <ul className="flex items-center gap-2">
+                <ul className="mt-3 flex items-center gap-2">
                   {socials.map(({ name, href, Icon }) => (
                     <li key={name}>
                       <a
                         href={href}
                         target="_blank"
                         rel="noreferrer"
-                        aria-label={name}
+                        aria-label={`${name} (opens in a new tab)`}
                         className="inline-flex size-11 items-center justify-center rounded-full border border-border bg-surface/60 text-text-secondary transition-colors duration-200 hover:border-accent/40 hover:text-text"
                       >
                         <Icon className="size-4.5" />

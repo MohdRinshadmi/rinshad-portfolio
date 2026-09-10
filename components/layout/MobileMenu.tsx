@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -9,7 +9,7 @@ import {
   useReducedMotion,
   type Variants,
 } from "framer-motion";
-import { X, ArrowUpRight } from "lucide-react";
+import { X, ArrowUpRight, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { siteConfig, navLinks } from "@/lib/config/site";
 import { EASE, DURATION } from "@/lib/animation";
@@ -42,10 +42,26 @@ const footerItem: Variants = {
   exit: { opacity: 0, transition: { duration: DURATION.fast, ease: EASE.out } },
 };
 
+// With reduced motion, swap the y-transform variants for opacity-only.
+const reduced: Variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+  exit: { opacity: 0 },
+};
+
+const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/**
+ * The phone navigation overlay — a real modal dialog. On open, focus moves to
+ * the close button and Tab cycles inside the menu; Escape or a tap on the
+ * backdrop closes it, and focus returns to whatever opened it.
+ */
 export function MobileMenu({ open, onClose }: MobileMenuProps) {
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
   const navClick = useNavClick();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   /* Close first, then let the shared handler decide: a different route
      navigates as usual, the current one glides to the top and replays. */
@@ -54,12 +70,32 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
     navClick(event, href);
   };
 
-  // Close on Escape + lock body scroll while open.
+  // Focus management, Escape, and body scroll lock while open.
   useEffect(() => {
     if (!open) return;
 
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    closeRef.current?.focus();
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (event.key !== "Tab" || !dialogRef.current) return;
+
+      const focusable = Array.from(dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE));
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     window.addEventListener("keydown", onKey);
 
@@ -72,24 +108,19 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = overflow;
       document.body.style.paddingRight = paddingRight;
+      opener?.focus();
     };
   }, [open, onClose]);
 
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(`${href}/`);
 
-  // With reduced motion, swap the y-transform variants for opacity-only.
-  const reduced: Variants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 },
-    exit: { opacity: 0 },
-  };
-
   return (
     <AnimatePresence>
       {open && (
         <motion.div
           key="mobile-menu"
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-label="Site menu"
@@ -114,10 +145,11 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
               <span className="ml-0.5 text-accent">.</span>
             </Link>
             <button
+              ref={closeRef}
               type="button"
               onClick={onClose}
               aria-label="Close menu"
-              className="-mr-1 inline-flex h-11 w-11 items-center justify-center rounded-md text-text-secondary transition-colors hover:text-text"
+              className="-mr-1 inline-flex size-11 items-center justify-center rounded-full text-text-secondary transition-colors hover:text-text"
             >
               <X size={22} strokeWidth={1.75} aria-hidden="true" />
             </button>
@@ -140,7 +172,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
                         aria-current={active ? "page" : undefined}
                         className={cn(
                           "group flex items-baseline gap-3 py-1 font-display text-display-lg leading-none tracking-tight transition-colors",
-                          active ? "text-text" : "text-text-secondary hover:text-text"
+                          active ? "text-text" : "text-text-secondary hover:text-text",
                         )}
                       >
                         <span>{link.label}</span>
@@ -158,18 +190,28 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
             </ul>
           </nav>
 
-          {/* Bottom — socials, résumé, primary CTA */}
+          {/* Bottom — primary CTA, résumé, socials */}
           <motion.div
             variants={reduceMotion ? reduced : footerItem}
             className="container-page shrink-0 space-y-5 border-t border-border py-8"
           >
-            <Link
-              href="/contact"
-              onClick={(event) => onNavClick(event, "/contact")}
-              className="flex h-12 w-full items-center justify-center rounded-full bg-accent px-5 text-sm font-medium text-accent-fg shadow-glow transition-colors hover:bg-accent-hover"
-            >
-              Let&apos;s talk
-            </Link>
+            <div className="grid grid-cols-2 gap-3">
+              <Link
+                href="/contact"
+                onClick={(event) => onNavClick(event, "/contact")}
+                className="flex h-12 items-center justify-center rounded-full bg-text px-5 text-sm font-medium text-bg transition-colors hover:bg-accent"
+              >
+                Let&apos;s talk
+              </Link>
+              <a
+                href={siteConfig.resumeUrl}
+                download={siteConfig.resumeFileName}
+                className="flex h-12 items-center justify-center gap-2 rounded-full border border-border-strong px-5 text-sm font-medium text-text transition-colors hover:border-text/35"
+              >
+                Résumé
+                <Download size={15} strokeWidth={1.75} aria-hidden="true" />
+              </a>
+            </div>
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -177,29 +219,27 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
                   href={siteConfig.social.github}
                   target="_blank"
                   rel="noreferrer"
-                  aria-label="GitHub"
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border text-text-secondary transition-colors hover:border-border-strong hover:text-text"
+                  aria-label="GitHub (opens in a new tab)"
+                  className="inline-flex size-11 items-center justify-center rounded-full border border-border text-text-secondary transition-colors hover:border-border-strong hover:text-text"
                 >
-                  <GithubIcon className="h-5 w-5" />
+                  <GithubIcon className="size-5" />
                 </a>
                 <a
                   href={siteConfig.social.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  aria-label="LinkedIn"
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border text-text-secondary transition-colors hover:border-border-strong hover:text-text"
+                  aria-label="LinkedIn (opens in a new tab)"
+                  className="inline-flex size-11 items-center justify-center rounded-full border border-border text-text-secondary transition-colors hover:border-border-strong hover:text-text"
                 >
-                  <LinkedinIcon className="h-5 w-5" />
+                  <LinkedinIcon className="size-5" />
                 </a>
               </div>
 
               <a
-                href={siteConfig.resumeUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full px-2 py-2 font-mono text-eyebrow uppercase text-text-secondary transition-colors hover:text-text"
+                href={`mailto:${siteConfig.email}`}
+                className="inline-flex min-h-11 items-center gap-1.5 font-mono text-xs text-text-secondary transition-colors hover:text-text"
               >
-                Résumé
+                {siteConfig.email}
                 <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden="true" />
               </a>
             </div>

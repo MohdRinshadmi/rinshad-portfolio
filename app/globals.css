@@ -151,11 +151,18 @@ body {
   color: #0a0a0a;
 }
 
-/* Keyboard focus only — ember ring offset from the paper */
+/* Keyboard focus only — terracotta ring offset from the paper.
+   No `border-radius` here: this rule is unlayered, so it beat every
+   `rounded-full` utility and squared off each pill the moment it took focus.
+   Modern outlines already follow the element's own radius. */
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-accent-text);
   outline-offset: 3px;
-  border-radius: 4px;
+}
+
+/* Hash links land below the fixed header rather than under it. */
+html {
+  scroll-padding-top: 5.5rem;
 }
 
 /* Scrollbar */
@@ -356,6 +363,9 @@ body {
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    /* Without this a `backwards`-filled entrance still sits hidden for its
+       whole delay — the hero would appear in pieces over most of a second. */
+    animation-delay: 0s !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
@@ -398,4 +408,98 @@ body {
 .hero-portrait-reveal {
   /* expo-out (EASE.emphasis) — the site's large-entrance curve. */
   animation: hero-portrait-reveal 1.15s cubic-bezier(0.22, 1, 0.36, 1) 0.15s backwards;
+}
+
+/* ============================================================================
+   HERO + HEADER ENTRANCE — CSS for the same reason as the portrait above.
+
+   Below `lg` the introduction is the LCP element (the portrait sits under it),
+   and the header carries the site's primary actions. A Framer `initial` state
+   would ship both clipped or transparent in the server HTML and hold them
+   there until React hydrates. These start as soon as the stylesheet parses.
+   Per-element stagger comes from `--hero-delay`; `backwards` fill covers the
+   delay and then lets `transform` fall back to none.
+   ========================================================================== */
+@keyframes hero-rise {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes hero-rule {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes nav-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes scroll-cue {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  45% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 0;
+  }
+}
+
+/* A masthead line rises out of its own clip. The bottom padding is headroom
+   for descenders, which a tight clip would otherwise shave. */
+.hero-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.hero-line > span {
+  display: block;
+  animation: hero-rise 0.78s cubic-bezier(0.22, 1, 0.36, 1) var(--hero-delay, 0s) backwards;
+}
+.hero-fade {
+  animation: hero-fade 0.78s cubic-bezier(0.16, 1, 0.3, 1) var(--hero-delay, 0s) backwards;
+}
+.hero-rule {
+  animation: hero-rule 0.78s cubic-bezier(0.16, 1, 0.3, 1) var(--hero-delay, 0s) backwards;
+}
+.nav-drop {
+  animation: nav-drop 0.3s cubic-bezier(0.16, 1, 0.3, 1) var(--hero-delay, 0s) backwards;
+}
+.scroll-cue-line {
+  animation: scroll-cue 2.6s cubic-bezier(0.65, 0, 0.35, 1) 1.6s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-line {
+    overflow: visible;
+  }
+  .scroll-cue-line {
+    animation: none;
+  }
 }

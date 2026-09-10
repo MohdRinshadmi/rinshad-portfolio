@@ -43,7 +43,12 @@ export function ScrubText({ text, className, as: Tag = "p" }: ScrubTextProps) {
   }
 
   return (
-    <Tag ref={ref} className={className} aria-label={text}>
+    // The visible words are aria-hidden, so the sentence reaches assistive tech
+    // through a single sr-only copy. `aria-label` used to carry it, but a <p>
+    // (role=paragraph) prohibits an accessible name — screen readers ignored
+    // the label and announced nothing at all.
+    <Tag ref={ref} className={className}>
+      <span className="sr-only">{text}</span>
       {words.map((word, i) => (
         <Word
           key={`${word}-${i}`}

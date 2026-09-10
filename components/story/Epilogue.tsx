@@ -1,76 +1,105 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Download } from "lucide-react";
 import { Reveal } from "@/components/motion/Reveal";
 import { ScrubText } from "@/components/motion/ScrubText";
 import { epilogue } from "@/lib/content/story";
 import { siteConfig } from "@/lib/config/site";
 
+interface Channel {
+  label: string;
+  value: string;
+  href: string;
+  external?: boolean;
+  download?: string;
+}
+
+const ROW =
+  "grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 py-5 sm:grid-cols-[7rem_1fr_auto] sm:py-6";
+const LABEL = "font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary";
+const VALUE =
+  "col-start-1 min-w-0 break-words font-display text-xl font-medium text-text sm:col-start-2 sm:row-start-1 sm:text-h3";
+const TRAILING = "col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1";
+
 /**
- * Epilogue — the documentary's ending, not a contact form. A closing statement
- * set large in serif, a quiet invitation, then four elegant hairline rows:
- * email, LinkedIn, GitHub, résumé.
+ * Epilogue — the ending, and the homepage's contact section. A direct line to
+ * whoever is hiring, availability and relocation in one sentence, then a row
+ * per channel plus where (and in which time zone) I am.
+ *
+ * On phones each row stacks its label above the value, so an email address is
+ * never truncated to "rinshad803@gm…".
  */
 export function Epilogue() {
-  const channels = [
+  const channels: Channel[] = [
     { label: "Email", value: siteConfig.email, href: `mailto:${siteConfig.email}` },
-    { label: "LinkedIn", value: "in/mohd-rinshadmi", href: siteConfig.social.linkedin },
-    { label: "GitHub", value: "@MohdRinshadmi", href: siteConfig.social.github },
-    { label: "Résumé", value: "PDF · two pages", href: siteConfig.resumeUrl },
+    { label: "LinkedIn", value: "in/mohd-rinshadmi", href: siteConfig.social.linkedin, external: true },
+    { label: "GitHub", value: "@MohdRinshadmi", href: siteConfig.social.github, external: true },
+    {
+      label: "Résumé",
+      value: "Download PDF · 2 pages",
+      href: siteConfig.resumeUrl,
+      download: siteConfig.resumeFileName,
+    },
   ];
 
   return (
-    <section id="epilogue" className="relative section-py overflow-hidden">
+    <section id="contact" className="relative section-py overflow-hidden">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-aurora" />
 
       <div className="container-page">
         <div className="mx-auto max-w-3xl">
           <Reveal className="text-center">
             <span className="font-grotesk text-eyebrow font-medium uppercase text-text-tertiary">
-              Epilogue
+              {epilogue.eyebrow}
             </span>
           </Reveal>
 
           <ScrubText
             as="h2"
             text={epilogue.statement}
-            className="mt-8 text-center font-serif text-display-xl"
+            className="mt-8 text-balance text-center font-serif text-display-xl"
           />
 
           <Reveal className="mt-8 text-center" delay={0.1}>
-            <p className="mx-auto max-w-[44ch] text-body-lg text-text-secondary">
-              {epilogue.invitation}
-            </p>
-            <p className="mt-7 inline-flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-text-tertiary">
+            <p className="mx-auto max-w-[50ch] text-body-lg text-text-secondary">{epilogue.invitation}</p>
+            <p className="mt-7 inline-flex flex-wrap items-center justify-center gap-x-2.5 gap-y-2 font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary">
               <span aria-hidden="true" className="size-1.5 rounded-full bg-positive animate-pulse-dot" />
               {siteConfig.availability} · {siteConfig.responsePromise}
             </p>
           </Reveal>
 
-          {/* ── Channels ────────────────────────────────────────────── */}
-          <Reveal className="mt-16" delay={0.15}>
+          <Reveal className="mt-14 sm:mt-16" delay={0.15}>
             <ul className="border-t border-border-strong">
-              {channels.map((channel) => {
-                const external = /^https?:/i.test(channel.href);
-                return (
-                  <li key={channel.label} className="border-b border-border">
-                    <a
-                      href={channel.href}
-                      {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
-                      className="group flex items-baseline justify-between gap-6 py-6 transition-colors duration-200"
-                    >
-                      <span className="w-24 shrink-0 font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary">
-                        {channel.label}
-                      </span>
-                      <span className="flex-1 truncate font-display text-h3 font-medium text-text transition-colors duration-200 group-hover:text-accent">
-                        {channel.value}
-                      </span>
+              {channels.map((channel) => (
+                <li key={channel.label} className="border-b border-border">
+                  <a
+                    href={channel.href}
+                    {...(channel.external ? { target: "_blank", rel: "noreferrer" } : {})}
+                    {...(channel.download ? { download: channel.download } : {})}
+                    className={`group ${ROW}`}
+                  >
+                    <span className={LABEL}>{channel.label}</span>
+                    <span className={`${VALUE} transition-colors duration-200 group-hover:text-accent-text`}>
+                      {channel.value}
+                    </span>
+                    {channel.download ? (
+                      <Download
+                        aria-hidden="true"
+                        className={`${TRAILING} size-5 text-text-tertiary transition-[transform,color] duration-200 group-hover:translate-y-0.5 group-hover:text-accent`}
+                      />
+                    ) : (
                       <ArrowUpRight
                         aria-hidden="true"
-                        className="size-5 shrink-0 self-center text-text-tertiary transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
+                        className={`${TRAILING} size-5 text-text-tertiary transition-[transform,color] duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent`}
                       />
-                    </a>
-                  </li>
-                );
-              })}
+                    )}
+                    {channel.external ? <span className="sr-only"> (opens in a new tab)</span> : null}
+                  </a>
+                </li>
+              ))}
+              <li className={`border-b border-border ${ROW}`}>
+                <span className={LABEL}>Based in</span>
+                <span className={VALUE}>{siteConfig.location}</span>
+                <span className={`${TRAILING} font-mono text-xs text-text-tertiary`}>{siteConfig.timezone}</span>
+              </li>
             </ul>
           </Reveal>
         </div>

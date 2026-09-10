@@ -1,8 +1,9 @@
 import { Prologue } from "@/components/story/Prologue";
-import { TheBuilder } from "@/components/story/TheBuilder";
+import { ProofStrip } from "@/components/story/ProofStrip";
+import { InProduction } from "@/components/story/InProduction";
 import { BehindTheInterfaces } from "@/components/story/BehindTheInterfaces";
-import { SystemsCanvas } from "@/components/story/SystemsCanvas";
 import { WorkStories } from "@/components/story/WorkStories";
+import { HowIBuild } from "@/components/story/HowIBuild";
 import { Principles } from "@/components/story/Principles";
 import { FAQ } from "@/components/story/FAQ";
 import { Epilogue } from "@/components/story/Epilogue";
@@ -12,11 +13,12 @@ import { faqs } from "@/lib/content/faq";
 import { siteConfig } from "@/lib/config/site";
 
 /**
- * Homepage — "an engineering documentary" in five chapters.
- * Prologue (the statement + living artifact) → The Builder → Behind the
- * Interfaces (horizontal case study) → Systems Thinking (drawn architecture)
- * → Selected Work (magazine features) → Principles → Epilogue (the ending).
- * The Builder closes on the full-bleed proof band (count-up stats).
+ * Homepage — an engineering documentary, ordered for a fifteen-second read.
+ *
+ * Cover (who · what · stack · three actions) → proof strip → 01 In Production
+ * (experience) → 02 Behind the Interfaces (one production system, end to end)
+ * → 03 Selected Work → 04 How I build production systems (architecture and
+ * skills) → 05 Principles → FAQ → Epilogue (contact).
  */
 /** The homepage is the canonical ProfilePage for the Person entity, and it
     carries the FAQPage. Both reference the site-wide graph by @id. */
@@ -24,7 +26,7 @@ const homeGraph = graph(
   webPage({
     path: "/",
     title: `${siteConfig.fullName} — ${siteConfig.role}`,
-    description: siteConfig.bio,
+    description: siteConfig.description,
     type: "ProfilePage",
     hasBreadcrumb: false,
     mainEntityId: `${siteConfig.url}/#person`,
@@ -38,10 +40,11 @@ export default function Home() {
     <>
       <JsonLd data={homeGraph} />
       <Prologue />
-      <TheBuilder />
+      <ProofStrip />
+      <InProduction />
       <BehindTheInterfaces />
-      <SystemsCanvas />
       <WorkStories />
+      <HowIBuild />
       <Principles />
       <FAQ />
       <Epilogue />

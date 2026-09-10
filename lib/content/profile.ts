@@ -7,16 +7,23 @@ import type {
 } from "../types";
 
 /* ============================================================================
-   PROOF STRIP — count-up facts (all résumé-backed).
-   Backend-first ordering: endpoints and latency lead, delivery follows.
+   PROOF STRIP — the band under the hero. Every number is on the résumé
+   (public/MohammedRinshadMI_FullStack.pdf); nothing here may be rounded up.
    ========================================================================== */
 export const proofStats: ProofStat[] = [
-  { to: 40, suffix: "+", label: "REST endpoints designed" },
-  { to: 35, suffix: "%", label: "Lower API response time" },
-  { to: 2000, suffix: "+", label: "Monthly transactions processed" },
+  { to: 3, suffix: "+", label: "Years shipping production software" },
+  { to: 40, suffix: "+", label: "REST endpoints designed & built" },
+  { to: 35, suffix: "%", label: "Lower average API response time" },
+  { to: 2000, suffix: "+", label: "Monthly payment transactions handled" },
   { to: 60, suffix: "%+", label: "Faster front-end builds" },
-  { to: 3, suffix: "+", label: "Years shipping production" },
+  { value: "AWS · Docker · CI/CD", label: "Deployed and monitored in production" },
 ];
+
+/** The homepage's "In production" chapter shows the bullets a reviewer scans
+    for first — scale, money, reliability, infrastructure, delivery speed — as
+    indices into the current role's `achievements`, so no sentence is ever
+    written twice. Guarded by lib/content/content.test.ts. */
+export const HIGHLIGHT_INDICES = [0, 2, 4, 5, 7] as const;
 
 /* ============================================================================
    EXPERIENCE & EDUCATION — mirrors the résumé bullet-for-bullet.

@@ -1,8 +1,8 @@
 /* ============================================================================
    SITE CONFIG — identity, contact channels, navigation.
-   Positioning: Full-Stack Software Engineer, backend-heavy (Node.js,
-   Express.js, TypeScript, Python) and hands-on with the clients those APIs
-   serve (React, Next.js, React Native). AI/LLM integration is the third rail.
+   Positioning: Full-Stack Software Engineer, backend-heavy — backend, cloud,
+   AI/LLM and real-time systems, hands-on with the clients those APIs serve
+   (React, Next.js, React Native).
    Voice: confident, concrete, senior. Lead with verbs and numbers.
    Every claim is evidence-backed by the résumé (public/MohammedRinshadMI_FullStack.pdf).
    Location note: the site targets Palakkad, Kerala by deliberate SEO decision —
@@ -72,16 +72,25 @@ export const siteConfig = {
   name: "Rinshad",
   fullName: "Mohammed Rinshad M I",
   role: "Full-Stack Software Engineer",
+  /** One line: footer, manifest, WebSite schema. */
   tagline:
-    "I build and run production REST APIs, relational schemas, and containerized services — Node.js, Express.js, and TypeScript.",
-  bio: "Full-Stack Software Engineer with 3+ years building and running production REST APIs, relational schemas, and containerized services in Node.js, Express.js, and TypeScript on MySQL, Redis, Docker, and AWS. Backend-heavy, and hands-on with the clients those APIs serve: React, Next.js, and React Native. I designed 40+ Express endpoints that cut average API response time 35%, shipped webhook-driven Stripe, PayPal, and Razorpay lifecycles for a platform handling 2,000+ monthly transactions, and deployed containerized services behind Nginx and PM2 with GitHub Actions CI/CD. Additional backend work in Golang (Gin) and Python across self-directed projects on PostgreSQL, pgvector, and RAG pipelines. Based in Palakkad, Kerala, India — available remotely across India and worldwide.",
+    "Full-stack software engineer building production backend, cloud, AI and real-time systems.",
+  /** Meta description — kept under ~160 characters so search results don't truncate it. */
+  description:
+    "Full-Stack Software Engineer in India with 3+ years of production Node.js and TypeScript APIs, PostgreSQL, AWS, and AI/RAG systems. Open to remote or relocation.",
+  /** Long form: Person schema, /about. */
+  bio: "Full-Stack Software Engineer with 3+ years building and running production REST APIs, relational schemas, and containerized services in Node.js, Express.js, and TypeScript on MySQL, Redis, Docker, and AWS. Backend-heavy, and hands-on with the clients those APIs serve: React, Next.js, and React Native. I designed 40+ Express endpoints that cut average API response time 35%, shipped webhook-driven Stripe, PayPal, and Razorpay lifecycles for a platform handling 2,000+ monthly transactions, and deployed containerized services behind Nginx and PM2 with GitHub Actions CI/CD. Additional backend work in Golang (Gin) and Python across self-directed projects on PostgreSQL, pgvector, and RAG pipelines. Based in Palakkad, Kerala, India — open to remote roles or relocation.",
   location: "Palakkad, Kerala, India",
   locationShort: "Palakkad, IN",
+  timezone: "IST · UTC+5:30",
   email: "rinshad803@gmail.com",
   phone: "+91 88486 75355",
-  availability: "Open to backend & full-stack engineering roles",
+  availability: "Open to full-stack & backend engineering roles",
+  relocation: "Remote, or relocation to Europe, the UK or the UAE",
   responsePromise: "Usually replies within 24h",
   resumeUrl: "/MohammedRinshadMI_FullStack.pdf",
+  /** Filename the browser saves the résumé under when a CTA downloads it. */
+  resumeFileName: "Mohammed-Rinshad-Full-Stack-Software-Engineer-Resume.pdf",
   /** Environment-resolved — see resolveSiteUrl above. Deliberately NOT a
       hard-coded domain: rinshad.dev is not registered, and shipping canonicals
       to a domain that does not resolve is worse than having none. */
@@ -108,15 +117,21 @@ export const siteConfig = {
   } as Record<string, string>,
 } as const;
 
+/** The header: the four places a reviewer goes. Résumé and "Let's talk" sit
+    beside these as actions rather than destinations. */
 export const navLinks = [
   { href: "/work", label: "Work" },
+  { href: "/about#experience", label: "Experience" },
   { href: "/about", label: "About" },
-  { href: "/blog", label: "Writing" },
   { href: "/contact", label: "Contact" },
 ];
 
-/** Footer gets the full map; the navbar stays tight (quiet pages live here only). */
-export const footerLinks = [...navLinks, { href: "/uses", label: "Uses" }];
+/** Footer gets the full map; the quieter pages live here only. */
+export const footerLinks = [
+  ...navLinks,
+  { href: "/blog", label: "Writing" },
+  { href: "/uses", label: "Uses" },
+];
 
 /** Icon names resolve in the consuming component (parked 3D journey uses this). */
 export const socialLinks = [

@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useRef } from "react";
+import { useRef } from "react";
 import {
   motion,
   useInView,
@@ -11,35 +11,12 @@ import {
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Chip } from "@/components/ui/Chip";
 import { education, experience } from "@/lib/content/profile";
-import { splitMetrics } from "@/lib/content/metrics";
+import { MetricText } from "@/components/ui/MetricText";
 import { DURATION, EASE, fadeUp, VIEWPORT } from "@/lib/animation";
 import { useHydrated } from "@/lib/hooks/use-hydrated";
 import { useScrubProgress } from "@/lib/hooks/use-scrub-progress";
 import { cn } from "@/lib/utils";
 import type { Experience } from "@/lib/types";
-
-/* ----------------------------------------------------------------------------
-   Metric highlighting — wrap résumé "proof" tokens in an accent inline chip so
-   the numbers read at a glance. The splitting itself is pure string work and
-   lives (tested) in lib/content/metrics.ts; this only maps segments to JSX.
-   -------------------------------------------------------------------------- */
-function MetricToken({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="mx-0.5 inline-flex items-center rounded-md border border-accent/20 bg-accent/10 px-1.5 py-px font-mono text-[0.8em] leading-none whitespace-nowrap text-accent-text align-baseline">
-      {children}
-    </span>
-  );
-}
-
-function highlightMetrics(text: string): React.ReactNode {
-  return splitMetrics(text).map((segment, i) =>
-    segment.isMetric ? (
-      <MetricToken key={i}>{segment.text}</MetricToken>
-    ) : (
-      <Fragment key={i}>{segment.text}</Fragment>
-    ),
-  );
-}
 
 /* ----------------------------------------------------------------------------
    One experience row
@@ -117,7 +94,7 @@ function ExperienceRow({ item }: { item: Experience }) {
               aria-hidden
               className="absolute left-0 top-[0.7em] size-1.5 -translate-y-1/2 rounded-full bg-border-strong"
             />
-            {highlightMetrics(achievement)}
+            <MetricText text={achievement} />
           </li>
         ))}
       </ul>

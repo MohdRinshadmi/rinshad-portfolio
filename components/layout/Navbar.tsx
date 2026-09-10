@@ -1,14 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, type CSSProperties } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Menu, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { siteConfig, navLinks } from "@/lib/config/site";
-import { EASE, DURATION } from "@/lib/animation";
 import { useNavClick } from "@/lib/hooks/use-nav-click";
 
 /* Lazy chunk: the overlay + its framer exit choreography only download on the
@@ -18,16 +17,17 @@ const MobileMenu = dynamic(
   { ssr: false },
 );
 
-/** Staggered entrance for the bar's three groups (wordmark · nav · actions). */
-const barContainer: Variants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.15 } },
-};
-const barItem: Variants = {
-  hidden: { opacity: 0, y: -8 },
-  visible: { opacity: 1, y: 0, transition: { duration: DURATION.base, ease: EASE.out } },
-};
+/** Stagger for the CSS entrance (`.nav-drop` in globals.css). */
+const at = (seconds: number) => ({ "--hero-delay": `${seconds}s` }) as CSSProperties;
 
+/**
+ * The site header. Résumé and "Let's talk" are one click from every page —
+ * on phones too, where the résumé stays in the bar as a pill beside the menu.
+ *
+ * The entrance is CSS rather than Framer: an `initial={{ opacity: 0 }}` renders
+ * into the server HTML, which left the site's primary actions invisible until
+ * React had hydrated.
+ */
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -56,29 +56,23 @@ export function Navbar() {
 
   return (
     <>
-      <motion.header
-        initial={reduceMotion ? false : { opacity: 0, y: -16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: DURATION.base, ease: EASE.out }}
+      <header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 border-b transition-colors duration-500 ease-out",
+          "nav-drop fixed inset-x-0 top-0 z-50 border-b transition-colors duration-500 ease-out",
           scrolled ? "border-b-transparent" : "border-dashed border-border-strong",
         )}
       >
-        <motion.div
-          variants={reduceMotion ? undefined : barContainer}
-          initial={reduceMotion ? false : "hidden"}
-          animate={reduceMotion ? undefined : "visible"}
+        <div
           className={cn(
-            "mx-auto flex items-center justify-between gap-4 border ease-[cubic-bezier(0.16,1,0.3,1)]",
+            "mx-auto flex items-center justify-between gap-3 border ease-[cubic-bezier(0.16,1,0.3,1)]",
             "transition-[max-width,height,padding,border-radius,border-color,background-color,box-shadow,margin] duration-500",
             scrolled
-              ? "mt-3 h-14 max-w-3xl rounded-full border-border bg-surface/80 pl-5 pr-3 shadow-[0_10px_40px_-18px_rgba(20,18,14,0.45)] backdrop-blur-xl"
-              : "mt-0 h-16 max-w-300 rounded-none border-transparent bg-transparent px-6 lg:px-12",
+              ? "mt-3 h-14 max-w-3xl rounded-full border-border bg-surface/80 pl-5 pr-2 shadow-[0_10px_40px_-18px_rgba(20,18,14,0.45)] backdrop-blur-xl sm:pr-3"
+              : "mt-0 h-16 max-w-300 rounded-none border-transparent bg-transparent px-5 sm:px-6 lg:px-12",
           )}
         >
           {/* Wordmark */}
-          <motion.div variants={reduceMotion ? undefined : barItem}>
+          <div className="nav-drop" style={at(0.12)}>
             <Link
               href="/"
               onClick={(event) => onNavClick(event, "/")}
@@ -92,13 +86,13 @@ export function Navbar() {
                 .
               </span>
             </Link>
-          </motion.div>
+          </div>
 
           {/* Desktop nav — hover-follow highlight pill */}
-          <motion.nav
-            variants={reduceMotion ? undefined : barItem}
+          <nav
             onMouseLeave={() => setHovered(null)}
-            className="hidden items-center gap-1 md:flex"
+            className="nav-drop hidden items-center gap-0.5 md:flex"
+            style={at(0.19)}
             aria-label="Primary"
           >
             {navLinks.map((link) => {
@@ -114,7 +108,7 @@ export function Navbar() {
                   onBlur={() => setHovered(null)}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200 ease-out",
+                    "relative rounded-full px-3.5 py-2 text-sm font-medium transition-colors duration-200 ease-out lg:px-4",
                     active || lit ? "text-text" : "text-text-secondary",
                   )}
                 >
@@ -122,8 +116,8 @@ export function Navbar() {
                     <motion.span
                       layoutId={reduceMotion ? undefined : "nav-highlight"}
                       className={cn(
-                        "absolute inset-0 -z-10 rounded-full bg-text/[0.05] ring-1 ring-inset ring-border",
-                        active && "bg-accent/[0.08] ring-accent/20",
+                        "absolute inset-0 -z-10 rounded-full bg-text/5 ring-1 ring-inset ring-border",
+                        active && "bg-accent/8 ring-accent/20",
                       )}
                       transition={
                         reduceMotion
@@ -136,12 +130,23 @@ export function Navbar() {
                 </Link>
               );
             })}
-          </motion.nav>
+          </nav>
 
-          <motion.div
-            variants={reduceMotion ? undefined : barItem}
-            className="flex items-center gap-2"
-          >
+          <div className="nav-drop flex items-center gap-1.5 md:gap-2" style={at(0.26)}>
+            {/* Résumé — the action most visitors came for. A bordered pill on
+                phones (it is the only action left in the bar there), a quiet
+                text link beside the primary CTA on wider screens. */}
+            <a
+              href={siteConfig.resumeUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex h-11 items-center gap-1 rounded-full border border-border-strong px-4 text-sm font-medium text-text transition-colors duration-200 hover:border-text/35 md:h-9 md:border-transparent md:px-3 md:text-text-secondary md:hover:border-transparent md:hover:text-text"
+            >
+              Résumé
+              <ArrowUpRight size={14} strokeWidth={2} aria-hidden="true" />
+              <span className="sr-only"> (PDF, opens in a new tab)</span>
+            </a>
+
             {/* Let's talk pill (primary CTA) */}
             <Link
               href="/contact"
@@ -169,13 +174,14 @@ export function Navbar() {
               }}
               aria-label="Open menu"
               aria-expanded={menuOpen}
-              className="-mr-1 inline-flex h-11 w-11 items-center justify-center rounded-md text-text-secondary transition-colors hover:text-text md:hidden"
+              aria-haspopup="dialog"
+              className="-mr-1 inline-flex size-11 items-center justify-center rounded-full text-text-secondary transition-colors hover:text-text md:hidden"
             >
               <Menu size={22} strokeWidth={1.75} aria-hidden="true" />
             </button>
-          </motion.div>
-        </motion.div>
-      </motion.header>
+          </div>
+        </div>
+      </header>
 
       {menuMounted && <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />}
     </>

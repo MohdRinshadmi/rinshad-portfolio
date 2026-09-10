@@ -1,14 +1,14 @@
 /* ============================================================================
    THE DOCUMENTARY — homepage narrative content.
 
-   The homepage reads as the opening chapter of a documentary about a backend
-   engineer: a prologue, five chapters, an epilogue. Voice rules: first person,
-   concrete, no buzzwords, every claim résumé-backed. Components render this
-   verbatim — copy edits happen here, not in JSX.
+   The homepage reads as a short documentary about a production engineer: a
+   cover, five chapters, an ending. Voice rules: first person, concrete, no
+   buzzwords, every claim résumé-backed or checkable in a linked repository.
+   Components render this verbatim — copy edits happen here, not in JSX.
 
-   Positioning (from the résumé): Full-Stack Software Engineer, backend-heavy.
-   APIs, schemas, and containerized services lead; the React / Next.js /
-   React Native clients follow as the surfaces those APIs serve.
+   Positioning: Full-Stack Software Engineer, backend-heavy — backend, cloud,
+   AI/LLM and real-time systems lead; the React / Next.js / React Native
+   clients follow as the surfaces those APIs serve.
    ========================================================================== */
 
 export const prologue = {
@@ -19,8 +19,8 @@ export const prologue = {
     edition: "Ed. 2026",
     name: "Mohammed Rinshad",
     role: "Full-stack software engineering",
-    location: "Palakkad, IN",
-    coords: "10.79°N",
+    location: "Palakkad, India",
+    coords: "UTC+5:30",
     status: "Available",
   },
   /** Masthead introduction. Reads "I am Rinshad, full-stack software engineer."
@@ -30,24 +30,32 @@ export const prologue = {
     name: "Rinshad",
     lines: ["full-stack", "software engineer"],
   },
-  byline:
-    "Mohammed Rinshad — full-stack software engineer, backend-heavy. Three years of production REST APIs, relational schemas, and containerized services. This is how the work actually happens.",
-  availability: "Open to backend & full-stack engineering roles",
+  /** WHAT — the four areas, in the order the work is weighted. */
+  focus: "Backend · Cloud · AI/LLM · Real-time systems",
+  /** VALUE — one sentence, then the evidence behind it. */
+  value: "Building production-grade backend, cloud, AI and real-time systems.",
+  support:
+    "3+ years designing, shipping and operating REST APIs, relational schemas and containerized services on AWS — plus Go services, Python RAG pipelines and WebSocket systems.",
+  /** TECHNOLOGY — the six a recruiter searches for first. */
+  stack: ["TypeScript", "Node.js", "Python", "Go", "PostgreSQL", "AWS"],
+  cta: {
+    work: { label: "View projects", href: "/work" },
+    resume: { label: "Download résumé" },
+    talk: { label: "Let's talk", href: "/contact" },
+  },
+  availability: "Open to full-stack & backend roles · Remote or relocation",
   scrollCue: "Scroll to begin",
-  /** The cover portrait — right column on desktop, above the masthead on phones. */
+  /** The cover portrait — right column on desktop, below the introduction on phones. */
   portrait: {
     src: "/images/rinshad-portrait-v2.jpg",
     alt: "Portrait of Mohammed Rinshad, full-stack software engineer",
     width: 1200,
     height: 1277,
   },
-  /** Vertical project reel — the cover photograph, in motion. One still per
-      featured project, all served from /public. Keep it that way: remote
-      placeholders cost a third-party DNS + TLS hop on the homepage's critical
-      path and force a `remotePatterns` entry in next.config. */
+  /** Vertical project reel revealed when the portrait is hovered. One still per
+      featured project, all served from /public — remote placeholders cost a
+      third-party DNS + TLS hop on the homepage's critical path. */
   reel: {
-    cta: "View all projects",
-    href: "/work",
     items: [
       {
         src: "/images/projects/iot-analytics-dashboard.png",
@@ -71,34 +79,15 @@ export const prologue = {
   },
 } as const;
 
-/* ── Chapter 01 — The Builder ───────────────────────────────────────────── */
-export const chapterBuilder = {
+/* ── Chapter 01 — In Production ─────────────────────────────────────────── */
+export const chapterProduction = {
   number: "01",
-  title: "The Builder",
-  /** Large scrubbed paragraphs — the narrative spine. */
-  paragraphs: [
-    "Most of what I've built is invisible. Forty-plus REST endpoints. Relational schemas with foreign keys that actually hold. Payment webhooks that survive a retry. Containers behind Nginx that come back up on their own. Users never see any of it — they only feel it when it isn't there.",
-    "Every one of those systems started messy: a vague brief, a query plan nobody had read, a schema mid-migration. The work is the same every time — understand the data until it stops being scary, draw the contract before writing the handler, then ship, watch it break, and stay until it doesn't.",
-  ],
+  title: "In Production",
+  /** Scrubbed word by word — the chapter's one long sentence. */
+  intro:
+    "Most of what I've built is invisible: REST endpoints, schemas with foreign keys that hold, payment webhooks that survive a retry, containers that come back up on their own. People only notice it when it isn't there.",
   quote: "Nobody thanks you for the index. They just stop complaining about the page.",
-  /** Editorial footnotes — quiet, annotated facts instead of counters. */
-  footnotes: [
-    {
-      mark: "1",
-      fact: "40+ REST endpoints",
-      gloss: "Express.js and Sequelize — middleware validation, JWT auth, SQL query and index optimization",
-    },
-    {
-      mark: "2",
-      fact: "35% lower response time",
-      gloss: "average across the API, from reading query plans rather than adding servers",
-    },
-    {
-      mark: "3",
-      fact: "2,000+ monthly transactions",
-      gloss: "Stripe, PayPal, and Razorpay — webhook-driven lifecycles, signature verification, safe retries",
-    },
-  ],
+  more: { label: "Full experience & education", href: "/about#experience" },
 } as const;
 
 /* ── Chapter 02 — Behind the Interfaces ─────────────────────────────────── */
@@ -106,89 +95,97 @@ export const chapterInterfaces = {
   number: "02",
   title: "Behind the Interfaces",
   intro:
-    "Every working product hides an argument about how it should fail. Here is one system — the sync backend for an offline-first geolocation tracker — from first bug report to something that survives a dead network.",
+    "One production system, start to finish: the sync backend for an offline-first geolocation tracker — from the first bug report to something that survives a dead network.",
   stages: [
     {
-      step: "Problem",
+      step: "Challenge",
       title: "The field has no signal.",
-      body: "Workforce tracking assumes a connection. The field doesn't have one. Devices went underground, into warehouses, out past coverage — and came back hours later with a backlog of location points and no safe way to hand them over.",
-      detail: "A truck offline for four hours is not an edge case. It is Tuesday.",
+      body: "Workforce tracking assumes a connection the field doesn't have. Devices went into warehouses and out past coverage, then came back hours later with a backlog of location points and no safe way to hand them over.",
+      detail: "A device offline for four hours is not an edge case. It is Tuesday.",
     },
     {
-      step: "Thinking",
-      title: "Assume the network is already gone.",
-      body: "If the client buffers locally and uploads later, then every write arrives twice eventually — once from the retry that timed out, once from the retry that worked. Idempotency isn't a nice-to-have here; it's the whole design. Make the write safe to repeat and the outage stops being a data-integrity problem.",
-      detail: "The decision: no upload is ever assumed to have happened once.",
+      step: "Decision",
+      title: "Every upload will arrive twice.",
+      body: "If the client buffers and retries, the same write eventually lands more than once — from the retry that timed out and from the one that worked. So idempotency became the design, not a feature: every write had to be safe to repeat.",
+      detail: "No upload is ever assumed to have happened exactly once.",
     },
     {
       step: "Architecture",
       title: "Batch, deduplicate, retry.",
-      body: "The device buffers points locally and uploads them in batches rather than one chatty request per fix. The sync endpoint treats every batch as replayable — duplicate-safe writes keyed so a repeat lands as a no-op instead of a second row. Failed batches back off and come around again.",
+      body: "Devices buffer points locally and upload them in batches instead of one request per fix. The sync endpoint treats each batch as replayable, so a repeat lands as a no-op instead of a second row; failed batches back off and try again.",
       detail: "Device buffer → batched upload → duplicate-safe write → acknowledged.",
     },
     {
-      step: "Execution",
-      title: "Make the recovery boring.",
-      body: "React Native captures location in the background and buffers locally when there's nothing to talk to. The backend absorbs whatever arrives whenever it arrives, in any order, more than once. Both stores end up agreeing, and nobody has to reconcile anything by hand on Monday morning.",
-      detail: "The hardest part: proving the same batch twice changes nothing.",
+      step: "Implementation",
+      title: "Make recovery the normal path.",
+      body: "React Native captures location in the background and buffers it while offline. The backend accepts the same batch any number of times, and both sides converge without anyone reconciling data by hand.",
+      detail: "The test that mattered: the same batch twice changes nothing.",
     },
     {
-      step: "Impact",
+      step: "Result",
       title: "Outages stopped being incidents.",
-      body: "Tracking now survives prolonged network outages instead of losing the window. The apps went to the Play Store and the App Store with background capture and local buffering, and the recovery path is the same one that runs on a good day — because it always runs.",
-      detail: "Prolonged outage → complete history, reconstructed on reconnect.",
+      body: "Tracking now survives prolonged network outages instead of losing the window, and the apps shipped to the Play Store and the App Store with background capture and local buffering.",
+      detail: "Prolonged outage → complete history, rebuilt on reconnect.",
     },
   ],
 } as const;
 
-/* ── Chapter 03 — Systems Thinking ──────────────────────────────────────── */
-export const chapterSystems = {
-  number: "03",
-  title: "Systems Thinking",
-  paragraphs: [
-    "A screen is the last mile of a much longer system. Behind every interface there is a schema deciding what is even expressible, an API holding a contract, a cache absorbing load, a container that has to come back up on its own — and increasingly, a model reasoning in the loop.",
-    "I work closest to that middle. Not because backend is a job title, but because latency, correctness, and reliability are decided long before anything reaches a screen.",
-  ],
-  /** The canvas chain — drawn top to bottom as the reader scrolls. */
-  nodes: [
-    { id: "clients", label: "Clients", sub: "React · Next.js · React Native" },
-    { id: "apis", label: "REST APIs", sub: "Express · typed contracts · JWT" },
-    { id: "services", label: "Services", sub: "Clean Architecture · DI" },
-    { id: "data", label: "Data", sub: "MySQL · PostgreSQL · schema design" },
-    { id: "cache", label: "Cache & events", sub: "Redis · Pub/Sub · background jobs" },
-    { id: "infra", label: "Infrastructure", sub: "Docker · Nginx · PM2 · AWS" },
-  ],
-  closing: "Systems, not screens.",
-} as const;
-
-/* ── Chapter 04 — Selected Work ─────────────────────────────────────────── */
+/* ── Chapter 03 — Selected Work ─────────────────────────────────────────── */
 export const chapterWork = {
-  number: "04",
+  number: "03",
   title: "Selected Work",
   intro:
-    "Three self-directed backends on self-hosted, open-source infrastructure — the problem, the difficulty, and what changed. No commercial users, and no claim of any.",
-  /** Editorial framing per featured project, keyed by slug. */
-  features: {
-    "iot-analytics-dashboard": {
-      kicker: "Feature · Golang & Clean Architecture",
-      hook: "A Go backend where the ORM never leaks upward and the index matches the query.",
-      difficulty: "High-frequency telemetry has to stay queryable as tables grow, inside a structure that separates transport, domain, and storage well enough to survive changing requirements.",
-      outcome: "Gin over a Clean-Architecture service layer with DI, GORM repositories on indexed time-series tables, and the whole stack one Docker Compose command away.",
+    "Three self-initiated systems, each taken from schema to deployment — the problem, the architecture, the decision that mattered, and a result you can check in the code. Self-hosted on open-source infrastructure; no commercial users, and no claim of any.",
+} as const;
+
+/* ── Chapter 04 — How I build production systems ───────────────────────── */
+export const chapterSystems = {
+  number: "04",
+  title: "How I build production systems",
+  paragraph:
+    "A screen is the last mile of a much longer system. I work closest to the middle — the contracts, schemas, caches and containers where latency and reliability are decided long before anything renders.",
+  closing: "Systems, not screens.",
+  languages: ["TypeScript", "JavaScript", "Python", "Go", "SQL"],
+  quality: ["Jest", "Vitest", "Playwright", "Postman", "Sentry", "Structured logging"],
+  /** Client → AI, top to bottom. Every item is on the résumé's skills list. */
+  layers: [
+    {
+      id: "client",
+      label: "Client",
+      role: "Interfaces built against typed API contracts.",
+      tech: ["React", "Next.js", "React Native", "TanStack Query", "Tailwind CSS"],
     },
-    "ai-life-assistant": {
-      kicker: "Feature · Streaming API & RAG",
-      hook: "A Node.js API that starts answering before it has finished thinking.",
-      difficulty: "Holding a streaming response open through server-side tool calls, while retrieval keeps pace with speech and the edge stays closed to abuse.",
-      outcome: "Token-by-token streaming, server-side tool calling, Python ingestion into HNSW-indexed pgvector, and JWT rotation with Redis rate limiting at the door.",
+    {
+      id: "api",
+      label: "API",
+      role: "Contracts, validation and auth at the edge.",
+      tech: ["Node.js", "Express", "FastAPI", "Go · Gin", "REST", "JWT / OAuth", "RBAC", "Rate limiting"],
     },
-    "realtime-collab-platform": {
-      kicker: "Feature · Distributed real-time",
-      hook: "A WebSocket tier with no memory of its own — so you can just add another one.",
-      difficulty: "Fanning updates across interchangeable instances without sticky sessions, while concurrent edits converge instead of overwriting each other.",
-      outcome: "Stateless sockets over Redis Pub/Sub, Yjs CRDT convergence, and Playwright driving real browsers through reconnection and conflict.",
+    {
+      id: "realtime",
+      label: "Real-time & events",
+      role: "Messages that fan out across instances and survive a retry.",
+      tech: ["WebSockets", "Redis Pub/Sub", "Webhooks", "Background jobs"],
     },
-  } as Record<string, { kicker: string; hook: string; difficulty: string; outcome: string }>,
-  readCta: "Read the story",
+    {
+      id: "data",
+      label: "Data",
+      role: "Schemas, indexes and caches that hold under peak load.",
+      tech: ["PostgreSQL", "MySQL", "Redis", "pgvector", "MongoDB", "Sequelize", "GORM", "Migrations"],
+    },
+    {
+      id: "infra",
+      label: "Cloud & infrastructure",
+      role: "Containers that deploy, restart and report on their own.",
+      tech: ["AWS (EC2 · S3 · IAM · CloudWatch)", "Docker", "GitHub Actions CI/CD", "Nginx", "PM2", "Linux"],
+    },
+    {
+      id: "ai",
+      label: "AI engineering",
+      role: "Retrieval and model calls held to the same API discipline.",
+      tech: ["LLM APIs (Gemini · Groq · Ollama)", "RAG", "Embeddings", "pgvector · HNSW", "Tool calling", "Streaming", "LangChain"],
+    },
+  ],
 } as const;
 
 /* ── Chapter 05 — Principles ────────────────────────────────────────────── */
@@ -220,8 +217,10 @@ export const chapterPrinciples = {
   ],
 } as const;
 
-/* ── Epilogue ───────────────────────────────────────────────────────────── */
+/* ── Epilogue — contact ─────────────────────────────────────────────────── */
 export const epilogue = {
-  statement: "Every system starts as an unfinished idea.",
-  invitation: "If you're building something ambitious, I'd love to hear about it.",
+  eyebrow: "Contact",
+  statement: "Hiring for backend or full-stack? Let's talk.",
+  invitation:
+    "Open to full-stack and backend engineering roles — remote, or relocating to Europe, the UK or the UAE. Email is the fastest route.",
 } as const;

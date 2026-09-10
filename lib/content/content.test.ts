@@ -3,8 +3,23 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { projects, getProject, workDisclaimer } from "./projects";
-import { experience, education, proofStats, skillGroups, workProcess, about } from "./profile";
-import { chapterWork, chapterBuilder, chapterSystems, chapterPrinciples, prologue } from "./story";
+import {
+  experience,
+  education,
+  proofStats,
+  skillGroups,
+  workProcess,
+  about,
+  HIGHLIGHT_INDICES,
+} from "./profile";
+import {
+  chapterProduction,
+  chapterInterfaces,
+  chapterWork,
+  chapterSystems,
+  chapterPrinciples,
+  prologue,
+} from "./story";
 import { faqs } from "./faq";
 import { siteConfig, navLinks, footerLinks, resolveSiteUrl } from "../config/site";
 
@@ -68,6 +83,17 @@ describe("projects", () => {
     }
   });
 
+  it("fills the scannable card with one short sentence per field", () => {
+    // ProjectFeature renders purpose → challenge → decision → result. A long
+    // paragraph here is exactly the wall of text the card exists to avoid.
+    for (const p of projects) {
+      for (const [field, text] of Object.entries(p.card)) {
+        expect(text, `${p.slug}.card.${field}`).toBeTruthy();
+        expect(text.length, `${p.slug}.card.${field} is too long to scan`).toBeLessThan(260);
+      }
+    }
+  });
+
   it("gives every architecture diagram unique node ids", () => {
     for (const p of projects) {
       const ids = p.architecture.nodes.map((n) => n.id);
@@ -76,13 +102,21 @@ describe("projects", () => {
   });
 
   it("marks a critical path on every architecture diagram", () => {
-    // The canvas strokes a terracotta "current" along `critical` nodes; a
-    // diagram with none renders inert.
+    // ArchitectureFlow draws the critical hops in accent; a diagram with none
+    // has no path to show.
     for (const p of projects) {
       expect(
         p.architecture.nodes.some((n) => n.critical),
         `project "${p.slug}" has no critical-path node`,
       ).toBe(true);
+    }
+  });
+
+  it("captions every architecture node with its layer", () => {
+    for (const p of projects) {
+      for (const node of p.architecture.nodes) {
+        expect(node.layer, `${p.slug} → ${node.id}`).toBeTruthy();
+      }
     }
   });
 
@@ -102,10 +136,10 @@ describe("projects", () => {
   });
 
   it("ships every project shot pre-cropped to the DeviceFrame's 4:3", () => {
-    // ProjectCard / CaseStudyHero / ProjectArchitectureCanvas render each shot
-    // in a 16:12 frame with object-cover, and their `sizes` hints request
-    // exactly the displayed width. That is only correct while the sources are
-    // themselves 4:3 — a wider one gets silently cropped AND renders soft.
+    // ProjectFeature and CaseStudyHero render each shot in a 16:12 frame with
+    // object-cover, and their `sizes` hints request exactly the displayed
+    // width. That is only correct while the sources are themselves 4:3 — a
+    // wider one gets silently cropped AND renders soft.
     for (const p of projects) {
       if (!p.image) continue;
       const size = imageSize(localAsset(p.image));
@@ -121,6 +155,7 @@ describe("projects", () => {
 
   it("keeps the honesty disclaimer that makes the claims credible", () => {
     expect(workDisclaimer).toMatch(/no commercial users/i);
+    expect(chapterWork.intro).toMatch(/no commercial users/i);
   });
 
   describe("getProject", () => {
@@ -136,46 +171,40 @@ describe("projects", () => {
   });
 });
 
-describe("homepage story ↔ projects coupling", () => {
-  const featured = projects.filter((p) => p.featured);
-
+describe("homepage story", () => {
   it("features at least one project on the homepage", () => {
-    expect(featured.length).toBeGreaterThan(0);
-  });
-
-  it("has editorial framing for every featured project", () => {
-    // WorkStories renders `chapterWork.features[slug]`; a missing key silently
-    // falls back to the generic tagline and loses the chapter's voice.
-    for (const p of featured) {
-      expect(
-        chapterWork.features[p.slug],
-        `chapterWork.features is missing "${p.slug}"`,
-      ).toBeDefined();
-    }
-  });
-
-  it("has no orphaned framing for a project that no longer exists", () => {
-    const slugs = new Set(projects.map((p) => p.slug));
-    for (const slug of Object.keys(chapterWork.features)) {
-      expect(slugs.has(slug), `chapterWork.features has stale key "${slug}"`).toBe(true);
-    }
-  });
-
-  it("fills every framing field the card renders", () => {
-    for (const [slug, f] of Object.entries(chapterWork.features)) {
-      expect(f.kicker, slug).toBeTruthy();
-      expect(f.hook, slug).toBeTruthy();
-      expect(f.difficulty, slug).toBeTruthy();
-      expect(f.outcome, slug).toBeTruthy();
-    }
+    expect(projects.filter((p) => p.featured).length).toBeGreaterThan(0);
   });
 
   it("numbers the chapters consecutively from 01", () => {
-    // The Prologue's scroll cue promises "Chapter 01" next. A parked chapter
-    // used to break this into 01 → 02.
-    const numbers = [chapterBuilder, { number: "02" }, chapterSystems, chapterWork, chapterPrinciples]
-      .map((c) => c.number);
+    // The hero's scroll cue promises "Chapter 01" next.
+    const numbers = [
+      chapterProduction,
+      chapterInterfaces,
+      chapterWork,
+      chapterSystems,
+      chapterPrinciples,
+    ].map((c) => c.number);
     expect(numbers).toEqual(["01", "02", "03", "04", "05"]);
+  });
+
+  it("gives every system layer a role and each technology once", () => {
+    const ids = chapterSystems.layers.map((l) => l.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    for (const layer of chapterSystems.layers) {
+      expect(layer.role, layer.id).toBeTruthy();
+      expect(layer.tech.length, layer.id).toBeGreaterThan(0);
+      expect(new Set(layer.tech).size, `duplicate tech in ${layer.id}`).toBe(layer.tech.length);
+    }
+  });
+
+  it("answers the five-second test in the hero", () => {
+    expect(prologue.headline.lines.join(" ")).toMatch(/software engineer/i);
+    expect(prologue.focus).toMatch(/backend/i);
+    expect(prologue.value).toBeTruthy();
+    expect(prologue.stack.length).toBeGreaterThanOrEqual(4);
+    expect(prologue.cta.work.href).toBe("/work");
+    expect(prologue.cta.talk.href).toBe("/contact");
   });
 
   it("points the prologue reel at files that exist", () => {
@@ -220,6 +249,14 @@ describe("profile", () => {
     expect(experience.filter((r) => r.current)).toHaveLength(1);
   });
 
+  it("points every homepage highlight at a real, distinct achievement", () => {
+    const current = experience.find((r) => r.current)!;
+    expect(new Set(HIGHLIGHT_INDICES).size).toBe(HIGHLIGHT_INDICES.length);
+    for (const index of HIGHLIGHT_INDICES) {
+      expect(current.achievements[index], `achievement #${index}`).toBeTruthy();
+    }
+  });
+
   it("gives experience and education unique ids", () => {
     const ids = [...experience.map((e) => e.id), ...education.map((e) => e.id)];
     expect(new Set(ids).size).toBe(ids.length);
@@ -234,6 +271,15 @@ describe("profile", () => {
       ).toBe(true);
       expect(stat.label).toBeTruthy();
     }
+  });
+
+  it("states exactly the résumé's verified numbers — never a zero", () => {
+    // Production once rendered every one of these as "0". The values
+    // themselves are pinned so a content edit can't quietly round one up.
+    const numbers = proofStats
+      .filter((s) => typeof s.to === "number")
+      .map((s) => `${s.to}${s.suffix ?? ""}`);
+    expect(numbers).toEqual(["3+", "40+", "35%", "2000+", "60%+"]);
   });
 
   it("has no duplicate skills inside a group", () => {
@@ -280,12 +326,18 @@ describe("site config", () => {
     }
   });
 
-  it("ships the résumé the whole site links to", () => {
+  it("ships the résumé the whole site links to, under a clean download name", () => {
     expect(siteConfig.resumeUrl.startsWith("/")).toBe(true);
     expect(
       existsSync(localAsset(siteConfig.resumeUrl)),
       `résumé missing from public/: ${siteConfig.resumeUrl}`,
     ).toBe(true);
+    expect(siteConfig.resumeFileName).toMatch(/^[\w-]+\.pdf$/);
+  });
+
+  it("keeps the meta description short enough not to truncate in results", () => {
+    expect(siteConfig.description.length).toBeGreaterThan(100);
+    expect(siteConfig.description.length).toBeLessThanOrEqual(165);
   });
 
   it("ships the portrait used for the Person schema image", () => {
@@ -344,12 +396,14 @@ describe("positioning consistency", () => {
   // /contact kept the old copy for a while; this stops it recurring in content.
   const corpus = [
     siteConfig.tagline,
+    siteConfig.description,
     siteConfig.bio,
     siteConfig.availability,
     about.intro,
     ...about.paragraphs,
     about.closing,
-    prologue.byline,
+    prologue.value,
+    prologue.support,
     prologue.availability,
     ...faqs.map((f) => f.answer),
   ].join("\n");
@@ -358,9 +412,14 @@ describe("positioning consistency", () => {
     expect(corpus).not.toMatch(/web (&|and) mobile/i);
   });
 
+  it("avoids the generic phrases the brief rules out", () => {
+    expect(corpus).not.toMatch(/passionate|enthusiast|problem solver|turning ideas into reality/i);
+  });
+
   it("states the role consistently in config", () => {
     expect(siteConfig.role).toBe("Full-Stack Software Engineer");
     expect(siteConfig.bio).toContain(siteConfig.role);
+    expect(siteConfig.description).toContain(siteConfig.role);
   });
 
   it("keeps the availability line pointed at backend/full-stack roles", () => {

@@ -4,13 +4,13 @@ import { projects, workDisclaimer } from "@/lib/content/projects";
 import { siteConfig } from "@/lib/config/site";
 import { buildMetadata, graph, webPage, breadcrumb } from "@/lib/seo";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { WorkFilter } from "@/components/work/WorkFilter";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { ProjectFeature } from "@/components/work/ProjectFeature";
 
 export const metadata: Metadata = buildMetadata({
   title: "Work",
   description:
-    "Selected backend and full-stack work — Node.js, TypeScript, and Golang services spanning REST APIs, RAG pipelines, and distributed real-time systems, each self-hosted on PostgreSQL, Redis, and Docker.",
+    "Backend case studies: a Go telemetry platform on Clean Architecture, a streaming Node.js AI API with pgvector RAG, and a stateless WebSocket tier on Redis Pub/Sub.",
   path: "/work",
 });
 
@@ -43,19 +43,16 @@ const workGraph = graph(
 );
 
 /**
- * /work — index of selected projects.
- *
- * Server component: a lite editorial header (eyebrow + h1 + short intro)
- * over the `WorkFilter` client island, which owns the category chips and the
- * filtered `ProjectCard` grid. The full `projects` array is passed down so the
- * island can derive its own category set.
+ * /work — the project index. Server component: a lite editorial header over
+ * the same ProjectFeature cards the homepage deck uses, in plain flow. With
+ * three projects a category filter was ceremony — every project sat under
+ * "Backend" — so the page now simply shows all of them in full.
  */
 export default function WorkPage() {
   return (
     <div className="section-py">
       <JsonLd data={workGraph} />
       <div className="container-page">
-        {/* Lite header */}
         <header className="max-w-3xl">
           <Eyebrow dot>Selected Work</Eyebrow>
 
@@ -77,8 +74,11 @@ export default function WorkPage() {
           </p>
         </header>
 
-        {/* Filterable project grid (client island) */}
-        <WorkFilter projects={projects} className="mt-16 lg:mt-20" />
+        <div className="mt-16 flex flex-col gap-8 lg:mt-20 lg:gap-12">
+          {projects.map((project, i) => (
+            <ProjectFeature key={project.slug} project={project} index={i} as="h2" />
+          ))}
+        </div>
       </div>
     </div>
   );

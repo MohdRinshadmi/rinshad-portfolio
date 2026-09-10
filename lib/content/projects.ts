@@ -5,11 +5,20 @@ import type { Project } from "../types";
    its framing: backend first, client second. Honesty rule from the PDF:
    "Self-initiated projects on self-hosted, open-source infrastructure
    (PostgreSQL, Redis, Docker); no commercial users." Nothing here claims
-   traffic, revenue, or users, and no number appears that the PDF can't back.
+   traffic, revenue, or users.
+
+   Beyond the résumé, a detail is allowed only if the linked repository's own
+   manifests show it (go.mod, package.json, pyproject.toml, docker-compose).
+   Checked 2026-09-10: IoT → Gin, GORM/Postgres, go-redis, paho MQTT, and a
+   compose file with Mosquitto, Prometheus and Grafana. AI assistant → Express,
+   Drizzle, ioredis + rate-limit-redis, @google/genai, groq-sdk; Python
+   ingestion (no FastAPI). Collaboration → Fastify + Socket.IO + ioredis + Yjs,
+   Passport OAuth/JWT, OpenTelemetry, and a compose file with two real-time
+   instances. Re-check before adding anything else.
    ========================================================================== */
 
-/** Rendered above the /work index — the résumé's own disclaimer, verbatim in
-    spirit. Keep it visible: it is what makes every claim below credible. */
+/** Rendered on /work and the homepage — the résumé's own disclaimer. Keep it
+    visible: it is what makes every claim below credible. */
 export const workDisclaimer =
   "Self-initiated projects on self-hosted, open-source infrastructure (PostgreSQL, Redis, Docker) — no commercial users. Source for all three is on GitHub.";
 
@@ -21,7 +30,7 @@ export const projects: Project[] = [
     description:
       "A Go/Gin backend structured on Clean Architecture — repository and service-layer separation with dependency injection — ingesting high-frequency device telemetry into indexed PostgreSQL time-series tables, with a type-safe React dashboard on top.",
     image: "/images/projects/iot-analytics-dashboard.png",
-    platform: "BACKEND · GOLANG · CLOUD-NATIVE",
+    platform: "Backend · Golang · Cloud-native",
     year: "2023",
     role: "Solo developer",
     timeline: "Self-initiated · Self-hosted",
@@ -38,11 +47,11 @@ export const projects: Project[] = [
       summary:
         "Devices push telemetry into Gin HTTP handlers, which stay thin — validation and routing only. A Clean-Architecture service layer holds the domain rules and receives its dependencies by injection; a GORM repository is the only thing that knows about storage, writing to indexed time-series tables in PostgreSQL with Redis in front for hot reads. Backend, database, and broker come up together under Docker Compose. The React dashboard reads through a type-safe API client on TanStack Query and Zustand.",
       nodes: [
-        { id: "devices", label: "Devices", sub: "high-frequency telemetry" },
-        { id: "api", label: "Gin Handlers", sub: "REST · thin transport" },
-        { id: "service", label: "Service Layer", sub: "Clean Arch · DI", critical: true },
-        { id: "repo", label: "GORM Repository", sub: "indexed time-series", critical: true },
-        { id: "data", label: "Postgres · Redis", sub: "Docker Compose" },
+        { id: "devices", layer: "Edge", label: "Devices", sub: "high-frequency telemetry" },
+        { id: "api", layer: "API", label: "Gin handlers", sub: "REST · thin transport" },
+        { id: "service", layer: "Domain", label: "Service layer", sub: "Clean Architecture · DI", critical: true },
+        { id: "repo", layer: "Data access", label: "GORM repository", sub: "indexed time-series", critical: true },
+        { id: "data", layer: "Storage", label: "PostgreSQL · Redis", sub: "Docker Compose" },
       ],
     },
     challenges: [
@@ -70,10 +79,20 @@ export const projects: Project[] = [
       "Clean Architecture costs an afternoon up front and refunds it the first time requirements move.",
       "An index is a statement about how you read, not about how you store. Write the query first.",
     ],
-    tags: ["Golang · Gin", "GORM", "PostgreSQL", "Redis", "Docker Compose"],
+    card: {
+      purpose:
+        "Ingests high-frequency device telemetry and serves it back as queryable analytics — a Go backend built to outlast growing tables and changing requirements.",
+      challenge:
+        "Telemetry never stops arriving. Tables grow without bound, reads still have to be fast, and the domain keeps changing underneath the code.",
+      decision:
+        "Clean Architecture with dependency injection: thin Gin handlers, a service layer that owns the rules, and GORM repositories over indexed PostgreSQL time-series tables, with Redis in front of hot reads.",
+      result:
+        "Transport, domain and storage change independently, and the whole stack — API, PostgreSQL, Redis, a Mosquitto MQTT broker, Prometheus and Grafana — starts with one docker compose up.",
+    },
+    tags: ["Go · Gin", "GORM", "PostgreSQL", "Redis", "MQTT", "Docker Compose"],
     stack: [
       { label: "Backend (Go)", items: ["Golang · Gin", "GORM", "REST API design", "Clean Architecture · DI", "Monorepo"] },
-      { label: "Data & infra", items: ["PostgreSQL (indexed time-series)", "Redis", "Docker Compose", "Message broker"] },
+      { label: "Data & infra", items: ["PostgreSQL (indexed time-series)", "Redis", "MQTT · Eclipse Mosquitto", "Docker Compose", "Prometheus · Grafana"] },
       { label: "Client", items: ["React", "TypeScript", "TanStack Query", "Zustand", "Type-safe API clients"] },
     ],
     metrics: [
@@ -91,7 +110,7 @@ export const projects: Project[] = [
     description:
       "A Node.js/TypeScript API layer for a voice-first AI assistant: streaming LLM responses, speech-to-text and TTS orchestration, server-side tool/function calling, and Python ingestion pipelines feeding HNSW-indexed pgvector retrieval.",
     image: "/images/projects/ai-life-assistant.png",
-    platform: "BACKEND · AI · RAG",
+    platform: "Backend · AI · RAG",
     year: "2024",
     role: "Solo developer",
     timeline: "Self-initiated · Self-hosted",
@@ -108,11 +127,11 @@ export const projects: Project[] = [
       summary:
         "Speech enters the Node.js API, which owns JWT refresh-token rotation and Redis rate limiting before anything reaches a model. The API streams Gemini completions back token by token and executes tool/function calls server-side. Grounding comes from a RAG path built offline by Python ingestion pipelines — chunk, embed, store — and read online as an HNSW-indexed pgvector lookup over thousands of documents. The answer returns as text and as TTS audio; the Next.js App Router client renders the stream.",
       nodes: [
-        { id: "client", label: "Next.js Client", sub: "App Router · streams" },
-        { id: "api", label: "Node.js API", sub: "JWT rotation · rate limit", critical: true },
-        { id: "gemini", label: "Gemini", sub: "stream · server-side tools", critical: true },
-        { id: "rag", label: "pgvector · HNSW", sub: "Python ingestion" },
-        { id: "tts", label: "STT / TTS", sub: "voice in, voice out" },
+        { id: "client", layer: "Interface", label: "Next.js client", sub: "App Router · streams" },
+        { id: "api", layer: "API", label: "Node.js API", sub: "JWT rotation · rate limit", critical: true },
+        { id: "gemini", layer: "Model", label: "Gemini", sub: "streaming · server-side tools", critical: true },
+        { id: "rag", layer: "Retrieval", label: "pgvector · HNSW", sub: "Python ingestion" },
+        { id: "tts", layer: "Output", label: "STT / TTS", sub: "voice in, voice out" },
       ],
     },
     challenges: [
@@ -140,10 +159,20 @@ export const projects: Project[] = [
       "Streaming is an architecture decision that reaches all the way down to the API contract — retrofitting it is a rewrite.",
       "Tool calls belong on the server. That's where the credentials are, and where you can still say no.",
     ],
-    tags: ["Node.js", "TypeScript", "Python", "pgvector · HNSW", "Gemini API"],
+    card: {
+      purpose:
+        "The backend for a voice-first AI assistant: an API that streams answers, runs tools on the server and grounds replies in the user's own documents.",
+      challenge:
+        "Voice makes latency audible. Answers have to start immediately, retrieval must keep pace with speech, and tool calls can't be trusted to the client.",
+      decision:
+        "An Express + TypeScript API streams Gemini responses and executes tool calls server-side; an offline Python pipeline chunks and embeds documents into pgvector; JWT refresh-token rotation and Redis-backed rate limiting guard the edge.",
+      result:
+        "The request path does one HNSW-indexed vector lookup instead of a sequential scan, and replies stream token by token as text and synthesized speech.",
+    },
+    tags: ["Node.js · Express", "TypeScript", "Python", "pgvector · HNSW", "Redis", "Gemini API"],
     stack: [
-      { label: "API & runtime", items: ["Node.js", "TypeScript", "Streaming responses", "Server-side tool / function calling"] },
-      { label: "Data & retrieval", items: ["Python data-ingestion pipelines", "PostgreSQL + pgvector", "HNSW indexing", "Chunking & embedding generation"] },
+      { label: "API & runtime", items: ["Node.js · Express", "TypeScript", "Drizzle ORM", "Streaming responses", "Server-side tool / function calling"] },
+      { label: "Data & retrieval", items: ["Python data-ingestion pipelines", "PostgreSQL + pgvector", "HNSW indexing", "Chunking & embedding generation", "Gemini · Groq"] },
       { label: "Security & client", items: ["JWT refresh-token rotation", "Redis rate limiting", "Next.js (App Router)", "React"] },
     ],
     metrics: [
@@ -161,7 +190,7 @@ export const projects: Project[] = [
     description:
       "A stateless WebSocket server with channel-based routing over Redis Pub/Sub — scaling horizontally without sticky sessions — carrying Yjs CRDT document sync, presence signals, and streaming LLM summarization behind JWT/OAuth.",
     image: "/images/projects/realtime-collab-platform.png",
-    platform: "BACKEND · REAL-TIME · DISTRIBUTED",
+    platform: "Backend · Real-time · Distributed",
     year: "2024",
     role: "Solo developer",
     timeline: "Self-initiated · Self-hosted",
@@ -178,11 +207,11 @@ export const projects: Project[] = [
       summary:
         "Clients connect to any instance — no affinity required. Each socket subscribes to channels, and Redis Pub/Sub carries every message to every instance holding a subscriber, so horizontal scaling needs no sticky sessions. Yjs CRDT updates travel those channels and converge conflict-free wherever they land; presence signals ride alongside. Streaming LLM summarization sits behind JWT/OAuth. Playwright exercises multi-user editing, reconnection, and conflict resolution end to end.",
       nodes: [
-        { id: "clients", label: "Clients", sub: "any instance · no affinity" },
-        { id: "ws", label: "WS Server", sub: "stateless · channel routing", critical: true },
-        { id: "pubsub", label: "Redis Pub/Sub", sub: "cross-instance fan-out", critical: true },
-        { id: "crdt", label: "Yjs CRDT", sub: "conflict-free convergence" },
-        { id: "ai", label: "Streaming LLM", sub: "summarize · JWT/OAuth" },
+        { id: "clients", layer: "Editors", label: "Clients", sub: "any instance · no affinity" },
+        { id: "ws", layer: "Gateway", label: "Socket.IO tier", sub: "stateless · channel routing", critical: true },
+        { id: "pubsub", layer: "Fan-out", label: "Redis Pub/Sub", sub: "cross-instance delivery", critical: true },
+        { id: "crdt", layer: "Merge", label: "Yjs CRDT", sub: "conflict-free convergence" },
+        { id: "ai", layer: "Assist", label: "Streaming LLM", sub: "summaries · JWT/OAuth" },
       ],
     },
     challenges: [
@@ -210,11 +239,21 @@ export const projects: Project[] = [
       "Statelessness is what makes a real-time tier boring to operate — and boring is the goal.",
       "CRDTs trade a steeper mental model for correctness you never have to page someone about.",
     ],
-    tags: ["Node.js", "WebSockets", "Redis Pub/Sub", "Yjs (CRDT)", "Playwright"],
+    card: {
+      purpose:
+        "Real-time multi-user document editing with presence and AI summaries, on a WebSocket tier designed to scale out rather than up.",
+      challenge:
+        "Stateful socket servers pin users to one instance, concurrent editors overwrite each other, and a dropped connection can silently lose work.",
+      decision:
+        "Stateless Socket.IO servers route by channel and fan out through Redis Pub/Sub; Yjs CRDTs make convergence a property of the data; Passport OAuth and JWT gate access, and OpenTelemetry traces the API.",
+      result:
+        "The Docker Compose stack runs two interchangeable real-time instances with no sticky sessions, and Playwright drives real browsers through concurrent edits, reconnection and conflict resolution.",
+    },
+    tags: ["Node.js · TypeScript", "Socket.IO", "Redis Pub/Sub", "Yjs CRDT", "PostgreSQL", "Playwright"],
     stack: [
-      { label: "Real-time core", items: ["Node.js", "TypeScript", "WebSockets", "Channel-based routing", "Redis Pub/Sub"] },
-      { label: "Sync & AI", items: ["Yjs (CRDT)", "Presence signals", "Streaming LLM summarization", "JWT / OAuth"] },
-      { label: "Data & delivery", items: ["PostgreSQL + pgvector", "Docker", "Playwright e2e", "React", "Next.js"] },
+      { label: "Real-time core", items: ["Node.js", "TypeScript", "Socket.IO · Fastify", "Channel-based routing", "Redis Pub/Sub"] },
+      { label: "Sync, auth & AI", items: ["Yjs (CRDT)", "Presence signals", "Streaming LLM summarization", "Passport OAuth · JWT"] },
+      { label: "Data & delivery", items: ["PostgreSQL + pgvector", "Prisma", "Docker", "OpenTelemetry", "Playwright e2e", "Next.js"] },
     ],
     metrics: [
       { label: "Sockets", value: "Stateless" },

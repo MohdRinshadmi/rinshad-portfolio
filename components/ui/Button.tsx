@@ -15,7 +15,9 @@ const buttonVariants = cva(
   "group/btn inline-flex items-center justify-center rounded-full font-medium whitespace-nowrap " +
     "transition-[transform,color,background-color,border-color,box-shadow] duration-200 ease-out " +
     "will-change-transform hover:-translate-y-0.5 active:translate-y-0 " +
-    "focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
+    // No `focus-visible:outline-none`: it erased the site-wide focus ring from
+    // every CTA, leaving keyboard users nothing to see (WCAG 2.4.7).
+    "disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -81,6 +83,8 @@ interface ButtonProps {
   disabled?: boolean;
   className?: string;
   ariaLabel?: string;
+  /** Same-origin file download: the filename the browser saves it under. */
+  download?: string;
 }
 
 function isExternal(href: string): boolean {
@@ -97,6 +101,7 @@ export function Button({
   disabled = false,
   className,
   ariaLabel,
+  download,
 }: ButtonProps) {
   const hasChip = Boolean(iconRight);
   const classes = cn(
@@ -114,6 +119,14 @@ export function Button({
       ) : null}
     </>
   );
+
+  if (href && download) {
+    return (
+      <a href={href} download={download} aria-label={ariaLabel} className={classes}>
+        {inner}
+      </a>
+    );
+  }
 
   if (href && isExternal(href)) {
     return (
