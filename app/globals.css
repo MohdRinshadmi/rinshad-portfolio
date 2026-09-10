@@ -56,6 +56,9 @@
 
   /* — semantic / state — */
   --color-positive: #16a34a;
+  /* `positive` is 3.1:1 on the paper surfaces — fine for the live dot, not for
+     the words beside it. Small green text uses this: 4.9:1 on surface. */
+  --color-positive-text: #15803d;
   --color-warning: #d97706;
   --color-danger: #dc2626;
 

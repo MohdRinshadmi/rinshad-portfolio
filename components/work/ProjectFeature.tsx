@@ -60,7 +60,9 @@ export function ProjectFeature({
           <div className="mt-6 flex flex-wrap items-center gap-3 lg:mt-auto lg:pt-6">
             <Link
               href={`/work/${project.slug}`}
-              className="group/cta inline-flex h-11 items-center gap-2 rounded-full bg-accent pl-5 pr-4 text-sm font-medium text-accent-fg shadow-glow transition-colors duration-200 hover:bg-accent-hover"
+              // `accent-press`, not `accent`: white on #c75c37 is 4.18:1 and fails
+              // AA for 14px text; #b04e2c is 5.3:1 and reads as the same terracotta.
+              className="group/cta inline-flex h-11 items-center gap-2 rounded-full bg-accent-press pl-5 pr-4 text-sm font-medium text-accent-fg shadow-glow transition-colors duration-200 hover:bg-accent-text"
             >
               Read case study
               <span className="sr-only">: {project.title}</span>

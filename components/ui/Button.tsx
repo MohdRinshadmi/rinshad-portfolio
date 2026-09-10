@@ -23,8 +23,9 @@ const buttonVariants = cva(
       variant: {
         // Formix primary = near-black pill, cream text
         primary: "bg-text text-bg shadow-card hover:bg-text/90",
-        // Ember CTA (used sparingly when we want the accent)
-        accent: "bg-accent text-accent-fg shadow-glow hover:bg-accent-hover",
+        // Terracotta CTA (used sparingly). Darker `accent-press` fill: white on
+        // plain `accent` is 4.18:1, under AA for button-sized text.
+        accent: "bg-accent-press text-accent-fg shadow-glow hover:bg-accent-text",
         ghost: "border border-border-strong text-text hover:border-text/35 hover:bg-surface",
         subtle: "bg-surface border border-border text-text-secondary hover:text-text hover:border-border-strong",
       },

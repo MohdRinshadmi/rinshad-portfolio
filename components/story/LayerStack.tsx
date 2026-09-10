@@ -183,7 +183,7 @@ function LayerRow({
         ref={nodeRef}
         aria-hidden="true"
         className={cn(
-          "absolute top-0.5 flex size-8 items-center justify-center rounded-full border border-border-strong bg-bg font-mono text-[11px] text-text-tertiary sm:size-10 sm:text-xs",
+          "absolute top-0.5 flex size-8 items-center justify-center rounded-full border border-border-strong bg-bg font-mono text-[11px] text-text-secondary sm:size-10 sm:text-xs",
           swung ? "left-6 sm:left-12 lg:left-16" : "left-0",
         )}
       >

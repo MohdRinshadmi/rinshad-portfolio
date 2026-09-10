@@ -4,7 +4,7 @@ type BadgeTone = "accent" | "positive" | "neutral";
 
 const toneText: Record<BadgeTone, string> = {
   accent: "text-accent-text",
-  positive: "text-positive",
+  positive: "text-positive-text",
   neutral: "text-text-secondary",
 };
 
