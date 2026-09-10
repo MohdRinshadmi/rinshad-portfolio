@@ -111,10 +111,12 @@ export function Prologue() {
               <p className="mt-4 font-display text-[clamp(1.25rem,1.9vw,1.625rem)] font-medium leading-snug tracking-[-0.015em] text-text">
                 {prologue.value}
               </p>
-              {/* Phones skip the evidence sentence — the proof strip directly
-                  below carries the same facts — so the first screen still
-                  reaches "View projects". */}
-              <p className="mt-3 hidden text-body-lg text-text-secondary sm:block">{prologue.support}</p>
+              {/* Phones and short laptop screens (1366×768, 1024×768) skip the
+                  evidence sentence — the proof strip directly below carries the
+                  same facts — so the first screen still reaches the CTAs. */}
+              <p className="mt-3 hidden text-body-lg text-text-secondary sm:block [@media(min-width:1024px)_and_(max-height:820px)]:hidden">
+                {prologue.support}
+              </p>
               <ul aria-label="Core technologies" className="mt-5 flex flex-wrap gap-1.5">
                 {prologue.stack.map((tech) => (
                   <li key={tech}>
