@@ -1,6 +1,6 @@
 import { ApiError, type GoogleGenAI } from "@google/genai";
 import { describe, expect, it, vi } from "vitest";
-import { EMBEDDING_BATCH_SIZE, embedDocuments, embedQuery, toVectorLiteral } from "./embed";
+import { EMBEDDING_BATCH_SIZE, embedDocuments, embedQuery, isDailyQuotaError, toVectorLiteral } from "./embed";
 
 /* The Gemini client is replaced with a stub: these tests pin what is asked of
    the API and how failures are handled, never the network. */
@@ -105,5 +105,32 @@ describe("backoff", () => {
 describe("toVectorLiteral", () => {
   it("renders pgvector's text form", () => {
     expect(toVectorLiteral([0.5, -1, 2e-7])).toBe("[0.5,-1,2e-7]");
+  });
+});
+
+describe("daily quota", () => {
+  // The shape Gemini actually returns on the free tier's per-day cap.
+  const daily = () =>
+    new ApiError({
+      message:
+        '{"error":{"code":429,"status":"RESOURCE_EXHAUSTED","details":[{"quotaId":"EmbedContentRequestsPerDayPerUserPerProjectPerModel-FreeTier"}]}}',
+      status: 429,
+    });
+
+  it("tells the daily cap apart from a per-minute rate limit", () => {
+    expect(isDailyQuotaError(daily())).toBe(true);
+    expect(isDailyQuotaError(quota())).toBe(false);
+    expect(isDailyQuotaError(new Error("PerDay"))).toBe(false);
+  });
+
+  it("does not retry the daily cap — it will not lift within a backoff", async () => {
+    const { ai, embedContent } = fakeAi(() => {
+      throw daily();
+    });
+    const sleep = vi.fn<(ms: number) => Promise<void>>(async () => {});
+
+    await expect(embedDocuments(ai, ["a"], { sleep })).rejects.toBeInstanceOf(ApiError);
+    expect(embedContent).toHaveBeenCalledTimes(1);
+    expect(sleep).not.toHaveBeenCalled();
   });
 });

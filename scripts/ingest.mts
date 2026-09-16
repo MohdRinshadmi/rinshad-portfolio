@@ -43,13 +43,15 @@ import { chunkFile, type CodeChunk } from "../lib/rag/code/chunk.ts";
 import { skipReason } from "../lib/rag/code/files.ts";
 import { CODE_REPOS, GITHUB_OWNER, type CodeRepo } from "../lib/rag/code/repos.ts";
 import { findSecrets, reportSecretSkip } from "../lib/rag/code/secrets.ts";
-import { EMBEDDING_BATCH_SIZE, embedDocuments, toVectorLiteral } from "../lib/rag/embed.ts";
+import { EMBEDDING_BATCH_SIZE, embedDocuments, isDailyQuotaError, toVectorLiteral } from "../lib/rag/embed.ts";
 
 const DRY_RUN = process.argv.includes("--dry-run");
 /** Stop after this many embeddings; unlimited unless --max-embeds is passed. */
 const MAX_EMBEDS = numberFlag("--max-embeds");
 let embedBudget = MAX_EMBEDS;
 let budgetReached = false;
+/** Set when Gemini's free daily embedding cap stops the run. */
+let quotaReached = false;
 const SIZE_LIMIT_BYTES = 400 * 1024 * 1024;
 /** A pause between embedding calls keeps a full re-index inside free-tier rate limits. */
 const BATCH_PAUSE_MS = 1_000;
@@ -143,7 +145,17 @@ async function ingestRepo(repo: CodeRepo, sql: Sql | null, ai: GoogleGenAI | nul
       // Embed only what the budget still allows; the rest waits for the next run.
       const allowed = Math.min(batch.length, embedBudget);
       if (sql && ai && allowed > 0) {
-        await writeBatch(sql, ai, batch.slice(0, allowed), sha);
+        try {
+          await writeBatch(sql, ai, batch.slice(0, allowed), sha);
+        } catch (err) {
+          if (!isDailyQuotaError(err)) throw err;
+          // Out of free embeddings for today: keep what is already written and
+          // stop exactly the way --max-embeds does (no pruning, exit 0).
+          quotaReached = true;
+          budgetReached = true;
+          batch = [];
+          return;
+        }
         embedBudget -= allowed;
         report.embedded += allowed;
         await sleep(BATCH_PAUSE_MS);
@@ -252,7 +264,12 @@ async function main() {
   const totalFiles = reports.reduce((n, r) => n + r.files, 0);
   const totalChunks = reports.reduce((n, r) => n + r.chunks, 0);
   console.log(`  total: ${totalFiles} files, ${totalChunks} chunks`);
-  if (budgetReached) {
+  if (quotaReached) {
+    console.warn(
+      "\n! Gemini's free daily limit (1,000 embeddings) is used up for today. Everything embedded so far is saved.\n" +
+        "  Run the same command again after it resets at midnight US Pacific time (currently 12:30 PM in India).",
+    );
+  } else if (budgetReached) {
     console.warn(
       `\n! Stopped after ${MAX_EMBEDS} embeddings (--max-embeds). The index is partly updated and nothing was\n` +
         `  pruned. Re-run once the daily quota resets; unchanged chunks are skipped, so it continues from here.`,

@@ -91,12 +91,19 @@ export async function embedDocuments(
       return await embed(ai, texts, "RETRIEVAL_DOCUMENT", options);
     } catch (err) {
       const status = err instanceof ApiError ? err.status : 0;
-      if (!RETRYABLE_STATUS.has(status) || attempt >= attempts) throw err;
+      // A daily cap won't lift within a backoff, so retrying only wastes attempts.
+      if (!RETRYABLE_STATUS.has(status) || isDailyQuotaError(err) || attempt >= attempts) throw err;
       const delay = Math.min(maxDelayMs, baseDelayMs * 2 ** (attempt - 1));
       onRetry?.(attempt, delay, status);
       await sleep(delay);
     }
   }
+}
+
+/** The free tier's per-day cap (quota id "…PerDay…"), as opposed to a
+    per-minute rate limit that a short backoff can wait out. */
+export function isDailyQuotaError(err: unknown): boolean {
+  return err instanceof ApiError && err.status === 429 && /PerDay/i.test(err.message);
 }
 
 /** pgvector's text input form, e.g. `[0.1,0.2,…]`. */
