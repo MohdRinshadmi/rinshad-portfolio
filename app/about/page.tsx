@@ -199,11 +199,15 @@ export default function AboutPage() {
                     transform + color only so it composites. Deliberately NOT
                     folded into `Chip` itself — the same component labels
                     project tech and metadata, where a hover response would be
-                    a promise of interaction that isn't there. */}
+                    a promise of interaction that isn't there.
+                    `whitespace-normal` lets the longest items wrap on a phone:
+                    as unbreakable chips they made /about 413px wide on a 390px
+                    screen, which also pushed every fixed element — the header
+                    and the chat launcher — partly off-screen. */}
                 <ul className="flex flex-wrap gap-2">
                   {group.items.map((item) => (
-                    <li key={item}>
-                      <Chip className="inline-block transition-[transform,background-color,border-color,color] duration-300 ease-out hover:-translate-y-[3px] hover:scale-[1.04] hover:border-accent/25 hover:bg-accent/8 hover:text-accent-text">
+                    <li key={item} className="max-w-full">
+                      <Chip className="inline-block max-w-full whitespace-normal leading-snug transition-[transform,background-color,border-color,color] duration-300 ease-out hover:-translate-y-[3px] hover:scale-[1.04] hover:border-accent/25 hover:bg-accent/8 hover:text-accent-text">
                         {item}
                       </Chip>
                     </li>

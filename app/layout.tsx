@@ -5,6 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { GuideRails } from "@/components/layout/GuideRails";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
+import { ChatLauncher } from "@/components/chat/ChatLauncher";
 import { siteConfig } from "@/lib/config/site";
 import { SITE_KEYWORDS, coreGraph } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -117,6 +118,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <GuideRails />
           </main>
           <Footer />
+          {/* Inside SmoothScroll so the chat inherits its MotionConfig (reduced
+              motion) and lives in the layout — conversations survive navigation. */}
+          <ChatLauncher />
         </SmoothScroll>
       </body>
     </html>

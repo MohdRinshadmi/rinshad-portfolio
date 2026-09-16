@@ -1,0 +1,39 @@
+# Re-index the public code corpus behind the portfolio assistant's searchCode tool.
+#
+# Idempotent: unchanged chunks are skipped by content hash, so a quiet week
+# costs a clone and a few queries rather than re-embedding every file.
+# Scheduled workflows only run from the default branch, so the weekly run
+# starts once this file is on main; workflow_dispatch works from any branch.
+name: Ingest code corpus
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Mondays at 03:17 UTC — off the hour, when scheduled runs pile up.
+    - cron: "17 3 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ingest-code-corpus
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run db:migrate
+      # Gemini's free tier allows 1,000 embeddings a day; a weekly delta is far
+      # smaller, but the cap keeps a big refactor from failing the job outright.
+      - run: npm run ingest -- --max-embeds=900

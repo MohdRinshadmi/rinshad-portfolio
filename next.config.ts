@@ -107,6 +107,13 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
+  // /api/chat reads content/blog from disk at request time (the blog pages
+  // read it at build time, so they never needed it traced). Without this the
+  // function bundle can ship without the directory, getAllPosts() returns []
+  // and the assistant silently forgets every article.
+  outputFileTracingIncludes: {
+    "/api/chat": ["./content/blog/**/*"],
+  },
   experimental: {
     // Ship the (Tailwind, ~16 KB) stylesheet inside the HTML instead of as a
     // render-blocking <link>. Lighthouse mobile flagged that request as the

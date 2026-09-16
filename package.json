@@ -11,11 +11,15 @@
     "start": "next start",
     "lint": "eslint",
     "mail:verify": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file=.env scripts/verify-mail.mts",
+    "db:migrate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file-if-exists=.env scripts/migrate.mts",
+    "ingest": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file-if-exists=.env scripts/ingest.mts",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@google/genai": "^2.21.0",
     "@hookform/resolvers": "^5.2.2",
+    "@neondatabase/serverless": "^1.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",
