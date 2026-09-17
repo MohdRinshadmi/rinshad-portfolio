@@ -19,7 +19,12 @@ vi.mock("@google/genai", () => {
   class GoogleGenAI {
     models = { generateContentStream };
   }
-  return { ApiError, GoogleGenAI, FunctionCallingConfigMode: { AUTO: "AUTO", NONE: "NONE" } };
+  return {
+    ApiError,
+    GoogleGenAI,
+    FunctionCallingConfigMode: { AUTO: "AUTO", NONE: "NONE" },
+    ThinkingLevel: { MINIMAL: "MINIMAL" },
+  };
 });
 
 /* Retrieval is replaced as well: the code-search tests script what a search
@@ -35,6 +40,21 @@ vi.mock("@/lib/server/rate-limit", async (importOriginal) => {
   return {
     ...actual,
     createRateLimiter: () => ({ check: limiterCheck, reset: () => {}, size: () => 0 }),
+  };
+});
+
+/* The real model pool, captured so each test starts with nothing benched —
+   otherwise a quota test would bench every model for the tests after it. */
+const modelPools = vi.hoisted(() => [] as { reset(): void }[]);
+vi.mock("@/lib/chat/models", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/chat/models")>();
+  return {
+    ...actual,
+    createModelPool: (...args: Parameters<typeof actual.createModelPool>) => {
+      const pool = actual.createModelPool(...args);
+      modelPools.push(pool);
+      return pool;
+    },
   };
 });
 
@@ -81,6 +101,7 @@ beforeEach(() => {
   retrieve.mockReset();
   generateContentStream.mockReset();
   generateContentStream.mockImplementation(async () => geminiStream("Hello ", "world."));
+  for (const pool of modelPools) pool.reset();
   limiterCheck.mockReset();
   limiterCheck.mockReturnValue({ ok: true, retryAfter: 0, remaining: 19 });
 });
@@ -271,6 +292,49 @@ describe("POST /api/chat", () => {
       await expect(framesOf(res)).resolves.toEqual([{ type: "error", code: "quota" }]);
     });
 
+    it("falls through to the next model when one is out of quota, and answers from it", async () => {
+      vi.spyOn(console, "warn").mockImplementation(() => {});
+      generateContentStream.mockRejectedValueOnce(new ApiError({ message: "PerMinute quota", status: 429 }));
+
+      const res = await post({ messages: [QUESTION] });
+
+      expect(res.status).toBe(200);
+      await expect(framesOf(res)).resolves.toEqual([
+        { type: "token", text: "Hello " },
+        { type: "token", text: "world." },
+        { type: "done" },
+      ]);
+      const [spent, next] = generateContentStream.mock.calls.map(([params]) => params);
+      expect(next.model).not.toBe(spent.model);
+      expect(next.config.thinkingConfig).toBeDefined();
+    });
+
+    it("skips a benched model on the next question instead of paying another 429", async () => {
+      vi.spyOn(console, "warn").mockImplementation(() => {});
+      generateContentStream.mockRejectedValueOnce(new ApiError({ message: "PerDay quota", status: 429 }));
+      await (await post({ messages: [QUESTION] })).text();
+      const answeredBy = generateContentStream.mock.calls[1][0].model;
+      generateContentStream.mockClear();
+
+      await (await post({ messages: [QUESTION] })).text();
+
+      expect(generateContentStream).toHaveBeenCalledTimes(1);
+      expect(generateContentStream.mock.calls[0][0].model).toBe(answeredBy);
+    });
+
+    it("answers quota without calling Gemini once every model is benched", async () => {
+      vi.spyOn(console, "warn").mockImplementation(() => {});
+      generateContentStream.mockRejectedValue(new ApiError({ message: "PerDay quota", status: 429 }));
+      await (await post({ messages: [QUESTION] })).text();
+      generateContentStream.mockClear();
+
+      const res = await post({ messages: [QUESTION] });
+
+      expect(res.status).toBe(429);
+      await expect(framesOf(res)).resolves.toEqual([{ type: "error", code: "quota" }]);
+      expect(generateContentStream).not.toHaveBeenCalled();
+    });
+
     it("answers 502 on any other provider failure, leaking nothing", async () => {
       vi.spyOn(console, "error").mockImplementation(() => {});
       generateContentStream.mockRejectedValue(
@@ -283,6 +347,8 @@ describe("POST /api/chat", () => {
       expect(res.status).toBe(502);
       expect(text).toBe('{"type":"error","code":"upstream"}\n');
       expect(text).not.toContain("AIzaSy");
+      // A bad request is a bug, not a spent quota: no other model is tried.
+      expect(generateContentStream).toHaveBeenCalledTimes(1);
     });
 
     it("ends a stream that fails mid-answer with an error frame, keeping what was sent", async () => {

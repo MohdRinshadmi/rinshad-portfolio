@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 import { ApiError, GoogleGenAI, type Content } from "@google/genai";
 import { answerFrames, type SearchCode } from "@/lib/chat/answer";
+import { CHAT_MODELS, createModelPool, QuotaExhaustedError } from "@/lib/chat/models";
 import {
   encodeFrame,
   MAX_HISTORY_CHARS,
@@ -21,12 +22,14 @@ import { createRateLimiter, clientKey } from "@/lib/server/rate-limit";
 
 /* ============================================================================
    POST /api/chat — the portfolio assistant. The second endpoint on the site
-   that spends money: every question is billed against one Gemini API key,
-   and with code search a single question can be several provider calls. So
-   it gets the contact form's controls (validation, a per-IP rate limit) plus
-   its own: hard caps on history size, at most three code searches per
-   question, one deadline for the whole answer, and a real upstream abort
-   when the visitor presses Stop.
+   that spends a scarce resource: every question draws on one Gemini
+   free-tier project's daily quotas, and with code search a single question
+   can be several provider calls. So it gets the contact form's controls
+   (validation, a per-IP rate limit) plus its own: a daily per-IP cap, a
+   fallback chain across models with separate quotas (lib/chat/models.ts),
+   hard caps on history size, at most three code searches per question, one
+   deadline for the whole answer, and a real upstream abort when the visitor
+   presses Stop.
 
    Grounding has two tiers. The site corpus (~15k tokens) rides in the system
    prompt on every request — see lib/rag/corpus.ts. The code of the three
@@ -74,8 +77,6 @@ export const runtime = "nodejs";
    not five. */
 export const maxDuration = 60;
 
-// gemini-2.5-flash is closed to API keys created after its retirement notice (404 NOT_FOUND).
-const MODEL = "gemini-3.6-flash";
 /** Per model call. The SDK keeps it armed while the body streams, so it bounds a whole turn. */
 const UPSTREAM_TIMEOUT_MS = 25_000;
 /** The whole answer, however many turns and searches it takes. */
@@ -86,10 +87,14 @@ const GENERATION = {
   // Google advises against lowering it — it can cause looping. Grounding comes
   // from the system prompt's rules, not from a cold sampler.
   maxOutputTokens: 1024,
-  // Thinking adds seconds before the first token and bills thought tokens;
-  // answering from supplied text and retrieved code doesn't need it.
-  thinkingConfig: { thinkingBudget: 0 },
+  // Thinking is set per model in lib/chat/models.ts, since the models disagree
+  // on how to turn it down. Every one keeps it at the minimum: answering from
+  // supplied text and retrieved code doesn't need it.
 };
+
+/* Which model answers is decided per turn, cheapest quota first. The bench of
+   spent models lives here, beside the limiter, for the life of the instance. */
+const models = createModelPool(CHAT_MODELS);
 
 const limiter = createRateLimiter({
   windowMs: 10 * 60 * 1000, // 10 minutes
@@ -100,6 +105,13 @@ const limiter = createRateLimiter({
   // lib/server/rate-limit.ts.
   max: 8,
 });
+
+/* The ten-minute window alone still lets one address ask ~48 questions an
+   hour, enough to spend a whole day's free quota for every other visitor
+   before lunch. Thirty a day is more than a recruiter reading the answers
+   asks, and caps one address at a small share of the day. Per warm instance,
+   like the window above. */
+const dailyLimiter = createRateLimiter({ windowMs: 24 * 60 * 60 * 1000, max: 30 });
 
 /* ----------------------------------------------------------------------------
    Grounding — built once per server instance, from the same content the pages
@@ -162,8 +174,10 @@ function errorResponse(code: ServerErrorCode, status: number, headers?: Record<s
   });
 }
 
-/** Gemini's free-tier and project quotas both surface as HTTP 429. */
-const isQuotaError = (err: unknown) => err instanceof ApiError && err.status === 429;
+/** Gemini's free-tier and project quotas both surface as HTTP 429; a bench
+    full of spent models surfaces before any call is made. */
+const isQuotaError = (err: unknown) =>
+  err instanceof QuotaExhaustedError || (err instanceof ApiError && err.status === 429);
 
 export async function POST(req: NextRequest) {
   let body: unknown;
@@ -176,8 +190,11 @@ export async function POST(req: NextRequest) {
   const parsed = schema.safeParse(body);
   if (!parsed.success) return errorResponse("invalid_request", 422);
 
-  const { ok, retryAfter } = limiter.check(clientKey(req.headers));
-  if (!ok) return errorResponse("rate_limited", 429, { "Retry-After": String(retryAfter) });
+  const client = clientKey(req.headers);
+  for (const window of [limiter, dailyLimiter]) {
+    const { ok, retryAfter } = window.check(client);
+    if (!ok) return errorResponse("rate_limited", 429, { "Retry-After": String(retryAfter) });
+  }
 
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) {
@@ -212,13 +229,13 @@ export async function POST(req: NextRequest) {
     : undefined;
 
   const frames = answerFrames({
-    ai,
-    model: MODEL,
+    generate: (turn) => models.stream(ai, turn),
     config: {
       ...GENERATION,
       systemInstruction: systemInstructionFor(codeSearch),
       // No retryOptions: the SDK only retries when asked, and retrying a 429
-      // would spend the visitor's wait on a quota that is already gone.
+      // would spend the visitor's wait on a quota that is already gone. The
+      // model pool moves to the next model's quota instead.
       httpOptions: { timeout: UPSTREAM_TIMEOUT_MS },
     },
     contents: parsed.data.messages.map(

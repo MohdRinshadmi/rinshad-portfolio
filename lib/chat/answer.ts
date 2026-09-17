@@ -4,13 +4,13 @@ import {
   type FunctionCall,
   type FunctionDeclaration,
   type GenerateContentConfig,
-  type GoogleGenAI,
   type Part,
 } from "@google/genai";
 import { z } from "zod";
 import { codeMarker, codeSourceTitle } from "@/lib/rag/code/citation";
 import { CODE_REPOS, type CodeRepo } from "@/lib/rag/code/repos";
 import type { RankedCodeResult } from "@/lib/rag/retrieve";
+import type { TurnRequest, TurnStream } from "./models";
 import { extractCitationIds, type Frame, type Source } from "./protocol";
 
 /* ============================================================================
@@ -70,8 +70,8 @@ const searchCodeArgs = z.object({
 export type SearchCode = (args: { query: string; repo?: CodeRepo }, signal: AbortSignal) => Promise<RankedCodeResult[]>;
 
 export interface AnswerRequest {
-  ai: GoogleGenAI;
-  model: string;
+  /** Opens one streamed model turn. Which model answers is the caller's business — see ./models.ts. */
+  generate: (request: TurnRequest) => Promise<TurnStream>;
   /** Generation settings, system instruction and HTTP options. Tools are added here. */
   config: GenerateContentConfig;
   contents: Content[];
@@ -103,7 +103,7 @@ export function formatSearchResults(query: string, results: readonly RankedCodeR
 }
 
 export async function* answerFrames(request: AnswerRequest): AsyncGenerator<Frame, void> {
-  const { ai, model, searchCode, signal } = request;
+  const { generate, searchCode, signal } = request;
   const contents = [...request.contents];
   const codeSources = new Map<string, Omit<Source, "id">>();
   const cited = new Set<string>();
@@ -156,8 +156,7 @@ export async function* answerFrames(request: AnswerRequest): AsyncGenerator<Fram
 
   for (let turn = 1; turn <= MAX_MODEL_TURNS; turn++) {
     const mustAnswer = forceAnswer || turn === MAX_MODEL_TURNS;
-    const stream = await ai.models.generateContentStream({
-      model,
+    const stream = await generate({
       // A copy per turn: the history grows between turns, and a request must
       // not change after it has been sent.
       contents: [...contents],
