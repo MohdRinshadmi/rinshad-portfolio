@@ -74,14 +74,17 @@ export const runtime = "nodejs";
    not five. */
 export const maxDuration = 60;
 
-const MODEL = "gemini-2.5-flash";
+// gemini-2.5-flash is closed to API keys created after its retirement notice (404 NOT_FOUND).
+const MODEL = "gemini-3.6-flash";
 /** Per model call. The SDK keeps it armed while the body streams, so it bounds a whole turn. */
 const UPSTREAM_TIMEOUT_MS = 25_000;
 /** The whole answer, however many turns and searches it takes. */
 const ANSWER_DEADLINE_MS = 55_000;
 
 const GENERATION = {
-  temperature: 0.2,
+  // No temperature: Gemini 3 models are tuned for their default (1.0), and
+  // Google advises against lowering it — it can cause looping. Grounding comes
+  // from the system prompt's rules, not from a cold sampler.
   maxOutputTokens: 1024,
   // Thinking adds seconds before the first token and bills thought tokens;
   // answering from supplied text and retrieved code doesn't need it.

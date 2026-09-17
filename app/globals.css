@@ -341,6 +341,48 @@ html {
   }
 }
 
+/* Chat avatar — the cut-out's idle breath, and its livelier bob while an
+   answer is arriving. Transform-only, from the bottom edge (see LiveAvatar). */
+@keyframes avatar-breathe {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-1.5%) scale(1.012);
+  }
+}
+@keyframes avatar-talk {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  30% {
+    transform: translateY(-2%) rotate(-1.5deg);
+  }
+  65% {
+    transform: translateY(-0.5%) rotate(1.2deg);
+  }
+}
+
+/* Chat welcome illustration — a slow push-in, back and forth. */
+@keyframes ken-burns {
+  from {
+    transform: scale(1.02) translate(0, 0);
+  }
+  to {
+    transform: scale(1.1) translate(-1.5%, 1%);
+  }
+}
+
+/* Chat — light passing across "Thinking…", like text being read. */
+@keyframes text-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
 /* Gentle attention breath — fades out then back in (rests at full opacity). */
 @keyframes fade-pulse {
   0%, 100% {

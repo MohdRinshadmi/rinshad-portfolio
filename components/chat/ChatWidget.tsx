@@ -12,13 +12,13 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
-import { ArrowRight, ArrowUp, ArrowUpRight, RotateCcw, Square, X } from "lucide-react";
+import { ArrowRight, ArrowUp, ArrowUpRight, Briefcase, FolderGit2, Globe2, RotateCcw, Sparkles, Square, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/lib/config/site";
 import { DURATION, EASE, staggerContainerFast } from "@/lib/animation";
-import { Eyebrow } from "@/components/ui/Eyebrow";
 import {
   createFrameDecoder,
   MAX_HISTORY_CHARS,
@@ -34,6 +34,8 @@ import {
   type Source,
   type WireMessage,
 } from "@/lib/chat/protocol";
+import { useRevealedLength } from "@/lib/hooks/use-revealed-length";
+import { LiveAvatar, type AvatarMood } from "./LiveAvatar";
 
 /* ============================================================================
    THE PORTFOLIO ASSISTANT — panel, conversation, and the stream behind it.
@@ -219,10 +221,10 @@ async function failureOf(res: Response): Promise<Settled> {
 /** Every one is answered from the corpus: experience, the AI FAQ, the three
     case studies, and the availability line. */
 const SUGGESTIONS = [
-  "What does Rinshad own in production?",
-  "What has he built with AI and RAG?",
-  "Walk me through his projects",
-  "Is he open to remote roles or relocation?",
+  { question: "What does Rinshad own in production?", Icon: Briefcase },
+  { question: "What has he built with AI and RAG?", Icon: Sparkles },
+  { question: "Walk me through his projects", Icon: FolderGit2 },
+  { question: "Is he open to remote or relocation?", Icon: Globe2 },
 ] as const;
 
 const ERROR_COPY: Record<ChatErrorCode, string> = {
@@ -258,6 +260,31 @@ function announcement(message: Message | undefined): string {
   }
 }
 
+/** What the avatar acts out for the latest answer. */
+function moodOf(message: Message | undefined): AvatarMood {
+  if (message?.role !== "assistant") return "idle";
+  switch (message.state.status) {
+    case "queued":
+      return "thinking";
+    case "tool-running":
+      return "searching";
+    case "streaming":
+      return "speaking";
+    default:
+      return "idle";
+  }
+}
+
+const STATUS_COPY: Record<AvatarMood, string> = {
+  idle: "Online · answers from this site",
+  thinking: "Thinking…",
+  searching: "Searching his code…",
+  speaking: "Typing…",
+};
+
+/** The welcome screen's hero card. */
+const WELCOME_ILLUSTRATION = "/images/rinshad_chatbot_avatar.webp";
+
 /* ----------------------------------------------------------------------------
    Motion — the site's tokens; opacity-only variants under reduced motion.
    -------------------------------------------------------------------------- */
@@ -267,18 +294,29 @@ function announcement(message: Message | undefined): string {
    it takes no focus, clicks or screen-reader attention. It deliberately never
    gets `visibility: hidden`: focus moves into the panel in the same commit that
    opens it, before an animation frame could make it visible again. */
+/* Desktop: the panel springs up out of the launcher's corner, sharpening out
+   of a blur as it lands — one spring with a little overshoot, Framer-style. */
 const desktopPanel: Variants = {
   hidden: {
     opacity: 0,
-    scale: 0.97,
-    y: 10,
+    scale: 0.88,
+    y: 28,
+    filter: "blur(8px)",
     transition: { duration: DURATION.fast, ease: EASE.out },
   },
   visible: {
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: { ...EASE.spring, opacity: { duration: DURATION.base, ease: EASE.out } },
+    filter: "blur(0px)",
+    transition: {
+      type: "spring",
+      stiffness: 380,
+      damping: 30,
+      mass: 0.8,
+      opacity: { duration: DURATION.fast, ease: EASE.out },
+      filter: { duration: DURATION.base, ease: EASE.out },
+    },
   },
 };
 
@@ -301,8 +339,13 @@ const reducedPanel: Variants = {
 };
 
 const suggestionItem: Variants = {
-  hidden: { opacity: 0, y: 8 },
-  visible: { opacity: 1, y: 0, transition: { duration: DURATION.base, ease: EASE.out } },
+  hidden: { opacity: 0, y: 14, scale: 0.97 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: EASE.spring },
+};
+
+const welcomeItem: Variants = {
+  hidden: { opacity: 0, y: 10, filter: "blur(4px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: DURATION.reveal, ease: EASE.out } },
 };
 
 /* ----------------------------------------------------------------------------
@@ -360,6 +403,7 @@ export function ChatWidget({ open, onClose }: ChatWidgetProps) {
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const pinnedRef = useRef(true);
 
   const titleId = useId();
@@ -368,6 +412,8 @@ export function ChatWidget({ open, onClose }: ChatWidgetProps) {
 
   const last = messages.at(-1);
   const busy = last?.role === "assistant" && isActive(last.state);
+  const mood = moodOf(last);
+  const hasMessages = messages.length > 0;
   const canSend = !busy && draft.trim().length > 0;
 
   useEffect(() => {
@@ -493,6 +539,18 @@ export function ChatWidget({ open, onClose }: ChatWidgetProps) {
     if (list && pinnedRef.current) list.scrollTop = list.scrollHeight;
   }, [messages, open]);
 
+  // Answers also grow between state updates, as they type out.
+  useEffect(() => {
+    const list = listRef.current;
+    const content = contentRef.current;
+    if (!list || !content) return;
+    const observer = new ResizeObserver(() => {
+      if (pinnedRef.current) list.scrollTop = list.scrollHeight;
+    });
+    observer.observe(content);
+    return () => observer.disconnect();
+  }, [hasMessages]);
+
   // The input grows with its text, up to five lines.
   useLayoutEffect(() => {
     const input = inputRef.current;
@@ -531,31 +589,65 @@ export function ChatWidget({ open, onClose }: ChatWidgetProps) {
         // Phones: the whole screen, sized to the visual viewport (see above).
         "inset-x-0 top-0 h-dvh",
         // Desktop: a floating panel anchored above the launcher.
-        "md:top-auto md:left-auto md:bottom-20 md:right-6 md:h-[min(40rem,calc(100dvh-7rem))] md:w-100",
-        "md:origin-bottom-right md:rounded-xl md:border md:border-border md:shadow-raised",
+        "md:top-auto md:left-auto md:bottom-24 md:right-6 md:h-[min(40rem,calc(100dvh-8rem))] md:w-100",
+        "md:origin-bottom-right md:rounded-[1.75rem] md:border md:border-border md:shadow-[0_40px_90px_-30px_rgba(20,18,14,0.35),0_0_0_1px_rgba(255,255,255,0.6)_inset]",
         !open && "pointer-events-none",
       )}
     >
-      {/* Header — identity + close */}
-      <div className="flex shrink-0 items-center justify-between gap-3 border-b border-border px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] md:px-5 md:pt-3">
-        <div className="flex min-w-0 items-center gap-3">
-          <span
-            aria-hidden="true"
-            className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-text font-display text-[0.9375rem] font-semibold tracking-tight text-bg"
-          >
-            {siteConfig.name.charAt(0)}
-            <span className="text-accent">.</span>
-          </span>
-          <div className="min-w-0">
+      {/* Terracotta glow behind the header and welcome — Framer's soft mesh. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(70%_60%_at_85%_0%,rgba(199,92,55,0.16),transparent_70%),radial-gradient(60%_50%_at_10%_10%,rgba(247,220,205,0.55),transparent_70%)]"
+      />
+
+      {/* Header — identity + live status + close */}
+      <div
+        className={cn(
+          "relative flex shrink-0 items-center justify-between gap-3 px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] transition-colors duration-300 md:px-5 md:pt-3.5",
+          hasMessages ? "border-b border-border bg-surface/70 backdrop-blur-md" : "border-b border-transparent",
+        )}
+      >
+        <motion.div layout transition={EASE.spring} className="flex min-w-0 items-center gap-3">
+          {hasMessages && (
+            <motion.span
+              initial={{ opacity: 0, scale: 0.4 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={EASE.springSnappy}
+              className="inline-flex"
+            >
+              <LiveAvatar size={36} mood={mood} className="mt-2" />
+            </motion.span>
+          )}
+          <motion.div layout="position" transition={EASE.spring} className="min-w-0">
             <h2
               id={titleId}
               className="truncate font-display text-[0.9375rem] font-semibold leading-tight tracking-tight text-text"
             >
-              Ask about {siteConfig.name}
+              {siteConfig.name}&apos;s AI
             </h2>
-            <p className="mt-0.5 truncate text-xs text-text-tertiary">Answers from this site only</p>
-          </div>
-        </div>
+            <p className="relative mt-0.5 flex h-4 items-center gap-1.5 overflow-hidden text-xs text-text-tertiary">
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "size-1.5 shrink-0 rounded-full transition-colors duration-300",
+                  mood === "idle" ? "bg-positive" : "bg-accent motion-safe:animate-pulse",
+                )}
+              />
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.span
+                  key={mood}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: DURATION.fast, ease: EASE.out }}
+                  className="truncate"
+                >
+                  {STATUS_COPY[mood]}
+                </motion.span>
+              </AnimatePresence>
+            </p>
+          </motion.div>
+        </motion.div>
         <button
           ref={closeRef}
           type="button"
@@ -581,13 +673,14 @@ export function ChatWidget({ open, onClose }: ChatWidgetProps) {
         {messages.length === 0 ? (
           <Welcome open={open} onAsk={ask} />
         ) : (
-          <div className="flex flex-col gap-6">
+          <div ref={contentRef} className="flex flex-col gap-6">
             {messages.map((message, index) => (
               <motion.div
                 key={message.id}
-                initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: DURATION.base, ease: EASE.out }}
+                initial={{ opacity: 0, y: 16, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ ...EASE.spring, opacity: { duration: DURATION.base, ease: EASE.out } }}
+                style={{ transformOrigin: message.role === "user" ? "100% 100%" : "0% 100%" }}
               >
                 {message.role === "user" ? (
                   <UserBubble content={message.content} />
@@ -618,14 +711,14 @@ export function ChatWidget({ open, onClose }: ChatWidgetProps) {
           event.preventDefault();
           submit();
         }}
-        className="shrink-0 border-t border-border px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 md:px-5 md:pb-3"
+        className="relative shrink-0 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 md:px-4 md:pb-3.5"
       >
         <label htmlFor={inputId} className="sr-only">
           Ask a question about {siteConfig.name}
         </label>
         {/* The ring lives on the wrapper so it frames the button too; the
             textarea's own outline is replaced by it, not removed. */}
-        <div className="flex items-end gap-2 rounded-lg border border-border bg-surface-raised p-1.5 pl-3.5 transition-[border-color,box-shadow] duration-200 ease-out focus-within:border-accent-text focus-within:ring-2 focus-within:ring-accent/60">
+        <div className="flex items-end gap-2 rounded-[1.375rem] border border-border bg-surface-raised p-1.5 pl-4 shadow-[0_10px_30px_-18px_rgba(20,18,14,0.35)] transition-[border-color,box-shadow] duration-300 ease-out focus-within:border-accent-text focus-within:shadow-[0_0_0_4px_rgba(199,92,55,0.14),0_14px_34px_-18px_rgba(199,92,55,0.5)]">
           <textarea
             ref={inputRef}
             id={inputId}
@@ -649,25 +742,28 @@ export function ChatWidget({ open, onClose }: ChatWidgetProps) {
           />
           {/* One button that changes role, not two that swap: keyboard focus
               survives the send → stop → send cycle. */}
-          <button
+          <motion.button
             type="button"
             onClick={busy ? stop : submit}
+            animate={{ scale: busy || canSend ? 1 : 0.9 }}
+            whileTap={busy || canSend ? { scale: 0.88 } : undefined}
+            transition={EASE.springSnappy}
             aria-label={busy ? "Stop generating" : "Send question"}
             aria-disabled={!busy && !canSend}
             className={cn(
-              "relative inline-flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full transition-colors duration-200 ease-out md:size-9",
+              "relative inline-flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full transition-colors duration-300 ease-out md:size-9",
               busy || canSend
-                ? "bg-text text-bg hover:bg-accent-press"
+                ? "bg-accent text-accent-fg hover:bg-accent-press"
                 : "cursor-default bg-bg-subtle text-text-tertiary",
             )}
           >
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.span
                 key={busy ? "stop" : "send"}
-                initial={{ opacity: 0, scale: 0.6 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.6 }}
-                transition={{ duration: DURATION.micro, ease: EASE.out }}
+                initial={{ opacity: 0, scale: 0.4, rotate: -90 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                exit={{ opacity: 0, scale: 0.4, rotate: 90 }}
+                transition={EASE.springSnappy}
                 className="inline-flex"
                 aria-hidden="true"
               >
@@ -678,7 +774,7 @@ export function ChatWidget({ open, onClose }: ChatWidgetProps) {
                 )}
               </motion.span>
             </AnimatePresence>
-          </button>
+          </motion.button>
         </div>
         <div id={hintId} className="mt-2 flex items-center justify-between gap-3 px-1 text-[0.6875rem] text-text-tertiary">
           <span>Grounded in this site · AI can make mistakes</span>
@@ -699,55 +795,82 @@ export function ChatWidget({ open, onClose }: ChatWidgetProps) {
 
 function Welcome({ open, onAsk }: { open: boolean; onAsk: (question: string) => void }) {
   return (
-    <div className="flex min-h-full flex-col justify-end gap-6 pb-1">
-      <div>
-        <Eyebrow dot>AI assistant</Eyebrow>
-        <p className="mt-4 font-display text-[1.375rem] font-semibold leading-[1.15] tracking-tight text-text">
-          Hi — I&apos;m {siteConfig.name}&apos;s AI assistant.
-        </p>
-        <p className="mt-2 text-sm leading-relaxed text-text-secondary">
-          Ask about his production work, projects, AI experience, or stack. Answers come from this site, with links to
-          the pages behind them.
-        </p>
-      </div>
-
-      <motion.ul
-        variants={staggerContainerFast}
-        initial="hidden"
-        // Replays each time the panel opens: it stays mounted between visits.
-        animate={open ? "visible" : "hidden"}
-        aria-label="Suggested questions"
-        className="flex flex-col gap-2"
+    <motion.div
+      variants={staggerContainerFast}
+      initial="hidden"
+      // Replays each time the panel opens: it stays mounted between visits.
+      animate={open ? "visible" : "hidden"}
+      className="flex min-h-full flex-col justify-end gap-4 pb-1"
+    >
+      {/* Hero card — the chatbot illustration, slowly pushing in. */}
+      <motion.div
+        variants={welcomeItem}
+        className="relative h-64 shrink-0 overflow-hidden rounded-3xl bg-ink shadow-[0_24px_50px_-28px_rgba(20,18,14,0.6)] md:h-50"
       >
-        {SUGGESTIONS.map((question) => (
+        <div className="absolute inset-0 animate-[ken-burns_16s_ease-in-out_infinite_alternate]">
+          <Image
+            src={WELCOME_ILLUSTRATION}
+            alt={`Illustration of ${siteConfig.name} at his desk with a small assistant robot`}
+            fill
+            sizes="(min-width: 48rem) 25rem, 100vw"
+            className="object-cover object-[50%_22%]"
+          />
+        </div>
+        <div className="absolute inset-0 bg-linear-to-t from-ink/90 via-ink/45 via-40% to-transparent to-70%" />
+        <div className="absolute inset-x-0 bottom-0 p-4">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-2 py-0.5 text-[0.6875rem] font-medium text-white backdrop-blur-md">
+            <span className="size-1.5 rounded-full bg-positive" />
+            Online now
+          </span>
+          <p className="mt-2 font-display text-[1.375rem] font-semibold leading-[1.1] tracking-tight text-white">
+            Hey, I&apos;m {siteConfig.name}&apos;s AI.
+          </p>
+          <p className="mt-1 text-[0.8125rem] leading-snug text-white/80">
+            Ask about his work, projects or stack — answered from his site and code.
+          </p>
+        </div>
+      </motion.div>
+
+      <motion.ul variants={staggerContainerFast} aria-label="Suggested questions" className="flex flex-col gap-2">
+        {SUGGESTIONS.map(({ question, Icon }) => (
           <motion.li key={question} variants={suggestionItem}>
             <motion.button
               type="button"
               onClick={() => onAsk(question)}
-              whileHover={{ y: -1 }}
-              whileTap={{ scale: 0.985 }}
+              whileHover="hover"
+              whileTap={{ scale: 0.98 }}
               transition={EASE.springSnappy}
-              className="group/q flex min-h-11 w-full items-center justify-between gap-3 rounded-lg border border-border bg-surface-raised px-3.5 py-2.5 text-left text-sm text-text transition-[border-color,box-shadow] duration-200 ease-out hover:border-border-strong hover:shadow-card"
+              className="group/q flex min-h-11 w-full items-center gap-3 rounded-2xl border border-border bg-surface-raised/80 p-1 pr-3.5 text-left text-sm text-text backdrop-blur-sm transition-[border-color,box-shadow,background-color] duration-300 ease-out hover:border-accent/30 hover:bg-surface-raised hover:shadow-[0_12px_28px_-16px_rgba(199,92,55,0.45)]"
             >
-              <span>{question}</span>
+              <motion.span
+                aria-hidden="true"
+                variants={{ hover: { rotate: -8, scale: 1.08 } }}
+                transition={EASE.springSnappy}
+                className="inline-flex size-8.5 shrink-0 items-center justify-center rounded-xl bg-bg-subtle text-text-secondary transition-colors duration-300 group-hover/q:bg-accent/10 group-hover/q:text-accent-text"
+              >
+                <Icon size={16} strokeWidth={1.75} />
+              </motion.span>
+              <motion.span variants={{ hover: { x: 3 } }} transition={EASE.springSnappy} className="flex-1">
+                {question}
+              </motion.span>
               <ArrowRight
                 size={15}
                 strokeWidth={1.75}
                 aria-hidden="true"
-                className="shrink-0 text-text-tertiary transition-[color,transform] duration-200 ease-out group-hover/q:translate-x-0.5 group-hover/q:text-accent-text"
+                className="shrink-0 -translate-x-1 text-text-tertiary opacity-0 transition-[opacity,transform,color] duration-300 ease-out group-hover/q:translate-x-0 group-hover/q:text-accent-text group-hover/q:opacity-100"
               />
             </motion.button>
           </motion.li>
         ))}
       </motion.ul>
-    </div>
+    </motion.div>
   );
 }
 
 function UserBubble({ content }: { content: string }) {
   return (
     <div className="flex justify-end">
-      <p className="max-w-[85%] whitespace-pre-wrap wrap-break-word rounded-lg rounded-br-sm bg-text px-3.5 py-2.5 text-sm leading-relaxed text-bg">
+      <p className="max-w-[85%] whitespace-pre-wrap wrap-break-word rounded-[1.25rem] rounded-br-md bg-linear-to-br from-ink-raised to-ink px-4 py-2.5 text-sm leading-relaxed text-ink-text shadow-[0_10px_24px_-14px_rgba(20,18,14,0.5)]">
         {content}
       </p>
     </div>
@@ -813,10 +936,17 @@ const AssistantAnswer = memo(function AssistantAnswer({
   onNavigate,
 }: AssistantAnswerProps) {
   const { content, sources, state } = message;
-  const blocks = toAnswerBlocks(content);
-  const numbers = new Map(sources.map((source, index) => [source.id, { source, n: index + 1 }]));
   const active = isActive(state);
-  const caret = state.status === "streaming" && !reduceMotion ? <Caret /> : null;
+  // Stopped and failed answers show what arrived at once; a live or finished
+  // answer types out at a steady pace instead of in network-sized lurches.
+  const shown = useRevealedLength(content, {
+    complete: state.status === "complete",
+    instant: reduceMotion || !(active || state.status === "complete"),
+  });
+  const revealing = shown < content.length;
+  const blocks = toAnswerBlocks(content.slice(0, shown));
+  const numbers = new Map(sources.map((source, index) => [source.id, { source, n: index + 1 }]));
+  const caret = (state.status === "streaming" || revealing) && !reduceMotion ? <Caret /> : null;
 
   /** Prose with citation markers turned into numbered links. The model's text
       is only ever a React text node; the only hrefs come from source frames. */
@@ -886,7 +1016,7 @@ const AssistantAnswer = memo(function AssistantAnswer({
   };
 
   return (
-    <article aria-busy={active} className="text-[0.9375rem] leading-relaxed text-text">
+    <article aria-busy={active || revealing} className="text-[0.9375rem] leading-relaxed text-text">
       {message.tools.length > 0 && <ToolTrace tools={message.tools} reduceMotion={reduceMotion} />}
       {active && blocks.length === 0 && state.status !== "tool-running" && <Pending reduceMotion={reduceMotion} />}
 
@@ -915,7 +1045,7 @@ const AssistantAnswer = memo(function AssistantAnswer({
         );
       })}
 
-      {sources.length > 0 && (
+      {sources.length > 0 && !revealing && (
         <ul aria-label="Sources" className="mt-3.5 flex flex-wrap gap-1.5">
           {sources.map((source, index) => (
             <li key={source.id} className="max-w-full">
@@ -962,16 +1092,14 @@ function Pending({ reduceMotion }: { reduceMotion: boolean }) {
   if (reduceMotion) {
     return <p className="text-sm text-text-tertiary">Thinking…</p>;
   }
+  // Light sweeping across the word, as if it were being read.
   return (
-    <div aria-hidden="true" className="flex h-6 items-center gap-1">
-      {[0, 1, 2].map((dot) => (
-        <span
-          key={dot}
-          className="size-1.5 animate-pulse rounded-full bg-text-tertiary"
-          style={{ animationDelay: `${dot * 160}ms` }}
-        />
-      ))}
-    </div>
+    <p
+      aria-hidden="true"
+      className="inline-block bg-[linear-gradient(90deg,var(--color-text-tertiary)_0%,var(--color-text-tertiary)_40%,var(--color-accent)_50%,var(--color-text-tertiary)_60%,var(--color-text-tertiary)_100%)] bg-size-[200%_100%] bg-clip-text text-sm font-medium text-transparent animate-[text-shimmer_1.6s_linear_infinite]"
+    >
+      Thinking…
+    </p>
   );
 }
 

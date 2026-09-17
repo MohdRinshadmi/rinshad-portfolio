@@ -2,11 +2,12 @@
 
 import { useCallback, useState } from "react";
 import dynamic from "next/dynamic";
-import { AnimatePresence, motion } from "framer-motion";
-import { Sparkles, X } from "lucide-react";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
+import { ArrowUpRight, X } from "lucide-react";
 import { siteConfig } from "@/lib/config/site";
 import { DURATION, EASE } from "@/lib/animation";
 import { useHydrated } from "@/lib/hooks/use-hydrated";
+import { LiveAvatar } from "./LiveAvatar";
 
 /* Lazy chunk: the panel, its state machine, the stream parser and every piece
    of choreography inside it download on the first tap of the launcher, not
@@ -16,10 +17,35 @@ const ChatWidget = dynamic(
   { ssr: false },
 );
 
+/* Hover propagates from the button to its children as a named variant, so the
+   avatar hops and the arrow turns on one spring — Framer's orchestration
+   rather than per-element CSS hovers. */
+const hop: Variants = { rest: { y: 0 }, hover: { y: -3 } };
+const nudge: Variants = { rest: { scale: 1 }, hover: { scale: 1.1 } };
+
+/** A label that slides and un-blurs into place when it changes. */
+function Swap({ id, className, children }: { id: string; className?: string; children: React.ReactNode }) {
+  return (
+    <AnimatePresence mode="popLayout" initial={false}>
+      <motion.span
+        key={id}
+        initial={{ opacity: 0, y: 8, filter: "blur(4px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        exit={{ opacity: 0, y: -8, filter: "blur(4px)" }}
+        transition={{ duration: DURATION.base, ease: EASE.out }}
+        className={className}
+      >
+        {children}
+      </motion.span>
+    </AnimatePresence>
+  );
+}
+
 /**
- * The floating "Ask AI" control. Everything it imports — framer-motion, lucide,
- * site config — already ships with the Navbar, so this adds a few hundred bytes
- * of component to the shell and none of the chat.
+ * The floating "Ask AI" control — Rinshad himself, live (see LiveAvatar),
+ * rising out of a dark pill and watching the cursor. Everything it imports is
+ * already in the shell except the avatar, a 28KB cut-out that loads after
+ * hydration; the chat still costs the first paint nothing.
  *
  * It renders only after hydration. A server-rendered button would sit dead
  * until React booted, and keeping it out of the HTML means it can never be the
@@ -57,28 +83,40 @@ export function ChatLauncher() {
         aria-expanded={open}
         aria-controls={mounted ? "chat-panel" : undefined}
         aria-haspopup="dialog"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: DURATION.base, ease: EASE.out }}
-        whileHover={{ y: -2, transition: EASE.springSnappy }}
-        whileTap={{ scale: 0.96, transition: EASE.springSnappy }}
-        className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-40 inline-flex size-13 items-center justify-center gap-2 rounded-full bg-text text-sm font-medium text-bg shadow-raised transition-colors duration-200 ease-out hover:bg-accent-press md:bottom-6 md:right-6 md:h-11 md:w-auto md:pl-3.5 md:pr-4.5"
+        initial={{ opacity: 0, y: 24, scale: 0.9 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        whileHover="hover"
+        whileTap={{ scale: 0.96 }}
+        transition={{ ...EASE.spring, opacity: { duration: DURATION.base } }}
+        className="group fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-40 flex items-center gap-3 rounded-full bg-ink p-1.5 text-left text-ink-text shadow-[0_18px_40px_-14px_rgba(20,18,14,0.55),inset_0_1px_0_rgba(255,255,255,0.12)] ring-1 ring-ink-border transition-shadow duration-300 hover:shadow-[0_22px_48px_-12px_rgba(199,92,55,0.45),inset_0_1px_0_rgba(255,255,255,0.14)] md:bottom-6 md:right-6 md:pr-2"
       >
-        <span aria-hidden="true" className="relative inline-flex size-5 items-center justify-center">
-          <AnimatePresence initial={false} mode="popLayout">
-            <motion.span
-              key={open ? "close" : "open"}
-              initial={{ opacity: 0, rotate: -45, scale: 0.7 }}
-              animate={{ opacity: 1, rotate: 0, scale: 1 }}
-              exit={{ opacity: 0, rotate: 45, scale: 0.7 }}
-              transition={{ duration: DURATION.fast, ease: EASE.out }}
-              className="inline-flex"
-            >
-              {open ? <X size={18} strokeWidth={2} /> : <Sparkles size={18} strokeWidth={1.75} />}
-            </motion.span>
-          </AnimatePresence>
+        <motion.span variants={hop} transition={EASE.springSnappy} className="inline-flex">
+          <LiveAvatar size={46} followPointer />
+        </motion.span>
+
+        <span aria-hidden="true" className="hidden min-w-34 flex-col md:flex">
+          <Swap id={open ? "close" : "ask"} className="text-sm font-semibold leading-tight tracking-tight">
+            {open ? "Close chat" : "Ask my AI"}
+          </Swap>
+          <span className="mt-0.5 flex items-center gap-1.5 text-[0.6875rem] leading-tight text-ink-text-secondary">
+            <span className="relative flex size-1.5">
+              <span className="absolute inset-0 rounded-full bg-positive motion-safe:animate-ping" />
+              <span className="relative size-1.5 rounded-full bg-positive" />
+            </span>
+            <Swap id={open ? "saved" : "online"}>{open ? "Your chat is kept" : "Online · replies in seconds"}</Swap>
+          </span>
         </span>
-        <span className="hidden md:inline">Ask AI</span>
+
+        <motion.span
+          aria-hidden="true"
+          variants={nudge}
+          transition={EASE.springSnappy}
+          className="hidden size-9 items-center justify-center rounded-full bg-ink-text text-ink md:inline-flex"
+        >
+          <Swap id={open ? "x" : "arrow"} className="inline-flex">
+            {open ? <X size={17} strokeWidth={2.25} /> : <ArrowUpRight size={17} strokeWidth={2.25} />}
+          </Swap>
+        </motion.span>
       </motion.button>
 
       {mounted && <ChatWidget open={open} onClose={close} />}
